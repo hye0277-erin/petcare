@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>PetCare+ · 리포트</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/report.css" />
+<link rel="stylesheet" href="css/picker.css" />
+<script type="module" src="js/guard.js"></script>
+</head>
+<body>
+<div class="app">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="status-icons">
+      <span class="material-symbols-rounded">signal_cellular_alt</span>
+      <span class="material-symbols-rounded">wifi</span>
+      <span class="material-symbols-rounded">battery_full</span>
+    </span>
+  </div>
+
+  <!-- Header -->
+  <header class="report-header" data-rise>
+    <div>
+      <h1 class="page-title">리포트</h1>
+      <p class="report-subtitle"><span data-pet-name>해피</span>의 최근 건강 기록을 요약했어요.</p>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" type="button" id="report-print" aria-label="리포트 인쇄 또는 저장">
+        <span class="material-symbols-rounded">print</span>
+      </button>
+      <button class="icon-btn" type="button" id="report-share" aria-label="리포트 요약 공유">
+        <span class="material-symbols-rounded">ios_share</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="scroll report-scroll">
+    <div class="pet-select static" aria-label="현재 반려견 정보" data-rise>
+      <span class="pet-avatar" data-pet-initial>해</span>
+      <span data-pet-line>해피 · 12살 · 말티즈</span>
+    </div>
+
+    <div class="report-tabs" role="tablist" aria-label="리포트 기간 선택" data-rise>
+      <button type="button" class="active" role="tab" aria-selected="true" data-period="weekly">주간</button>
+      <button type="button" role="tab" aria-selected="false" data-period="monthly">월간</button>
+      <button type="button" role="tab" aria-selected="false" data-period="custom">직접 선택</button>
+    </div>
+
+    <!-- 기간 직접 지정 -->
+    <div class="report-range" id="report-range" style="display:none" data-rise>
+      <div class="rr-field">
+        <span class="rr-label">시작일</span>
+        <input id="rr-start" data-picker="date" />
+      </div>
+      <span class="rr-tilde">~</span>
+      <div class="rr-field">
+        <span class="rr-label">종료일</span>
+        <input id="rr-end" data-picker="date" />
+      </div>
+      <button class="btn btn-primary" id="rr-apply" type="button">조회</button>
+    </div>
+
+    <section class="report-card hero-summary" data-rise>
+      <div class="card-kicker" id="summary-period">최근 7일 기준</div>
+      <h2>최근 상태 요약</h2>
+      <p id="summary-text"></p>
+      <p class="safe-note">
+        입력한 기록을 기준으로 정리한 내용이며, 진단이나 치료 판단을 제공하지 않습니다.
+      </p>
+    </section>
+
+    <section class="metric-grid" aria-label="주요 지표" data-rise>
+      <article class="metric-card">
+        <span class="metric-icon material-symbols-rounded">medication</span>
+        <span class="metric-label">복약 완료율</span>
+        <strong id="metric-medication">92%</strong>
+        <small id="metric-medication-sub">지난 7일 기준</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-icon material-symbols-rounded">sick</span>
+        <span class="metric-label">증상 기록</span>
+        <strong id="metric-symptoms">3회</strong>
+        <small id="metric-symptoms-sub">기침 기록 중심</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-icon material-symbols-rounded">restaurant</span>
+        <span class="metric-label" id="metric-meal-label">식사량 감소</span>
+        <strong id="metric-meal">2회</strong>
+        <small id="metric-meal-sub">평소보다 적음</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-icon material-symbols-rounded">event_upcoming</span>
+        <span class="metric-label" id="metric-next-label">다음 진료</span>
+        <strong id="metric-next">D-3</strong>
+        <small id="metric-next-sub">서울동물병원</small>
+      </article>
+    </section>
+
+    <section class="report-card" data-rise>
+      <div class="section-head tight">
+        <h2 class="section-title">복약 완료율</h2>
+        <span class="section-chip" id="medication-chip">완료 92%</span>
+      </div>
+      <div class="stacked-progress" aria-label="복약 기록 비율">
+        <span class="complete" id="med-complete-bar"></span>
+        <span class="missed" id="med-missed-bar"></span>
+        <span class="late" id="med-late-bar"></span>
+      </div>
+      <div class="legend-row">
+        <span><i class="dot complete"></i>완료 <b id="med-complete">92%</b></span>
+        <span><i class="dot missed"></i>놓침 <b id="med-missed">5%</b></span>
+        <span><i class="dot late"></i>일부 복용 <b id="med-late">3%</b></span>
+      </div>
+      <p class="section-copy" id="medication-copy"></p>
+    </section>
+
+    <section class="report-card" data-rise>
+      <div class="section-head tight">
+        <h2 class="section-title">증상 기록 요약</h2>
+      </div>
+      <div class="bar-list" id="symptom-list"></div>
+      <p class="section-copy" id="symptom-copy"></p>
+    </section>
+
+    <section class="report-card" data-rise>
+      <div class="section-head tight">
+        <h2 class="section-title">식사량 기록</h2>
+      </div>
+      <div class="meal-list" id="meal-list"></div>
+      <p class="section-copy" id="meal-copy"></p>
+    </section>
+
+    <section class="report-card weight-card" data-rise>
+      <div class="section-head tight">
+        <h2 class="section-title">체중 변화</h2>
+        <span class="section-chip" id="weight-change">-0.2kg</span>
+      </div>
+      <div class="weight-main">
+        <div>
+          <span>현재 체중</span>
+          <strong id="weight-current">4.8kg</strong>
+        </div>
+        <svg class="line-chart" viewBox="0 0 220 90" role="img" aria-label="최근 체중 변화 그래프">
+          <polyline points="8,38 60,34 112,42 164,48 212,54"></polyline>
+          <circle cx="8" cy="38" r="4"></circle>
+          <circle cx="60" cy="34" r="4"></circle>
+          <circle cx="112" cy="42" r="4"></circle>
+          <circle cx="164" cy="48" r="4"></circle>
+          <circle cx="212" cy="54" r="4"></circle>
+        </svg>
+      </div>
+      <p class="section-copy" id="weight-copy"></p>
+    </section>
+
+    <section class="report-card hospital-card" data-rise>
+      <div class="section-head tight">
+        <h2 class="section-title">병원 방문 전 요약</h2>
+        <span class="section-chip">다음 진료 D-3</span>
+      </div>
+      <div class="hospital-box">
+        <span class="material-symbols-rounded">local_hospital</span>
+        <div>
+          <strong>서울동물병원 / 김하늘 수의사</strong>
+          <p>다음 진료 때 아래 기록을 함께 확인해보세요.</p>
+        </div>
+      </div>
+      <ul class="check-summary" id="visit-summary"></ul>
+      <button class="btn btn-primary btn-block" type="button" id="open-visit-modal">
+        <span class="material-symbols-rounded">description</span>
+        진료 전 요약 보기
+      </button>
+    </section>
+
+    <section class="report-card" data-rise>
+      <div class="section-head tight">
+        <h2 class="section-title">검사 결과</h2>
+      </div>
+      <div class="test-result">
+        <span class="material-symbols-rounded">lab_profile</span>
+        <div>
+          <span>최근 업로드</span>
+          <strong>2026.06.10 혈액검사 결과</strong>
+          <small>혈액검사 1건 · 처방전 2건 · 기타 1건</small>
+        </div>
+      </div>
+      <a class="btn btn-ghost btn-block" href="hospital.html" aria-label="검사 결과 보기">
+        <span class="material-symbols-rounded">folder_open</span>
+        검사 결과 보기
+      </a>
+    </section>
+
+    <section class="report-card empty-report" data-rise>
+      <span class="material-symbols-rounded">monitor_heart</span>
+      <h2>아직 리포트를 만들 기록이 부족해요.</h2>
+      <p>복약, 증상, 식사 기록을 남기면 리포트에서 변화 흐름을 확인할 수 있어요.</p>
+      <a class="btn btn-primary btn-block" href="record.html" aria-label="기록 남기기">
+        <span class="material-symbols-rounded">edit_note</span>
+        기록 남기기
+      </a>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="하단 메뉴">
+    <a class="tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
+    <a class="tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
+    <a class="tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
+    <a class="tab active" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
+    <a class="tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
+  </nav>
+  <div class="home-indicator"><i></i></div>
+
+  <div class="report-modal" id="visit-modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="visit-modal-title">
+      <div class="modal-head">
+        <h2 id="visit-modal-title">진료 전 요약</h2>
+        <button class="icon-btn" type="button" aria-label="모달 닫기" data-close-modal>
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+      <p id="visit-modal-copy"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" type="button" data-close-modal>닫기</button>
+        <button class="btn btn-primary" type="button" id="prepare-share">공유 준비하기</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="js/store.js"></script>
+<script src="js/picker.js"></script>
+<script src="js/main.js"></script>
+<script src="js/report.js"></script>
+</body>
+</html>

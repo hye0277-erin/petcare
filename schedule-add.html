@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>PetCare+ · 새 일정 추가</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/picker.css" />
+<script type="module" src="js/guard.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="status-icons">
+      <span class="material-symbols-rounded">signal_cellular_alt</span>
+      <span class="material-symbols-rounded">wifi</span>
+      <span class="material-symbols-rounded">battery_full</span>
+    </span>
+  </div>
+
+  <header class="sub-header">
+    <a class="icon-btn" href="schedule.html" aria-label="뒤로"><span class="material-symbols-rounded">arrow_back_ios_new</span></a>
+    <div class="title">새 일정 추가</div>
+    <span style="width:44px"></span>
+  </header>
+
+  <main class="scroll">
+    <form id="sched-form">
+      <!-- 유형 -->
+      <div class="card-label" data-rise>일정 유형</div>
+      <div class="card" data-rise>
+        <div class="choice-grid" style="grid-template-columns:repeat(4,1fr)">
+          <label class="choice"><input type="radio" name="type" value="med" checked /> 약</label>
+          <label class="choice"><input type="radio" name="type" value="meal" /> 식사</label>
+          <label class="choice"><input type="radio" name="type" value="water" /> 물</label>
+          <label class="choice"><input type="radio" name="type" value="symptom" /> 증상</label>
+          <label class="choice"><input type="radio" name="type" value="poop" /> 배변</label>
+          <label class="choice"><input type="radio" name="type" value="weight" /> 체중</label>
+          <label class="choice"><input type="radio" name="type" value="temp" /> 체온</label>
+          <label class="choice"><input type="radio" name="type" value="breath" /> 호흡</label>
+          <label class="choice"><input type="radio" name="type" value="walk" /> 산책</label>
+          <label class="choice"><input type="radio" name="type" value="hospital" /> 병원</label>
+          <label class="choice"><input type="radio" name="type" value="memo" /> 메모</label>
+        </div>
+      </div>
+
+      <!-- 기본 정보 -->
+      <div class="card-label" data-rise>기본 정보</div>
+      <div class="card" data-rise>
+        <div class="form">
+          <div class="form-group">
+            <span class="form-label">제목</span>
+            <input class="input" id="s-title" type="text" placeholder="예: 저녁 약" />
+          </div>
+          <div class="form-group">
+            <span class="form-label">상세 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
+            <input class="input" id="s-desc" type="text" placeholder="예: 신장 보조 · 1/2 알" />
+          </div>
+          <div class="form-group">
+            <span class="form-label">시간 <span style="font-weight:500;color:var(--color-text-light)">하루 여러 번이면 쉼표로 구분 (예: 09:00, 14:00, 20:00)</span></span>
+            <input class="input" id="s-time" type="text" inputmode="numeric" placeholder="08:00" value="08:00" />
+          </div>
+          <div class="field-row">
+            <div class="form-group">
+              <span class="form-label">시작 날짜</span>
+              <input class="input" id="s-date" data-picker="date" value="2026-06-13" />
+            </div>
+            <div class="form-group">
+              <span class="form-label">종료일 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
+              <input class="input" id="s-end" data-picker="date" data-picker-placeholder="없음" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 반복 -->
+      <div class="card-label" data-rise>반복 <span style="font-weight:500;color:var(--color-text-light)">공통 일정은 매일 꾸준히 들어가요</span></div>
+      <div class="card" data-rise>
+        <div class="choice-row">
+          <label class="choice"><input type="radio" name="repeat" value="daily" checked /> 매일</label>
+          <label class="choice"><input type="radio" name="repeat" value="weekday" /> 평일</label>
+          <label class="choice"><input type="radio" name="repeat" value="weekend" /> 주말</label>
+          <label class="choice"><input type="radio" name="repeat" value="weekly" /> 매주</label>
+          <label class="choice"><input type="radio" name="repeat" value="custom" /> 특정 요일</label>
+          <label class="choice"><input type="radio" name="repeat" value="once" /> 한 번만</label>
+        </div>
+
+        <div class="form-group" id="days-field" style="margin-top:14px;display:none">
+          <span class="form-label">요일 선택</span>
+          <div class="choice-row">
+            <label class="choice"><input type="checkbox" name="day" value="일" /> 일</label>
+            <label class="choice"><input type="checkbox" name="day" value="월" /> 월</label>
+            <label class="choice"><input type="checkbox" name="day" value="화" /> 화</label>
+            <label class="choice"><input type="checkbox" name="day" value="수" /> 수</label>
+            <label class="choice"><input type="checkbox" name="day" value="목" /> 목</label>
+            <label class="choice"><input type="checkbox" name="day" value="금" /> 금</label>
+            <label class="choice"><input type="checkbox" name="day" value="토" /> 토</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 알림 -->
+      <div class="card-label" data-rise>알림 <span style="font-weight:500;color:var(--color-text-light)">선택</span></div>
+      <div class="card" data-rise>
+        <label class="choice" style="justify-content:flex-start"><input type="checkbox" id="s-alarm" /> 케어 시간에 알림 받기</label>
+        <div class="form-group" id="alarm-before-field" style="margin-top:14px;display:none">
+          <span class="form-label">사전 알림</span>
+          <select class="input" id="s-alarm-before">
+            <option value="0">정각</option>
+            <option value="10" selected>10분 전</option>
+            <option value="30">30분 전</option>
+            <option value="60">1시간 전</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 메모 -->
+      <div class="card-label" data-rise>메모 <span style="font-weight:500;color:var(--color-text-light)">선택</span></div>
+      <div class="card" data-rise>
+        <textarea class="textarea" id="s-memo" maxlength="200"
+          placeholder="기억해 둘 내용을 적어주세요." style="min-height:80px"></textarea>
+      </div>
+
+      <div class="section" data-rise>
+        <button class="btn btn-primary btn-block" id="s-submit" type="submit">일정 추가</button>
+      </div>
+    </form>
+  </main>
+
+  <nav class="tabbar">
+    <a class="tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
+    <a class="tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
+    <a class="tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
+    <a class="tab" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
+    <a class="tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
+  </nav>
+  <div class="home-indicator"><i></i></div>
+
+</div>
+<script src="js/store.js"></script>
+<script src="js/picker.js"></script>
+<script src="js/schedule.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

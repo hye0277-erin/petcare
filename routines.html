@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>PetCare+ · 반복 루틴 관리</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+<script type="module" src="js/guard.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="status-icons">
+      <span class="material-symbols-rounded">signal_cellular_alt</span>
+      <span class="material-symbols-rounded">wifi</span>
+      <span class="material-symbols-rounded">battery_full</span>
+    </span>
+  </div>
+
+  <header class="sub-header">
+    <a class="icon-btn" href="schedule.html" aria-label="뒤로"><span class="material-symbols-rounded">arrow_back_ios_new</span></a>
+    <div class="title">반복 루틴 관리</div>
+    <a class="icon-btn" href="schedule-add.html" aria-label="루틴 추가"><span class="material-symbols-rounded">add</span></a>
+  </header>
+
+  <main class="scroll">
+    <p class="quick-hint" data-rise style="margin-top:8px">반복되는 케어 규칙이에요. 활성화된 루틴은 매일/매주 오늘의 케어로 자동 생성됩니다.</p>
+    <div id="routine-list"></div>
+
+    <a class="add-dashed" href="schedule-add.html">
+      <span class="material-symbols-rounded">add</span>새 루틴 추가
+    </a>
+    <div style="height:8px"></div>
+  </main>
+
+  <nav class="tabbar">
+    <a class="tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
+    <a class="tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
+    <a class="tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
+    <a class="tab" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
+    <a class="tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
+  </nav>
+  <div class="home-indicator"><i></i></div>
+
+  <!-- 루틴 수정 시트 -->
+  <div class="sheet-overlay" id="routine-sheet">
+    <div class="sheet" style="max-height:86vh;overflow:auto">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">루틴 수정</div>
+      <div class="form">
+        <div class="form-group"><span class="form-label">루틴명</span>
+          <input class="input" id="e-title" type="text" /></div>
+        <div class="form-group"><span class="form-label">상세</span>
+          <input class="input" id="e-desc" type="text" placeholder="선택" /></div>
+        <div class="form-group"><span class="form-label">시간 <span style="font-weight:500;color:var(--color-text-light)">쉼표로 구분</span></span>
+          <input class="input" id="e-times" type="text" placeholder="08:00, 20:00" /></div>
+        <div class="form-group"><span class="form-label">반복</span>
+          <div class="choice-row">
+            <label class="choice"><input type="radio" name="e-repeat" value="daily" /> 매일</label>
+            <label class="choice"><input type="radio" name="e-repeat" value="weekday" /> 평일</label>
+            <label class="choice"><input type="radio" name="e-repeat" value="weekend" /> 주말</label>
+            <label class="choice"><input type="radio" name="e-repeat" value="weekly" /> 매주</label>
+          </div>
+        </div>
+        <div class="form-group" id="e-days-field" style="display:none">
+          <span class="form-label">요일</span>
+          <div class="choice-row">
+            <label class="choice"><input type="checkbox" name="e-day" value="일" /> 일</label>
+            <label class="choice"><input type="checkbox" name="e-day" value="월" /> 월</label>
+            <label class="choice"><input type="checkbox" name="e-day" value="화" /> 화</label>
+            <label class="choice"><input type="checkbox" name="e-day" value="수" /> 수</label>
+            <label class="choice"><input type="checkbox" name="e-day" value="목" /> 목</label>
+            <label class="choice"><input type="checkbox" name="e-day" value="금" /> 금</label>
+            <label class="choice"><input type="checkbox" name="e-day" value="토" /> 토</label>
+          </div>
+        </div>
+        <label class="choice" style="justify-content:flex-start"><input type="checkbox" id="e-alarm" /> 알림 받기</label>
+        <div style="display:flex;gap:10px;margin-top:6px">
+          <button class="btn btn-ghost" type="button" data-r-close style="flex:0 0 90px">취소</button>
+          <button class="btn btn-primary btn-block" type="button" id="e-save">수정 완료</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="js/store.js"></script>
+<script src="js/main.js"></script>
+<script src="js/routines.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>PetCare+ · 병원 기록</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/picker.css" />
+<script type="module" src="js/guard.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="status-icons">
+      <span class="material-symbols-rounded">signal_cellular_alt</span>
+      <span class="material-symbols-rounded">wifi</span>
+      <span class="material-symbols-rounded">battery_full</span>
+    </span>
+  </div>
+
+  <header class="header" data-rise>
+    <div class="header-row">
+      <div>
+        <h1 class="page-title">병원</h1>
+        <p class="greeting-sub" data-pet-sub>해피의 진료 기록을 모아봤어요.</p>
+      </div>
+      <button class="icon-btn solid" id="btn-add-hospital" aria-label="병원 기록 추가">
+        <span class="material-symbols-rounded">add</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="scroll">
+    <!-- 다음 진료 카드 -->
+    <div id="next-visit-card" data-rise></div>
+
+    <!-- 최근 방문 기록 -->
+    <div class="section-head" data-rise style="margin:24px 0 12px">
+      <h2 class="section-title">최근 방문 기록</h2>
+    </div>
+    <div id="visit-list" data-rise></div>
+
+    <!-- 검사 결과 -->
+    <div class="section-head" data-rise style="margin:24px 0 12px">
+      <h2 class="section-title">검사 결과</h2>
+    </div>
+    <div id="test-list" data-rise></div>
+
+    <!-- 처방 내역 -->
+    <div class="section-head" data-rise style="margin:24px 0 12px">
+      <h2 class="section-title">처방 내역</h2>
+    </div>
+    <div id="rx-list" data-rise></div>
+
+    <!-- 병원 메모 -->
+    <div class="section-head" data-rise style="margin:24px 0 12px">
+      <h2 class="section-title">병원 메모</h2>
+    </div>
+    <div id="memo-card" data-rise></div>
+
+    <button class="add-dashed" id="btn-add-hospital-2">
+      <span class="material-symbols-rounded">add</span>병원 기록 추가
+    </button>
+    <div style="height:8px"></div>
+  </main>
+
+  <nav class="tabbar">
+    <a class="tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
+    <a class="tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
+    <a class="tab active" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
+    <a class="tab" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
+    <a class="tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
+  </nav>
+  <div class="home-indicator"><i></i></div>
+
+  <div class="sheet-overlay" data-sheet>
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">무엇을 기록할까요?</div>
+      <div class="sheet-grid">
+        <a class="quick-btn" href="record.html?type=symptom"><span class="quick-ic ic-blue"><span class="material-symbols-rounded">stethoscope</span></span><span>증상</span></a>
+        <a class="quick-btn" href="record.html?type=meal"><span class="quick-ic ic-green"><span class="material-symbols-rounded">restaurant</span></span><span>식사</span></a>
+        <a class="quick-btn" href="record.html?type=water"><span class="quick-ic ic-blue"><span class="material-symbols-rounded">water_drop</span></span><span>물</span></a>
+        <a class="quick-btn" href="record.html?type=poop"><span class="quick-ic ic-orange"><span class="material-symbols-rounded">pets</span></span><span>배변</span></a>
+        <a class="quick-btn" href="record.html?type=weight"><span class="quick-ic ic-yellow"><span class="material-symbols-rounded">monitor_weight</span></span><span>체중</span></a>
+        <a class="quick-btn" href="record.html?type=breath"><span class="quick-ic ic-green"><span class="material-symbols-rounded">air</span></span><span>호흡</span></a>
+        <a class="quick-btn" href="record.html?type=photo"><span class="quick-ic ic-purple"><span class="material-symbols-rounded">photo_camera</span></span><span>사진</span></a>
+        <button class="quick-btn" data-sheet-close><span class="quick-ic ic-orange"><span class="material-symbols-rounded">close</span></span><span>닫기</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 병원 기록 추가 시트 -->
+  <div class="sheet-overlay" id="hospital-sheet">
+    <div class="sheet" style="max-height:86vh;overflow:auto">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">병원 기록 추가</div>
+      <div class="form">
+        <div class="field-row">
+          <div class="form-group"><span class="form-label">진료 날짜</span>
+            <input class="input" id="h-date" data-picker="date" value="2026-06-13" /></div>
+          <div class="form-group"><span class="form-label">다음 진료 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
+            <input class="input" id="h-next" data-picker="date" data-picker-placeholder="선택 안 함" /></div>
+        </div>
+        <div class="form-group"><span class="form-label">병원명</span>
+          <input class="input" id="h-name" type="text" placeholder="예: 서울동물병원" /></div>
+        <div class="form-group"><span class="form-label">담당 수의사 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
+          <input class="input" id="h-doctor" type="text" placeholder="예: 김하늘 수의사" /></div>
+        <div class="form-group"><span class="form-label">진료 목적</span>
+          <div class="choice-grid" style="grid-template-columns:repeat(3,1fr)">
+            <label class="choice"><input type="radio" name="h-purpose" value="정기 진료" checked /> 정기 진료</label>
+            <label class="choice"><input type="radio" name="h-purpose" value="검사" /> 검사</label>
+            <label class="choice"><input type="radio" name="h-purpose" value="응급" /> 응급</label>
+            <label class="choice"><input type="radio" name="h-purpose" value="예방접종" /> 예방접종</label>
+            <label class="choice"><input type="radio" name="h-purpose" value="처방 갱신" /> 처방 갱신</label>
+            <label class="choice"><input type="radio" name="h-purpose" value="기타" /> 기타</label>
+          </div>
+        </div>
+        <div class="form-group"><span class="form-label">진료 내용 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
+          <textarea class="textarea" id="h-content" placeholder="진료 내용을 적어주세요." style="min-height:70px"></textarea></div>
+        <div class="form-group"><span class="form-label">처방 약물 <span style="font-weight:500;color:var(--color-text-light)">한 줄에 하나씩</span></span>
+          <textarea class="textarea" id="h-rx" placeholder="예: 심장약 1일 1회 · 아침" style="min-height:60px"></textarea></div>
+        <div class="form-group"><span class="form-label">영수증 / 처방전 첨부 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
+          <input class="input" id="h-file" type="file" accept="application/pdf,image/png,image/jpeg" /></div>
+        <div class="form-group"><span class="form-label">검사 결과 파일 <span style="font-weight:500;color:var(--color-text-light)">선택 · 검사 결과 목록에 추가돼요</span></span>
+          <input class="input" id="h-test-file" type="file" accept="application/pdf,image/png,image/jpeg" />
+          <input class="input" id="h-test-name" type="text" placeholder="검사명 (예: 혈액검사)" style="margin-top:8px" /></div>
+        <div class="form-group"><span class="form-label">메모 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
+          <input class="input" id="h-memo" type="text" placeholder="기억해 둘 내용" /></div>
+        <label class="choice" style="justify-content:flex-start"><input type="checkbox" id="h-make-task" /> 처방 약물로 복약 일정 만들기</label>
+        <div style="display:flex;gap:10px;margin-top:6px">
+          <button class="btn btn-ghost" type="button" data-h-close style="flex:0 0 90px">취소</button>
+          <button class="btn btn-primary btn-block" type="button" id="h-save">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 검사 결과 상세 시트 -->
+  <div class="sheet-overlay" id="test-sheet">
+    <div class="sheet" style="max-height:86vh;overflow:auto">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title" id="t-title">검사 결과</div>
+      <div id="t-body"></div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="btn btn-ghost" type="button" data-h-close style="flex:0 0 90px">닫기</button>
+        <button class="btn btn-primary btn-block" type="button" id="t-share">공유 준비하기</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="js/store.js"></script>
+<script src="js/picker.js"></script>
+<script src="js/main.js"></script>
+<script src="js/hospital.js"></script>
+</body>
+</html>

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet Care+ Redesign</title>
+<link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF8F4;
+    --warm-white: #FFFFFF;
+    --ink: #1A1814;
+    --ink-soft: #3D3A35;
+    --ink-muted: #7A7670;
+    --ink-faint: #C4BFB8;
+    --accent: #2D5BFF;
+    --accent-soft: #E8EEFF;
+    --amber: #F5A623;
+    --amber-soft: #FEF3DC;
+    --sage: #4CAF89;
+    --sage-soft: #E5F7F0;
+    --rose: #E85555;
+    --rose-soft: #FDEAEA;
+    --border: #EDEAE4;
+    --shadow-sm: 0 1px 4px rgba(26,24,20,0.06);
+    --shadow-md: 0 4px 20px rgba(26,24,20,0.08);
+    --shadow-lg: 0 12px 40px rgba(26,24,20,0.12);
+    --r-sm: 12px;
+    --r-md: 16px;
+    --r-lg: 24px;
+    --r-xl: 32px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background: #F0EDE6;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  /* Header */
+  .page-title {
+    text-align: center;
+    font-family: 'Gmarket Sans', sans-serif;
+  }
+  .page-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+  }
+  .page-title p {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* Screen wrapper */
+  .screens {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+    width: 100%;
+  }
+
+  .phone-frame {
+    width: 375px;
+    background: var(--cream);
+    border-radius: 48px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(26,24,20,0.18), 0 0 0 1px rgba(26,24,20,0.06);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* Status bar */
+  .status-bar {
+    background: var(--cream);
+    padding: 14px 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .status-right { display: flex; gap: 6px; align-items: center; }
+  .status-dot { width: 6px; height: 6px; background: var(--ink); border-radius: 50%; }
+
+  /* Navigation */
+  .nav-bar {
+    background: var(--cream);
+    padding: 16px 24px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-menu { width: 20px; height: 14px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+  .nav-menu span { display: block; height: 2px; background: var(--ink); border-radius: 2px; }
+  .nav-menu span:last-child { width: 60%; }
+  .nav-title { font-family: 'Gmarket Sans', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+  .nav-bell {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--ink); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; position: relative; cursor: pointer;
+  }
+  .nav-bell-dot {
+    position: absolute; top: 2px; right: 2px;
+    width: 8px; height: 8px; background: var(--rose);
+    border-radius: 50%; border: 2px solid var(--cream);
+  }
+
+  /* Screen scroll */
+  .screen-scroll {
+    height: 780px;
+    overflow-y: auto;
+    padding-bottom: 80px;
+    scroll-behavior: smooth;
+  }
+  .screen-scroll::-webkit-scrollbar { display: none; }
+
+  /* Pet profile */
+  .pet-profile {
+    margin: 4px 20px 0;
+    background: var(--ink);
+    border-radius: var(--r-xl);
+    padding: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .pet-profile::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 130px; height: 130px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .pet-profile::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: 20px;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+  }
+  .pet-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .pet-avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    overflow: hidden; border: 2.5px solid rgba(255,255,255,0.25);
+    flex-shrink: 0;
+  }
+  .pet-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .pet-avatar-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #3D3A35, #2A2825);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .pet-info-top { flex: 1; }
+  .pet-name-row { display: flex; align-items: center; gap: 6px; }
+  .pet-name { font-family: 'Gmarket Sans', sans-serif; font-size: 20px; font-weight: 700; }
+  .pet-chevron { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .pet-breed { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px; font-weight: 300; }
+  .pet-visit {
+    margin-left: auto; text-align: right;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 8px 12px;
+  }
+  .pet-visit-label { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 300; }
+  .pet-visit-date { font-family: 'Gmarket Sans', sans-serif; font-size: 15px; font-weight: 700; color: #7FB3FF; margin-top: 2px; }
+  .pet-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pet-tag {
+    padding: 4px 10px; border-radius: 20px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px; color: rgba(255,255,255,0.75);
+    font-weight: 300;
+  }
+
+  /* Section header */
+  .section-header {
+    padding: 24px 20px 12px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .section-title {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+  }
+  .section-link { font-size: 12px; color: var(--accent); font-weight: 500; cursor: pointer; }
+
+  /* Care card */
+  .care-card {
+    margin: 0 20px;
+    background: white;
+    border-radius: var(--r-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .care-summary { display: flex; gap: 0; margin-bottom: 16px; }
+  .care-stat { flex: 1; }
+  .care-stat-label { font-size: 11px; color: var(--ink-muted); font-weight: 300; margin-bottom: 4px; }
+  .care-stat-value {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 40px; font-weight: 700;
+    color: var(--accent); line-height: 1;
+    letter-spacing: -2px;
+  }
+  .care-stat-unit { font-size: 14px; color: var(--ink-muted); font-weight: 400; margin-left: 2px; letter-spacing: 0; }
+  .care-next {
+    flex: 1;
+    background: var(--accent-soft);
+    border-radius: var(--r-sm);
+    padding: 12px 14px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .care-next-label { font-size: 10px; color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+  .care-next-item { display: flex; align-items: center; gap: 6px; }
+  .care-next-icon { font-size: 18px; }
+  .care-next-name { font-size: 13px; font-weight: 600; }
+  .care-next-time {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 20px; font-weight: 700; color: var(--accent);
+    margin-top: 2px; letter-spacing: -0.5px;
+  }
+
+  /* Progress bar */
+  .progress-wrap { margin: 0 0 16px; }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-muted); margin-bottom: 6px; }
+  .progress-bar {
+    height: 6px; background: var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), #7FB3FF);
+    border-radius: 10px; transition: width 0.8s ease;
+  }
+
+  /* Task list */
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+  .task-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px;
+    background: var(--cream); border-radius: var(--r-sm);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .task-item:hover { background: var(--accent-soft); }
+  .task-check {
+    width: 20px; height: 20px; border-radius: 6px;
+    border: 2px solid var(--ink-faint); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .task-check.done { background: var(--sage); border-color: var(--sage); }
+  .task-check.done::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+  .task-icon { font-size: 18px; }
+  .task-name { flex: 1; font-size: 13px; font-weight: 500; }
+  .task-time { font-size: 12px; color: var(--ink-muted); font-family: 'Gmarket Sans', sans-serif; font-weight: 500; }
+  .task-more {
+    text-align: center; padding: 10px;
+    font-size: 12px; color: var(--accent); font-weight: 500;
+    cursor: pointer;
+  }
+  .view-all-btn {
+    margin: 14px 0 0;
+    width: 100%;
+    padding: 13px;
+    background: var(--ink);
+    color: white; font-size: 13px; font-weight: 600;
+    border-radius: var(--r-sm);
+    border: none; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  /* Schedule upcoming */
+  .schedule-row {
+    padding: 0 20px;
+    display: flex; gap: 10px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .schedule-row::-webkit-scrollbar { display: none; }
+  .schedule-card {
+    flex-shrink: 0;
+    background: white;
+    border-radius: var(--r-md);
+    padding: 16px;
+    width: 110px;
+    box-shadow: var(--shadow-sm);
+  }
+  .schedule-day { font-size: 11px; color: var(--ink-muted); font-weight: 300; margin-bottom: 8px; }
+  .schedule-icon-wrap {
+    width: 44px; height: 44px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 8px;
+  }
+  .schedule-name { font-size: 12px; font-weight: 600; line-height: 1.3; }
+  .schedule-date { font-size: 11px; color: var(--ink-muted); margin-top: 4px; }
+
+  /* Symptoms */
+  .symptom-list { margin: 0 20px; display: flex; flex-direction: column; gap: 8px; }
+  .symptom-item {
+    background: white;
+    border-radius: var(--r-sm);
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .symptom-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rose); flex-shrink: 0; }
+  .symptom-icon { font-size: 20px; }
+  .symptom-info { flex: 1; }
+  .symptom-name { font-size: 13px; font-weight: 600; }
+  .symptom-time { font-size: 11px; color: var(--ink-muted); margin-top: 2px; }
+
+  /* Quick record */
+  .quick-grid {
+    margin: 0 20px;
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+  }
+  .quick-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 12px 4px; background: white; border-radius: var(--r-sm);
+    cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: transform 0.15s;
+  }
+  .quick-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .quick-btn-icon {
+    width: 36px; height: 36px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .quick-btn-label { font-size: 10px; font-weight: 500; color: var(--ink-soft); }
+
+  /* Hospital record */
+  .hospital-card {
+    margin: 0 20px;
+    background: white; border-radius: var(--r-md);
+    padding: 16px; box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .hospital-icon-wrap {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: var(--amber-soft);
+    display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+  }
+  .hospital-info { flex: 1; }
+  .hospital-name { font-size: 14px; font-weight: 600; }
+  .hospital-detail { font-size: 12px; color: var(--rose); margin-top: 2px; }
+  .hospital-date { font-size: 11px; color: var(--ink-muted); margin-top: 4px; }
+  .hospital-chart {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: sticky; bottom: 0;
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 12px 20px 20px;
+    display: flex; justify-content: space-around;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: pointer; opacity: 0.4; transition: opacity 0.2s;
+  }
+  .nav-item.active { opacity: 1; }
+  .nav-item-icon { font-size: 22px; }
+  .nav-item-label { font-size: 10px; font-weight: 500; color: var(--ink-soft); }
+  .nav-item.active .nav-item-label { color: var(--accent); }
+  .nav-item.active .nav-item-icon { filter: none; }
+
+  /* ─── SCREEN 2: Daily Care Detail ─── */
+  .top-bar {
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--cream);
+  }
+  .top-back {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: white; box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; cursor: pointer;
+  }
+  .top-title { font-family: 'Gmarket Sans', sans-serif; font-size: 16px; font-weight: 700; }
+  .top-calendar { font-size: 22px; cursor: pointer; }
+
+  .care-hero {
+    margin: 0 20px 20px;
+    background: linear-gradient(135deg, #2D5BFF 0%, #1A3FCC 100%);
+    border-radius: var(--r-xl); padding: 22px;
+    color: white; position: relative; overflow: hidden;
+  }
+  .care-hero::before {
+    content: '🐾';
+    position: absolute; right: 20px; bottom: -8px;
+    font-size: 64px; opacity: 0.15;
+  }
+  .care-hero-row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .care-hero-left .label { font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 4px; font-weight: 300; }
+  .care-hero-left .value { font-family: 'Gmarket Sans', sans-serif; font-size: 42px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+  .care-hero-left .denom { font-size: 18px; color: rgba(255,255,255,0.6); font-weight: 400; }
+  .care-hero-right .label { font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 4px; font-weight: 300; text-align: right; }
+  .care-hero-right .value {
+    font-family: 'Gmarket Sans', sans-serif; font-size: 28px; font-weight: 700;
+    letter-spacing: -1px;
+    background: rgba(255,255,255,0.2); border-radius: 10px; padding: 6px 12px;
+  }
+  .hero-progress {
+    margin-top: 16px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden;
+  }
+  .hero-progress-fill { height: 100%; background: white; border-radius: 10px; width: 58%; }
+
+  .divider-label {
+    padding: 16px 20px 8px;
+    font-size: 11px; font-weight: 600; color: var(--ink-muted);
+    letter-spacing: 0.8px; text-transform: uppercase;
+  }
+
+  .detail-task-list { padding: 0 20px; display: flex; flex-direction: column; gap: 8px; }
+  .detail-task-item {
+    background: white; border-radius: var(--r-md); padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-sm);
+  }
+  .detail-task-item.done { opacity: 0.65; }
+  .detail-task-icon-wrap {
+    width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .detail-task-info { flex: 1; }
+  .detail-task-name { font-size: 13px; font-weight: 600; }
+  .detail-task-time { font-size: 11px; color: var(--ink-muted); margin-top: 2px; }
+  .detail-task-badge {
+    font-size: 11px; font-weight: 600; padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .badge-done { background: var(--sage-soft); color: var(--sage); }
+  .badge-pending { background: var(--amber-soft); color: var(--amber); }
+
+  .notice-box {
+    margin: 12px 20px 0;
+    background: var(--amber-soft); border-radius: var(--r-sm);
+    padding: 12px 14px;
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 11px; color: var(--ink-soft); line-height: 1.5;
+  }
+  .notice-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ─── SCREEN 3: Record ─── */
+  .record-hero {
+    margin: 0 20px 16px;
+    background: white; border-radius: var(--r-xl);
+    padding: 18px; box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .record-avatar {
+    width: 48px; height: 48px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+    border: 2px solid var(--border);
+  }
+  .record-avatar-inner { width: 100%; height: 100%; background: linear-gradient(135deg, #3D3A35, #2A2825); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .record-pet-name { font-family: 'Gmarket Sans', sans-serif; font-size: 16px; font-weight: 700; }
+  .record-pet-info { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+
+  .quick-record-grid {
+    margin: 0 20px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .quick-record-btn {
+    background: white; border-radius: var(--r-md);
+    padding: 16px 10px; text-align: center;
+    cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+  }
+  .quick-record-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .quick-record-btn:nth-child(4) .qr-icon-wrap { background: var(--rose-soft); }
+  .quick-record-btn:nth-child(5) .qr-icon-wrap { background: #FFF3E5; }
+  .quick-record-btn:nth-child(6) .qr-icon-wrap { background: var(--sage-soft); }
+  .qr-icon-wrap {
+    width: 48px; height: 48px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; margin: 0 auto 8px;
+    background: var(--accent-soft);
+  }
+  .qr-label { font-size: 12px; font-weight: 600; }
+
+  .date-header {
+    padding: 20px 20px 10px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .date-header-text { font-family: 'Gmarket Sans', sans-serif; font-size: 14px; font-weight: 700; }
+  .date-header-icon { font-size: 18px; cursor: pointer; }
+
+  .timeline { padding: 0 20px; display: flex; flex-direction: column; }
+  .timeline-item {
+    display: flex; gap: 14px; padding-bottom: 14px; position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute; left: 36px; top: 28px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .timeline-item:last-child::before { display: none; }
+  .timeline-time { font-family: 'Gmarket Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--ink-muted); width: 42px; flex-shrink: 0; padding-top: 2px; }
+  .timeline-dot {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+    z-index: 1;
+  }
+  .timeline-card {
+    flex: 1; background: white; border-radius: var(--r-sm);
+    padding: 12px 14px; box-shadow: var(--shadow-sm);
+    margin-top: -2px;
+  }
+  .timeline-card-name { font-size: 13px; font-weight: 600; }
+  .timeline-card-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 20px; margin-top: 4px;
+  }
+
+  /* Color utilities */
+  .bg-blue { background: var(--accent-soft); }
+  .bg-amber { background: var(--amber-soft); }
+  .bg-sage { background: var(--sage-soft); }
+  .bg-rose { background: var(--rose-soft); }
+  .bg-purple { background: #F0EDFF; }
+  .text-accent { color: var(--accent); }
+  .text-sage { color: var(--sage); }
+  .text-rose { color: var(--rose); }
+  .text-amber { color: var(--amber); }
+
+  .label-section {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>Pet Care+ ✦ 리디자인</h1>
+  <p>따뜻하고 신뢰감 있는 반려동물 케어 앱</p>
+</div>
+
+<div class="screens">
+
+  <!-- ── SCREEN 1: Home ── -->
+  <div>
+    <div class="label-section">01 · 홈 화면</div>
+    <div class="phone-frame">
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-right">
+          <span>●●●</span>
+          <span>WiFi</span>
+          <span>🔋</span>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <div class="nav-bar">
+        <div class="nav-menu"><span></span><span></span><span></span></div>
+        <div class="nav-title">Pet Care+</div>
+        <div class="nav-bell">🔔<div class="nav-bell-dot"></div></div>
+      </div>
+
+      <div class="screen-scroll">
+
+        <!-- Pet profile -->
+        <div class="pet-profile">
+          <div class="pet-top">
+            <div class="pet-avatar">
+              <div class="pet-avatar-placeholder">🐶</div>
+            </div>
+            <div class="pet-info-top">
+              <div class="pet-name-row">
+                <div class="pet-name">코코</div>
+                <div class="pet-chevron">▾</div>
+              </div>
+              <div class="pet-breed">12세 · 말티즈</div>
+            </div>
+            <div class="pet-visit">
+              <div class="pet-visit-label">다음 진료</div>
+              <div class="pet-visit-date">D-3</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.45);font-weight:300;">6.2 (월)</div>
+            </div>
+          </div>
+          <div class="pet-tags">
+            <div class="pet-tag">심장질환</div>
+            <div class="pet-tag">신장질환</div>
+            <div class="pet-tag">췌장염</div>
+          </div>
+        </div>
+
+        <!-- Today's care -->
+        <div class="section-header">
+          <div class="section-title">오늘의 케어</div>
+        </div>
+        <div class="care-card">
+          <div class="care-summary">
+            <div class="care-stat">
+              <div class="care-stat-label">남은 일정</div>
+              <div class="care-stat-value">5<span class="care-stat-unit">건</span></div>
+            </div>
+            <div class="care-next">
+              <div class="care-next-label">다음 일정</div>
+              <div class="care-next-item">
+                <span class="care-next-icon">💊</span>
+                <span class="care-next-name">저녁약</span>
+              </div>
+              <div class="care-next-time">18:00</div>
+            </div>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-labels">
+              <span>완료 7 / 12</span>
+              <span>58%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:58%"></div>
+            </div>
+          </div>
+
+          <div class="task-list">
+            <div class="task-item">
+              <div class="task-check"></div>
+              <span class="task-icon">💊</span>
+              <span class="task-name">저녁약</span>
+              <span class="task-time">18:00</span>
+            </div>
+            <div class="task-item">
+              <div class="task-check"></div>
+              <span class="task-icon">💧</span>
+              <span class="task-name">물 섭취 확인</span>
+              <span class="task-time" style="color:var(--amber)">오늘 중</span>
+            </div>
+            <div class="task-item">
+              <div class="task-check"></div>
+              <span class="task-icon">🫁</span>
+              <span class="task-name">호흡 체크</span>
+              <span class="task-time">21:00</span>
+            </div>
+          </div>
+          <div class="task-more">+2개 더 보기 ∨</div>
+          <button class="view-all-btn">오늘의 케어 전체보기 →</button>
+        </div>
+
+        <!-- Upcoming -->
+        <div class="section-header">
+          <div class="section-title">다가오는 일정</div>
+          <div class="section-link">전체보기</div>
+        </div>
+        <div class="schedule-row">
+          <div class="schedule-card">
+            <div class="schedule-day">내일</div>
+            <div class="schedule-icon-wrap bg-blue" style="font-size:22px">🔬</div>
+            <div class="schedule-name">정기검진</div>
+            <div class="schedule-date" style="color:var(--accent);font-weight:600;">6.1 (일)</div>
+          </div>
+          <div class="schedule-card">
+            <div class="schedule-day">3일 후</div>
+            <div class="schedule-icon-wrap bg-purple" style="font-size:22px">🧪</div>
+            <div class="schedule-name">혈액검사</div>
+            <div class="schedule-date">6.4 (수)</div>
+          </div>
+          <div class="schedule-card">
+            <div class="schedule-day">7일 후</div>
+            <div class="schedule-icon-wrap bg-amber" style="font-size:22px">💊</div>
+            <div class="schedule-name">처방약 갱신</div>
+            <div class="schedule-date">6.8 (일)</div>
+          </div>
+        </div>
+
+        <!-- Symptoms -->
+        <div class="section-header">
+          <div class="section-title">최근 특이사항</div>
+          <div class="section-link">전체보기</div>
+        </div>
+        <div class="symptom-list">
+          <div class="symptom-item">
+            <div class="symptom-dot"></div>
+            <span class="symptom-icon">😮‍💨</span>
+            <div class="symptom-info">
+              <div class="symptom-name">기침</div>
+              <div class="symptom-time">어제 21:30</div>
+            </div>
+          </div>
+          <div class="symptom-item">
+            <div class="symptom-dot" style="background:var(--amber)"></div>
+            <span class="symptom-icon">🍽️</span>
+            <div class="symptom-info">
+              <div class="symptom-name">식욕 감소</div>
+              <div class="symptom-time">3일 전</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick record -->
+        <div class="section-header">
+          <div class="section-title">빠른 기록</div>
+        </div>
+        <div class="quick-grid">
+          <div class="quick-btn"><div class="quick-btn-icon bg-blue" style="border-radius:12px">💊</div><div class="quick-btn-label">약</div></div>
+          <div class="quick-btn"><div class="quick-btn-icon bg-amber" style="border-radius:12px">🥣</div><div class="quick-btn-label">식사</div></div>
+          <div class="quick-btn"><div class="quick-btn-icon" style="background:#E5F4FF;border-radius:12px">💧</div><div class="quick-btn-label">물</div></div>
+          <div class="quick-btn"><div class="quick-btn-icon bg-rose" style="border-radius:12px">😟</div><div class="quick-btn-label">증상</div></div>
+          <div class="quick-btn"><div class="quick-btn-icon" style="background:#FFF0E5;border-radius:12px">💩</div><div class="quick-btn-label">배변</div></div>
+          <div class="quick-btn"><div class="quick-btn-icon bg-sage" style="border-radius:12px">⚖️</div><div class="quick-btn-label">체중</div></div>
+        </div>
+
+        <!-- Hospital -->
+        <div class="section-header">
+          <div class="section-title">최근 병원 기록</div>
+          <div class="section-link">검사결과 보기</div>
+        </div>
+        <div class="hospital-card">
+          <div class="hospital-icon-wrap">📋</div>
+          <div class="hospital-info">
+            <div class="hospital-name">신장 검사</div>
+            <div class="hospital-detail">크레아티닌 ↑</div>
+            <div class="hospital-date">2026.05.20</div>
+          </div>
+          <div class="hospital-chart">📈</div>
+        </div>
+
+        <div style="height:20px"></div>
+      </div>
+
+      <!-- Bottom nav -->
+      <div class="bottom-nav">
+        <div class="nav-item active"><div class="nav-item-icon">🏠</div><div class="nav-item-label" style="color:var(--accent)">홈</div></div>
+        <div class="nav-item"><div class="nav-item-icon">📅</div><div class="nav-item-label">일정</div></div>
+        <div class="nav-item"><div class="nav-item-icon">📝</div><div class="nav-item-label">기록</div></div>
+        <div class="nav-item"><div class="nav-item-icon">🏥</div><div class="nav-item-label">병원</div></div>
+        <div class="nav-item"><div class="nav-item-icon">⚙️</div><div class="nav-item-label">설정</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 2: Today's Care Detail ── -->
+  <div>
+    <div class="label-section">02 · 오늘의 케어 전체보기</div>
+    <div class="phone-frame">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-right"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+      </div>
+
+      <div class="top-bar">
+        <div class="top-back">←</div>
+        <div class="top-title">오늘의 케어</div>
+        <div class="top-calendar">🗓️</div>
+      </div>
+
+      <div class="screen-scroll">
+        <!-- Hero -->
+        <div class="care-hero" style="margin-top:0">
+          <div class="care-hero-row">
+            <div class="care-hero-left">
+              <div class="label">완료</div>
+              <div class="value">7<span class="denom"> / 12</span></div>
+            </div>
+            <div class="care-hero-right">
+              <div class="label">남은 일정</div>
+              <div class="value">5건</div>
+            </div>
+          </div>
+          <div class="hero-progress"><div class="hero-progress-fill"></div></div>
+        </div>
+
+        <!-- Completed -->
+        <div class="divider-label">완료한 일정</div>
+        <div class="detail-task-list">
+          <div class="detail-task-item done">
+            <div class="detail-task-icon-wrap bg-blue">💊</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">아침약</div>
+              <div class="detail-task-time">예정 08:00 · 완료 08:05</div>
+            </div>
+            <div class="detail-task-badge badge-done">완료</div>
+          </div>
+          <div class="detail-task-item done">
+            <div class="detail-task-icon-wrap bg-amber">🥣</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">아침 식사</div>
+              <div class="detail-task-time">완료 08:30</div>
+            </div>
+            <div class="detail-task-badge badge-done">완료</div>
+          </div>
+          <div class="detail-task-item done">
+            <div class="detail-task-icon-wrap" style="background:#E5F4FF">💧</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">물 섭취 확인</div>
+              <div class="detail-task-time">완료 09:00</div>
+            </div>
+            <div class="detail-task-badge badge-done">완료</div>
+          </div>
+          <div class="detail-task-item done">
+            <div class="detail-task-icon-wrap bg-blue">💊</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">점심약</div>
+              <div class="detail-task-time">예정 12:00 · 완료 12:05</div>
+            </div>
+            <div class="detail-task-badge badge-done">완료</div>
+          </div>
+          <div class="detail-task-item done">
+            <div class="detail-task-icon-wrap bg-amber">🥣</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">점심 식사</div>
+              <div class="detail-task-time">완료 12:30</div>
+            </div>
+            <div class="detail-task-badge badge-done">완료</div>
+          </div>
+          <div class="detail-task-item done">
+            <div class="detail-task-icon-wrap bg-sage">🚶</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">산책</div>
+              <div class="detail-task-time">완료 15:00</div>
+            </div>
+            <div class="detail-task-badge badge-done">완료</div>
+          </div>
+          <div class="detail-task-item done">
+            <div class="detail-task-icon-wrap" style="background:#F0F0FF">🦠</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">유산균</div>
+              <div class="detail-task-time">완료 16:00</div>
+            </div>
+            <div class="detail-task-badge badge-done">완료</div>
+          </div>
+        </div>
+
+        <!-- Remaining -->
+        <div class="divider-label">남은 일정</div>
+        <div class="detail-task-list">
+          <div class="detail-task-item">
+            <div class="detail-task-icon-wrap bg-blue">💊</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">저녁약</div>
+              <div class="detail-task-time">예정 18:00</div>
+            </div>
+            <div class="detail-task-badge badge-pending">예정</div>
+          </div>
+          <div class="detail-task-item">
+            <div class="detail-task-icon-wrap bg-amber">🥣</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">저녁 식사</div>
+              <div class="detail-task-time">예정 19:00</div>
+            </div>
+            <div class="detail-task-badge badge-pending">예정</div>
+          </div>
+          <div class="detail-task-item">
+            <div class="detail-task-icon-wrap" style="background:#E5F4FF">🫁</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">호흡 체크</div>
+              <div class="detail-task-time">예정 21:00</div>
+            </div>
+            <div class="detail-task-badge badge-pending">예정</div>
+          </div>
+          <div class="detail-task-item">
+            <div class="detail-task-icon-wrap bg-sage">🌿</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">취침 전 약</div>
+              <div class="detail-task-time">예정 22:00</div>
+            </div>
+            <div class="detail-task-badge badge-pending">예정</div>
+          </div>
+          <div class="detail-task-item">
+            <div class="detail-task-icon-wrap bg-sage">⚖️</div>
+            <div class="detail-task-info">
+              <div class="detail-task-name">체중 측정</div>
+              <div class="detail-task-time" style="color:var(--amber)">오늘 중</div>
+            </div>
+            <div class="detail-task-badge" style="background:var(--amber-soft);color:var(--amber)">미정</div>
+          </div>
+        </div>
+
+        <div class="notice-box">
+          <span class="notice-icon">💡</span>
+          <span>시간 미정 일정은 예정 시간과 실제 완료 시간이 함께 기록됩니다.</span>
+        </div>
+
+        <div style="height:20px"></div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-item-icon">🏠</div><div class="nav-item-label">홈</div></div>
+        <div class="nav-item active"><div class="nav-item-icon">📅</div><div class="nav-item-label" style="color:var(--accent)">일정</div></div>
+        <div class="nav-item"><div class="nav-item-icon">📝</div><div class="nav-item-label">기록</div></div>
+        <div class="nav-item"><div class="nav-item-icon">🏥</div><div class="nav-item-label">병원</div></div>
+        <div class="nav-item"><div class="nav-item-icon">⚙️</div><div class="nav-item-label">설정</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 3: Record ── -->
+  <div>
+    <div class="label-section">03 · 기록 메인</div>
+    <div class="phone-frame">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-right"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+      </div>
+
+      <div class="top-bar">
+        <div class="top-back">←</div>
+        <div class="top-title">기록</div>
+        <div style="width:36px"></div>
+      </div>
+
+      <div class="screen-scroll">
+
+        <!-- Pet selector -->
+        <div class="record-hero">
+          <div class="record-avatar">
+            <div class="record-avatar-inner">🐶</div>
+          </div>
+          <div>
+            <div class="record-pet-name">코코 ∨</div>
+            <div class="record-pet-info">12세 · 말티즈</div>
+          </div>
+        </div>
+
+        <!-- Quick record -->
+        <div class="section-header" style="padding-top:8px">
+          <div class="section-title">빠른 기록</div>
+        </div>
+        <div class="quick-record-grid">
+          <div class="quick-record-btn">
+            <div class="qr-icon-wrap bg-blue">💊</div>
+            <div class="qr-label">약</div>
+          </div>
+          <div class="quick-record-btn">
+            <div class="qr-icon-wrap bg-amber">🥣</div>
+            <div class="qr-label">식사</div>
+          </div>
+          <div class="quick-record-btn">
+            <div class="qr-icon-wrap" style="background:#E5F4FF">💧</div>
+            <div class="qr-label">물</div>
+          </div>
+          <div class="quick-record-btn">
+            <div class="qr-icon-wrap bg-rose">😟</div>
+            <div class="qr-label">증상</div>
+          </div>
+          <div class="quick-record-btn">
+            <div class="qr-icon-wrap" style="background:#FFF0E5">💩</div>
+            <div class="qr-label">배변</div>
+          </div>
+          <div class="quick-record-btn">
+            <div class="qr-icon-wrap bg-sage">⚖️</div>
+            <div class="qr-label">체중</div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="date-header">
+          <div class="date-header-text">오늘 기록 · 2026.06.02 (화)</div>
+          <div class="date-header-icon">🗓️</div>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-time">08:05</div>
+            <div class="timeline-dot bg-blue" style="border-radius:50%">💊</div>
+            <div class="timeline-card">
+              <div class="timeline-card-name">아침약</div>
+              <div class="timeline-card-badge" style="background:var(--accent-soft);color:var(--accent)">복용</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">08:30</div>
+            <div class="timeline-dot bg-amber" style="border-radius:50%">🥣</div>
+            <div class="timeline-card">
+              <div class="timeline-card-name">아침 식사</div>
+              <div class="timeline-card-badge" style="background:var(--amber-soft);color:var(--amber)">완식</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">09:00</div>
+            <div class="timeline-dot" style="background:#E5F4FF;border-radius:50%">💧</div>
+            <div class="timeline-card">
+              <div class="timeline-card-name">물 섭취 확인</div>
+              <div class="timeline-card-badge" style="background:#E5F4FF;color:#2196F3">100ml</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">12:05</div>
+            <div class="timeline-dot bg-blue" style="border-radius:50%">💊</div>
+            <div class="timeline-card">
+              <div class="timeline-card-name">점심약</div>
+              <div class="timeline-card-badge" style="background:var(--accent-soft);color:var(--accent)">복용</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">12:30</div>
+            <div class="timeline-dot bg-amber" style="border-radius:50%">🥣</div>
+            <div class="timeline-card">
+              <div class="timeline-card-name">점심 식사</div>
+              <div class="timeline-card-badge" style="background:var(--amber-soft);color:var(--amber)">완식</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">14:10</div>
+            <div class="timeline-dot bg-rose" style="border-radius:50%">😟</div>
+            <div class="timeline-card">
+              <div class="timeline-card-name">기침</div>
+              <div class="timeline-card-badge" style="background:var(--rose-soft);color:var(--rose)">증상</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">15:00</div>
+            <div class="timeline-dot bg-sage" style="border-radius:50%">🚶</div>
+            <div class="timeline-card">
+              <div class="timeline-card-name">산책</div>
+              <div class="timeline-card-badge" style="background:var(--sage-soft);color:var(--sage)">20분</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:20px"></div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-item-icon">🏠</div><div class="nav-item-label">홈</div></div>
+        <div class="nav-item"><div class="nav-item-icon">📅</div><div class="nav-item-label">일정</div></div>
+        <div class="nav-item active"><div class="nav-item-icon">📝</div><div class="nav-item-label" style="color:var(--accent)">기록</div></div>
+        <div class="nav-item"><div class="nav-item-icon">🏥</div><div class="nav-item-label">병원</div></div>
+        <div class="nav-item"><div class="nav-item-icon">⚙️</div><div class="nav-item-label">설정</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* ============================================================
+   PetCare+ · 회원가입(약관 동의) 스타일
+   ============================================================ */
+.term-all { display:flex; align-items:center; gap:10px; padding:13px 14px; background:var(--color-primary-soft); border-radius:var(--radius-sm); cursor:pointer; }
+.term-all-txt { font-size:14px; font-weight:700; color:var(--color-primary); }
+.terms-list { display:flex; flex-direction:column; gap:4px; margin-top:8px; }
+.term-item { display:flex; align-items:center; gap:10px; padding:11px 6px; cursor:pointer; }
+.term-check { width:22px; height:22px; border-radius:7px; border:2px solid var(--color-border); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; transition:all .2s var(--ease); }
+.term-check .material-symbols-rounded { font-size:15px; transform:scale(0); transition:transform .2s var(--ease); }
+.term-check.on { background:var(--color-primary); border-color:var(--color-primary); }
+.term-check.on .material-symbols-rounded { transform:scale(1); }
+.term-txt { flex:1; font-size:13px; font-weight:500; }
+.term-req { font-size:11px; color:#C0564E; font-weight:700; }
+.term-opt { font-size:11px; color:var(--color-text-light); font-weight:700; }

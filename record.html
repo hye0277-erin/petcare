@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>PetCare+ · 기록</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
+<link rel="stylesheet" href="css/record.css" />
+<link rel="stylesheet" href="css/picker.css" />
+<script type="module" src="js/guard.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="ic">
+      <span class="material-symbols-rounded">signal_cellular_alt</span>
+      <span class="material-symbols-rounded">wifi</span>
+      <span class="material-symbols-rounded">battery_full</span>
+    </span>
+  </div>
+
+  <!-- Header -->
+  <header class="r-header" data-rise>
+    <div class="r-header-top">
+      <div>
+        <h1 class="r-title">기록</h1>
+        <p class="r-subtitle">완료한 케어와 직접 남긴 기록이 쌓이는 곳이에요.</p>
+      </div>
+      <div class="r-header-actions">
+        <button class="icon-btn" id="btn-search" aria-label="검색"><span class="material-symbols-rounded">search</span></button>
+        <button class="icon-btn" id="btn-calendar" aria-label="캘린더"><span class="material-symbols-rounded">calendar_month</span></button>
+      </div>
+    </div>
+    <div class="pet-chip static" aria-label="현재 반려견 정보">
+      <span class="avatar">🐶</span><span data-pet-chip>해피 · 12살 · 말티즈</span>
+    </div>
+  </header>
+
+  <main class="scroll">
+    <!-- 오늘 기록 요약 -->
+    <section class="summary" data-rise>
+      <div class="summary-top">
+        <div class="summary-count" id="sm-count">오늘 기록 <b>5개</b></div>
+        <div class="summary-last" id="sm-last">마지막 기록 오후 9:00</div>
+      </div>
+      <div class="summary-stats">
+        <span class="stat-pill"><span class="material-symbols-rounded">medication</span>복약 2회 완료</span>
+        <span class="stat-pill alt"><span class="material-symbols-rounded">restaurant</span>식사량 70%</span>
+        <span class="stat-pill warn"><span class="material-symbols-rounded">sick</span>기침 1회</span>
+        <span class="stat-pill"><span class="material-symbols-rounded">pets</span>배변 완료</span>
+      </div>
+      <div class="summary-note">
+        <span class="material-symbols-rounded">info</span>
+        <span>오늘 기침 기록이 1회 있어요. 다음 진료 시 함께 확인해보세요.</span>
+      </div>
+    </section>
+
+    <!-- 빠른 기록 (예정 외 직접 기록) -->
+    <section class="section" data-rise>
+      <div class="section-head"><h2 class="section-title">빠른 기록</h2></div>
+      <div class="quick-grid">
+        <div id="quick-main" style="display:contents"></div>
+        <div class="quick-more" id="quick-more"></div>
+      </div>
+      <button class="quick-toggle" id="quick-toggle">
+        <span id="quick-toggle-label">더보기</span><span class="material-symbols-rounded">expand_more</span>
+      </button>
+    </section>
+
+    <!-- 카테고리 필터 -->
+    <section class="section" data-rise>
+      <div class="filter-row" id="filters" role="tablist" aria-label="기록 유형 필터"></div>
+    </section>
+
+    <!-- 타임라인 -->
+    <section id="timeline" aria-live="polite"></section>
+
+    <!-- 빈 상태 -->
+    <div class="empty" id="empty">
+      <div class="empty-ic"><span class="material-symbols-rounded">edit_note</span></div>
+      <div class="empty-text"><b>아직 기록이 없어요.</b><br />오늘 해피의 상태를 짧게 남겨보세요.</div>
+      <button class="btn-primary" id="empty-cta"><span class="material-symbols-rounded">add</span>첫 기록 남기기</button>
+    </div>
+  </main>
+
+  <!-- Bottom nav -->
+  <nav class="tabbar">
+    <a class="tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
+    <a class="tab active" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
+    <a class="tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
+    <a class="tab" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
+    <a class="tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
+  </nav>
+  <div class="home-indicator"><i></i></div>
+
+  <!-- ───────── 기록 작성 / 수정 시트 ───────── -->
+  <div class="overlay bottom" id="form-sheet">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head">
+        <div class="sheet-title" id="form-title">기록하기</div>
+        <button class="sheet-close" data-close aria-label="닫기"><span class="material-symbols-rounded">close</span></button>
+      </div>
+      <div class="type-row" id="type-row" role="tablist" aria-label="기록 유형"></div>
+      <div class="sheet-body"><div id="form-fields"></div></div>
+      <div class="sheet-foot">
+        <button class="btn-primary btn-block" id="form-save">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── 기록 상세 모달 ───────── -->
+  <div class="overlay center" id="detail-modal">
+    <div class="modal">
+      <div class="detail-head">
+        <div class="detail-type">
+          <span class="di" id="d-ic"><span class="material-symbols-rounded" id="d-ic-symbol">sick</span></span>
+          <h3 id="d-type">증상 기록</h3>
+          <button class="icon-btn" id="d-star-btn" aria-label="중요 표시" style="margin-left:auto">
+            <span class="material-symbols-rounded" id="d-star">star</span>
+          </button>
+        </div>
+        <div class="detail-date" id="d-date">2026.06.11 · 오후 4:20</div>
+      </div>
+      <div class="detail-body">
+        <div id="d-rows"></div>
+        <div class="detail-photo" id="d-photo" style="display:none">🐶</div>
+        <button class="link-hospital" id="d-link-hospital">
+          <span class="material-symbols-rounded">link</span>병원 기록에 연결
+        </button>
+      </div>
+      <div class="detail-foot">
+        <button class="btn-ghost btn-block" id="d-edit"><span class="material-symbols-rounded">edit</span>수정</button>
+        <button class="btn-danger btn-block" id="d-delete"><span class="material-symbols-rounded">delete</span>삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── 삭제 확인 모달 ───────── -->
+  <div class="overlay center" id="confirm-modal">
+    <div class="modal" style="max-width:300px">
+      <div style="padding:26px 24px 8px;text-align:center">
+        <div style="font-size:17px;font-weight:800">기록을 삭제할까요?</div>
+        <div style="font-size:14px;color:var(--sub);margin-top:8px;line-height:1.5">삭제한 기록은 다시 되돌릴 수 없어요.</div>
+      </div>
+      <div class="detail-foot" style="border-top:none">
+        <button class="btn-ghost btn-block" id="confirm-no">취소</button>
+        <button class="btn-danger btn-block" id="confirm-yes">삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── 검색 / 필터 시트 ───────── -->
+  <div class="overlay bottom" id="search-sheet">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">검색 · 필터</div>
+        <button class="sheet-close" data-close aria-label="닫기"><span class="material-symbols-rounded">close</span></button>
+      </div>
+      <div class="sheet-body">
+        <div class="search-box">
+          <span class="material-symbols-rounded">search</span>
+          <input id="s-keyword" type="text" placeholder="기침, 심장약, 식사량, 병원…" aria-label="키워드 검색" />
+        </div>
+
+        <div class="field"><div class="field-label">기간</div>
+          <div class="opt-row">
+            <button class="opt-chip active" data-period="all">전체</button>
+            <button class="opt-chip" data-period="today">오늘</button>
+            <button class="opt-chip" data-period="7d">최근 7일</button>
+            <button class="opt-chip" data-period="30d">최근 30일</button>
+            <button class="opt-chip" data-period="month">이번 달</button>
+            <button class="opt-chip" data-period="custom">직접 선택</button>
+          </div>
+        </div>
+
+        <div class="field"><div class="field-label">기록 유형</div>
+          <div class="opt-row">
+            <button class="opt-chip active" data-stype="all">전체</button>
+            <button class="opt-chip" data-stype="symptom">증상</button>
+            <button class="opt-chip" data-stype="med">복약</button>
+            <button class="opt-chip" data-stype="meal">식사</button>
+            <button class="opt-chip" data-stype="water">물</button>
+            <button class="opt-chip" data-stype="poop">배변</button>
+            <button class="opt-chip" data-stype="weight">체중</button>
+            <button class="opt-chip" data-stype="temp">체온</button>
+            <button class="opt-chip" data-stype="breath">호흡</button>
+            <button class="opt-chip" data-stype="walk">산책</button>
+            <button class="opt-chip" data-stype="hospital">병원</button>
+            <button class="opt-chip" data-stype="photo">사진</button>
+            <button class="opt-chip" data-stype="memo">메모</button>
+          </div>
+        </div>
+
+        <div class="switch-field">
+          <span class="lab"><span class="material-symbols-rounded">star</span>중요 기록만 보기</span>
+          <button class="switch" id="s-important" role="switch" aria-checked="false"></button>
+        </div>
+        <div class="switch-field">
+          <span class="lab"><span class="material-symbols-rounded">photo_camera</span>사진 있는 기록만 보기</span>
+          <button class="switch" id="s-photo" role="switch" aria-checked="false"></button>
+        </div>
+      </div>
+      <div class="sheet-foot">
+        <button class="btn-ghost" id="s-reset" style="flex:0 0 96px">초기화</button>
+        <button class="btn-primary btn-block" id="s-apply">검색 적용</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="js/store.js"></script>
+<script src="js/picker.js"></script>
+<script src="js/record.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# 에디터/IDE
+.vscode/
+.claude/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 로그/임시
+*.log
+_*.png
+_*.html
+node_modules/

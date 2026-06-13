@@ -1,0 +1,33 @@
+/* ============================================================
+   PetCare+ · 온보딩(스플래시 + 소개 슬라이드) 스타일
+   ============================================================ */
+.ob { flex:1; display:flex; flex-direction:column; }
+
+/* 스플래시 */
+.splash {
+  position:absolute; inset:0; z-index:20; background:var(--color-primary);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+  transition:opacity .5s var(--ease); overflow:hidden;
+}
+.splash::after { content:""; position:absolute; width:240px; height:240px; border-radius:50%; background:rgba(255,255,255,.06); top:-70px; right:-60px; }
+.splash.hide { opacity:0; pointer-events:none; }
+.splash-paw { font-size:56px; animation:pulse 1.5s ease-in-out infinite; }
+.splash-name { font-size:26px; font-weight:800; color:#fff; letter-spacing:-.5px; }
+.splash-name sup { font-size:.6em; }
+.splash-tag { font-size:13px; color:rgba(255,255,255,.7); font-weight:300; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+
+/* 슬라이드 */
+.ob-illus { flex:1; display:flex; align-items:center; justify-content:center; position:relative; min-height:0; }
+.ob-illus-bg { width:220px; height:220px; border-radius:50%; position:absolute; }
+.ob-emoji { font-size:96px; position:relative; z-index:1; }
+.ob-dots { display:flex; gap:8px; justify-content:center; padding:8px 0 20px; }
+.ob-dot { width:8px; height:8px; border-radius:50%; background:var(--color-border); transition:all .24s var(--ease); }
+.ob-dot.on { width:24px; border-radius:6px; background:var(--color-primary); }
+.ob-text { padding:0 28px; text-align:center; }
+.ob-badge { display:inline-block; padding:4px 12px; border-radius:999px; background:var(--color-primary-soft); color:var(--color-primary); font-size:11px; font-weight:800; letter-spacing:.5px; margin-bottom:14px; }
+.ob-h { font-size:24px; font-weight:800; line-height:1.35; letter-spacing:-.5px; }
+.ob-p { font-size:14px; color:var(--color-text-sub); line-height:1.7; margin-top:12px; font-weight:300; }
+.ob-actions { padding:24px; display:flex; flex-direction:column; gap:10px; }
+.ob-actions .btn { padding:15px; }
+.ob-skip { text-align:center; font-size:13px; color:var(--color-text-light); padding:8px; cursor:pointer; }
