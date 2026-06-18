@@ -80,9 +80,15 @@ a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 input, textarea { font-family: inherit; }
 
-/* 전역 아이콘 라인 굵기 — 가늘고 부드럽게 통일 */
+/* 전역 아이콘 — 폰트 로드 전 텍스트 깜빡임(FOUT) 방지 */
 .material-symbols-rounded {
   font-variation-settings: 'wght' 300, 'opsz' 24, 'FILL' 0, 'GRAD' 0;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+.fonts-loaded .material-symbols-rounded,
+.material-symbols-rounded.visible {
+  opacity: 1;
 }
 
 /* ── App frame (mobile) ───────────────────────────────── */
@@ -357,6 +363,7 @@ input, textarea { font-family: inherit; }
   gap: 14px;
   padding: 14px 0;
   border-bottom: 1px solid var(--color-border);
+  width: 100%; background: none; text-align: left; color: inherit;
 }
 .check-item:last-child { border-bottom: none; }
 .check-box {
@@ -587,7 +594,7 @@ button.src-badge:active { opacity: 0.7; }
 .cell .pip.orange { background: var(--color-orange); }
 .cell .pip.blue { background: var(--color-blue); }
 /* 클릭 가능 + 선택 표시 */
-.cell[data-date] { cursor: pointer; }
+.cell[data-date] { cursor: pointer; width: 100%; background: none; padding: 0; color: inherit; }
 .cell[data-date] .mark { transition: background var(--t) var(--ease); }
 .cell[data-date]:active .mark { background: var(--color-primary-soft); }
 .cell.sel .mark { background: var(--color-primary-soft); color: var(--color-primary); font-weight: 700; box-shadow: 0 0 0 2px var(--color-primary) inset; }

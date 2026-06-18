@@ -10,7 +10,8 @@ import { getUser } from './auth.js';
 
 try {
   const user = await getUser();
-  if (!user) location.replace('login.html');
+  // 라이브 데모: 로그인 없이 모든 화면 접근 허용
+  // if (!user) location.replace('login.html');
 } catch (_) {
   // 인증 서버 확인 실패 시 데모 흐름은 막지 않음
 }

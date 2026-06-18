@@ -96,7 +96,7 @@
     for (let d = 1; d <= days; d++) {
       const isSel = draft.y === y && draft.m === m && draft.d === d;
       const isToday = today.getFullYear() === y && today.getMonth() + 1 === m && today.getDate() === d;
-      cells += `<div class="pk-cell ${isSel ? "sel" : ""} ${isToday ? "today" : ""}" data-pk-day="${d}">${d}</div>`;
+      cells += `<div class="pk-cell ${isSel ? "sel" : ""} ${isToday ? "today" : ""}" data-pk-day="${d}"><span>${d}</span></div>`;
     }
     overlay.querySelector(".pk-body").innerHTML = `
       <div class="pk-cal-head">

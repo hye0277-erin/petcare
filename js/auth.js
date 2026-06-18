@@ -9,14 +9,13 @@ export async function signIn() {
 }
 
 export async function signOut() {
-  location.href = 'login.html';
+  location.href = 'index.html';
 }
 
 export async function getUser() {
-  return null;
+  return { id: 'demo', email: 'demo@petcare.app' };
 }
 
 export async function requireAuth() {
-  location.replace('login.html');
-  return null;
+  return { id: 'demo', email: 'demo@petcare.app' };
 }

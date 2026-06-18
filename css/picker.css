@@ -105,11 +105,14 @@
 .pk-cell span { position: relative; z-index: 1; }
 .pk-cell:not(.empty):not(.sel):active::before { background: #DDEFE7; }
 .pk-cell.muted { color: #A3A3A3; opacity: .5; }
-.pk-cell.today::after {
-  content: ""; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%;
-  background: #6FAF9A; z-index: 1;
+.pk-cell.today::before {
+  border: 2px solid #6FAF9A;
 }
-.pk-cell.sel::before { background: #6FAF9A; }
+.pk-cell.today::after {
+  content: ""; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%;
+  background: #6FAF9A; z-index: 2;
+}
+.pk-cell.sel::before { background: #6FAF9A; border: none; }
 .pk-cell.sel { color: #fff; font-weight: 700; }
 .pk-cell.sel.today::after { background: #fff; }
 .pk-cell.empty { visibility: hidden; pointer-events: none; }

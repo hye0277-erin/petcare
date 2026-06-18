@@ -247,23 +247,37 @@
     const t = TYPES[r.type] || TYPES.memo;
     const tags = [];
     const src = SRC_META[r.source || "manual"];
-    // 아이콘 없이 통일된 알약(pill) 버튼 스타일로 표기
     tags.push(`<span class="rec-tag ${src[1]}">${src[0]}</span>`);
     if (r.tag) tags.push(`<span class="rec-tag ${r.tagType || ""}">${esc(r.tag)}</span>`);
     if (r.photo) tags.push(`<span class="rec-tag ghost">사진 1장</span>`);
     const summary = r.summary || [r.title, r.value].filter(Boolean).join(" · ") || t.label;
-    return `<button class="rec-card" data-detail="${r.id}">
-      <span class="rec-card-ic" style="background:${t.color[0]};color:${t.color[1]}">
-        <span class="material-symbols-rounded">${t.icon}</span></span>
-      <span class="rec-card-body">
-        <span class="rec-card-head">
-          <span class="rec-type">${t.label}</span>
-          <span class="rec-time">${ampm(r.time)}</span>
-          <span class="rec-star ${r.important ? "on" : ""}"><span class="material-symbols-rounded">star</span></span>
-        </span>
-        <span class="rec-summary">${esc(summary)}</span>
-        <span class="rec-tags">${tags.join("")}</span>
-      </span></button>`;
+    // 시간 분리: 오전/오후 + HH:MM
+    const rawAmpm = ampm(r.time); // "오후 4:20"
+    const [ap, hm] = rawAmpm ? rawAmpm.split(" ") : ["", ""];
+    return `<div class="tl-row">
+      <div class="tl-time-col">
+        <span class="tl-time-txt">${hm || ""}</span>
+        <span class="tl-time-ampm">${ap || ""}</span>
+      </div>
+      <div class="tl-line-col">
+        <div class="tl-dot"></div>
+        <div class="tl-vline"></div>
+      </div>
+      <div class="tl-card-col">
+        <button class="rec-card" data-detail="${r.id}">
+          <span class="rec-card-ic" style="background:${t.color[0]};color:${t.color[1]}">
+            <span class="material-symbols-rounded">${t.icon}</span></span>
+          <span class="rec-card-body">
+            <span class="rec-card-head">
+              <span class="rec-type">${t.label}</span>
+              <span class="rec-star ${r.important ? "on" : ""}"><span class="material-symbols-rounded">star</span></span>
+            </span>
+            <span class="rec-summary">${esc(summary)}</span>
+            <span class="rec-tags">${tags.join("")}</span>
+          </span>
+        </button>
+      </div>
+    </div>`;
   }
 
   function renderTimeline() {
@@ -280,7 +294,7 @@
       const rel = relLabel(date);
       return `<div class="day-group">
         <div class="day-label">${date}${rel ? ` <span class="rel">${rel}</span>` : ""}<span class="line"></span></div>
-        ${groups[date].map(recordCard).join("")}
+        <div class="tl-list">${groups[date].map(recordCard).join("")}</div>
       </div>`;
     }).join("");
   }
@@ -590,7 +604,7 @@
       const rel = relLabel(date);
       return `<div class="day-group">
         <div class="day-label">${date}${rel ? ` <span class="rel">${rel}</span>` : ""}<span class="line"></span></div>
-        ${groups[date].map(recordCard).join("")}
+        <div class="tl-list">${groups[date].map(recordCard).join("")}</div>
       </div>`;
     }).join("");
   }

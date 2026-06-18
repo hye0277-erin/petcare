@@ -59,6 +59,19 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.18) !important;
 }
 
+/* 달력 선택된 날짜 테두리 링 유지 */
+.cell.sel .mark {
+  box-shadow: 0 0 0 2px var(--color-primary) inset !important;
+}
+.cell.today.sel .mark {
+  box-shadow: none !important;
+}
+
+/* wb-day 오늘 표시 — 테두리로 구분 */
+.wb-day.today {
+  border-color: var(--color-primary) !important;
+}
+
 /* 데스크톱 앱 프레임 드롭쉐도우는 유지 */
 @media (min-width: 480px) {
   .app {

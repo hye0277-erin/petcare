@@ -216,4 +216,13 @@
     el.classList.add("rise");
     el.style.animationDelay = i * 0.05 + "s";
   });
+
+  /* ── Material Symbols FOUT 방지 ── */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      document.documentElement.classList.add("fonts-loaded");
+    });
+  } else {
+    document.documentElement.classList.add("fonts-loaded");
+  }
 })();

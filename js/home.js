@@ -131,8 +131,14 @@
              <button class="check-act skip" data-care-skip="${t.id}">건너뜀</button>
            </span>`
         : statusLabel(t);
-      const clickable = (!done && !skipped) ? ` data-care-toggle="${t.id}" role="button" tabindex="0"` : "";
-      return `<div class="check-item ${cls}" data-care-item="${t.id}"${clickable}>
+      if (!done && !skipped) {
+        return `<button type="button" class="check-item ${cls}" data-care-item="${t.id}" data-care-toggle="${t.id}">
+          <span class="check-box"><span class="material-symbols-rounded">check</span></span>
+          <span class="check-label">${esc(t.title)}${t.description ? ` <span style="color:var(--color-text-light);font-weight:400">· ${esc(t.description)}</span>` : ""}</span>
+          ${actions}
+        </button>`;
+      }
+      return `<div class="check-item ${cls}" data-care-item="${t.id}">
         <span class="check-box"><span class="material-symbols-rounded">check</span></span>
         <span class="check-label">${esc(t.title)}${t.description ? ` <span style="color:var(--color-text-light);font-weight:400">· ${esc(t.description)}</span>` : ""}</span>
         ${actions}
@@ -244,31 +250,6 @@
       toast("케어를 완료했어요. 기록에 저장됐어요.", "check_circle");
       renderAll();
       return;
-    }
-    // 다음 진료 영역 → 병원 화면 (반려견 카드의 settings 이동보다 우선)
-    const nextVisit = e.target.closest("#next-visit");
-    if (nextVisit) {
-      e.preventDefault();
-      e.stopPropagation();
-      location.href = "hospital.html";
-      return;
-    }
-  });
-
-  // 키보드 접근성: Enter/Space
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    if (e.target.closest("#next-visit")) {
-      e.preventDefault();
-      location.href = "hospital.html";
-      return;
-    }
-    const row = e.target.closest("[data-care-toggle]");
-    if (row) {
-      e.preventDefault();
-      S.completeTask(row.dataset.careToggle);
-      toast("케어를 완료했어요. 기록에 저장됐어요.", "check_circle");
-      renderAll();
     }
   });
 

@@ -223,8 +223,8 @@
       if (m.done) pip = `<i class="pip green"></i>`;
       else if (m.task) pip = `<i class="pip orange"></i>`;
       else if (m.rec) pip = `<i class="pip blue"></i>`;
-      html += `<div class="cell${isToday ? " today" : ""}${isSel ? " sel" : ""}" data-date="${iso}" role="button" tabindex="0">
-        <span class="mark">${d}</span>${pip}</div>`;
+      html += `<button type="button" class="cell${isToday ? " today" : ""}${isSel ? " sel" : ""}" data-date="${iso}">
+        <span class="mark">${d}</span>${pip}</button>`;
     }
     grid.innerHTML = html;
   }
@@ -274,6 +274,52 @@
       alarmChk.addEventListener("change", syncAlarm); syncAlarm();
     }
 
+    /* ── 시간 picker 동적 추가/삭제 ── */
+    const timeList = $("#s-time-list");
+    const timeAddBtn = $("#s-time-add");
+
+    function addTimeRow(defaultVal) {
+      const row = document.createElement("div");
+      row.style.cssText = "display:flex;gap:8px;align-items:center";
+
+      const inp = document.createElement("input");
+      inp.className = "input";
+      inp.setAttribute("data-picker", "time");
+      inp.placeholder = "시간 선택";
+      if (defaultVal) inp.value = defaultVal;
+
+      const del = document.createElement("button");
+      del.type = "button";
+      del.innerHTML = '<span class="material-symbols-rounded" style="font-size:20px;color:#C0392B">remove_circle</span>';
+      del.style.cssText = "flex-shrink:0;padding:4px";
+      del.addEventListener("click", () => {
+        if (timeList.children.length > 1) row.remove();
+        else if (window.toast) window.toast("시간은 최소 1개 필요해요", "info");
+      });
+
+      row.appendChild(inp);
+      row.appendChild(del);
+      timeList.appendChild(row);
+
+      // DOM 삽입 후 bind — bind()가 input을 hidden으로 바꾸고 trig 버튼을 afterend에 삽입
+      if (window.PetPicker) {
+        PetPicker.bind(inp);
+        // trig 버튼이 inp 바로 뒤, del 앞에 위치하므로 flex:1 지정
+        if (inp._pkTrigger) {
+          inp._pkTrigger.style.flex = "1";
+        }
+      }
+    }
+
+    // 기본 시간 1개 추가
+    addTimeRow("09:00");
+
+    timeAddBtn.addEventListener("click", () => addTimeRow(""));
+
+    function getSelectedTimes() {
+      return Array.from(timeList.querySelectorAll("input")).map((i) => i.value.trim()).filter(Boolean);
+    }
+
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const type = $('input[name="type"]:checked')?.value || "memo";
@@ -281,7 +327,7 @@
       const description = $("#s-desc").value.trim();
       const repeat = $('input[name="repeat"]:checked')?.value || "daily";
       const days = $$('input[name="day"]:checked').map((d) => d.value);
-      const times = ($("#s-time").value || "").split(/[, ]+/).map((s) => s.trim()).filter(Boolean);
+      const times = getSelectedTimes();
       const start = $("#s-date").value || TODAY;
       const end = $("#s-end")?.value || "";
       const alarm = $("#s-alarm")?.checked || false;
@@ -289,17 +335,22 @@
       const memo = $("#s-memo").value.trim();
 
       if (!title) { if (window.toast) window.toast("일정 제목을 입력해 주세요", "info"); $("#s-title").focus(); return; }
+      if (times.length === 0) { if (window.toast) window.toast("시간을 1개 이상 선택해 주세요", "info"); return; }
 
       if (repeat === "once") {
-        (times.length ? times : [""]).forEach((t) => {
-          S.addTask({ routine_id: null, type, title, description, scheduled_date: start, scheduled_time: t, repeat: "once", memo });
+        times.forEach((t) => {
+          S.addTask({
+            routine_id: null, type, title, description,
+            scheduled_date: start, scheduled_time: t, repeat: "once", memo,
+            alarm_enabled: alarm, alarm_before_minutes: before,
+          });
         });
       } else {
         S.addRoutine({
           type, title, description,
           repeat_type: repeat,
           days_of_week: (repeat === "custom" || repeat === "weekly") ? days : [],
-          times: times.length ? times : ["09:00"],
+          times,
           start_date: start, end_date: end,
           alarm_enabled: alarm, alarm_before_minutes: before,
           active: true,
@@ -312,7 +363,8 @@
   }
 
   /* 초기화 */
-  $("#full-cal-wrap").style.display = "none";
+  const calWrap = $("#full-cal-wrap");
+  if (calWrap) calWrap.style.display = "none";
   renderWeekBar();
   refreshDay();
   initForm();

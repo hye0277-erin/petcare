@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
+<script src="js/font-loader.js"></script>
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/picker.css" />
 <link rel="stylesheet" href="css/page-v2.css" />
@@ -59,8 +60,11 @@
             <input class="input" id="s-desc" type="text" placeholder="예: 신장 보조 · 1/2 알" />
           </div>
           <div class="form-group">
-            <span class="form-label">시간 <span style="font-weight:500;color:var(--color-text-light)">여러 번이면 쉼표로 구분 (예: 09:00, 20:00)</span></span>
-            <input class="input" id="s-time" type="text" inputmode="numeric" placeholder="08:00" value="08:00" />
+            <span class="form-label">시간 <span style="font-weight:500;color:var(--color-text-light)">여러 시간을 추가할 수 있어요</span></span>
+            <div id="s-time-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px"></div>
+            <button type="button" id="s-time-add" class="btn" style="width:100%;background:#F0F4F2;color:#2A6F40;font-weight:700;font-size:14px;border-radius:10px;padding:11px">
+              + 시간 추가
+            </button>
           </div>
           <div class="field-row">
             <div class="form-group">
@@ -141,6 +145,7 @@
 </div>
 <script src="js/store.js"></script>
 <script src="js/picker.js"></script>
+<script src="js/alarm.js"></script>
 <script src="js/schedule.js"></script>
 <script src="js/main.js"></script>
 </body>

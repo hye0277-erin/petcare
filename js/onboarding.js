@@ -33,7 +33,7 @@
   }
   function finish() {
     try { localStorage.setItem("petcare_onboarded", "1"); } catch (e) {}
-    location.href = "login.html";
+    location.href = "index.html";
   }
   $("ob-next").addEventListener("click", function () {
     if (i < slides.length - 1) { i++; render(); } else finish();

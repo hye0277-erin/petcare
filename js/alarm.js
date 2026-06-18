@@ -42,12 +42,18 @@
     return h * 60 + m;
   }
 
+  let alarmTimer = null;
+  function startScheduler() {
+    if (alarmTimer) return;
+    checkAlarms();
+    alarmTimer = setInterval(checkAlarms, 60 * 1000);
+    window.addEventListener("beforeunload", () => { clearInterval(alarmTimer); alarmTimer = null; }, { once: true });
+  }
+
   function requestAndSchedule() {
     Notification.requestPermission().then((perm) => {
       if (perm !== "granted") return;
-      // 즉시 1회 체크 후 1분마다 반복
-      checkAlarms();
-      setInterval(checkAlarms, 60 * 1000);
+      startScheduler();
     });
   }
 
@@ -66,42 +72,45 @@
     }
   }
 
+  function fireOne(alarmId, title, description, beforeMinutes, fired) {
+    if (fired[alarmId]) return false;
+    fired[alarmId] = true;
+    const pet = S.getPet ? S.getPet() : null;
+    const petName = pet ? pet.name : "반려견";
+    const beforeMsg = beforeMinutes > 0 ? ` (${beforeMinutes}분 전 알림)` : "";
+    const body = `${petName}의 ${title}${description ? " · " + description : ""}${beforeMsg}`;
+    new Notification("PetCare+ 케어 알림", { body, icon: "images/icon-192.png", tag: alarmId });
+    localStorage.setItem("petcare_noti_read_all", "0");
+    return true;
+  }
+
   function checkAlarms() {
     const now = toMinutes(nowHHMM());
     const today = todayIso();
     const fired = loadFired();
-    const routines = S.getRoutines ? S.getRoutines() : [];
     let changed = false;
 
+    // 반복 루틴 알람
+    const routines = S.getRoutines ? S.getRoutines() : [];
     routines.forEach((r) => {
       if (!r.active || !r.alarm_enabled) return;
       if (!routineRunsToday(r)) return;
-
       (r.times || []).forEach((time) => {
         const fireAt = toMinutes(time) - (r.alarm_before_minutes || 0);
-        const alarmId = `${r.id}_${today}_${time}`;
-        if (fired[alarmId]) return;
-        if (now < fireAt || now > fireAt + 1) return; // ±1분 허용
-
-        fired[alarmId] = true;
-        changed = true;
-
-        const pet = S.getPet();
-        const petName = pet ? pet.name : "반려견";
-        const beforeMsg = r.alarm_before_minutes > 0
-          ? ` (${r.alarm_before_minutes}분 전 알림)`
-          : "";
-        const body = `${petName}의 ${r.title}${r.description ? " · " + r.description : ""}${beforeMsg}`;
-
-        new Notification("PetCare+ 케어 알림", {
-          body,
-          icon: "images/icon-192.png",
-          tag: alarmId,
-        });
-
-        // 알림 목록 dot 갱신 (홈화면이 열려있을 때)
-        localStorage.setItem("petcare_noti_read_all", "0");
+        if (now < fireAt || now > fireAt + 1) return;
+        if (fireOne(`r_${r.id}_${today}_${time}`, r.title, r.description, r.alarm_before_minutes || 0, fired)) changed = true;
       });
+    });
+
+    // 한 번만(once) Task 알람
+    const tasks = S.getTasks ? S.getTasks() : [];
+    tasks.forEach((t) => {
+      if (!t.alarm_enabled) return;
+      if (t.scheduled_date !== today) return;
+      if (!t.scheduled_time) return;
+      const fireAt = toMinutes(t.scheduled_time) - (t.alarm_before_minutes || 0);
+      if (now < fireAt || now > fireAt + 1) return;
+      if (fireOne(`t_${t.id}_${today}`, t.title, t.description, t.alarm_before_minutes || 0, fired)) changed = true;
     });
 
     if (changed) saveFired(fired);
@@ -109,8 +118,7 @@
 
   // 알림 권한 요청 및 스케줄 시작
   if (Notification.permission === "granted") {
-    checkAlarms();
-    setInterval(checkAlarms, 60 * 1000);
+    startScheduler();
   } else if (Notification.permission !== "denied") {
     // 사용자 제스처 없이는 권한 요청이 막히는 브라우저를 위해
     // 첫 클릭 시 권한 요청
