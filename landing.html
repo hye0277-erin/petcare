@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>PetCare+ · 사랑이의 오늘은 괜찮을까요?</title>
+<meta name="description" content="약·식사·물·산책·병원 일정까지, 반려견의 매일 반복되는 케어를 한곳에서 챙기는 건강 관리 서비스 PetCare+. 노령견·질환견 보호자를 위한 따뜻한 케어 다이어리." />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/landing.css" />
+</head>
+<body class="lp">
+
+<!-- ── Nav (히어로 위에 투명하게 올라감) ─────────────────── -->
+<header class="lp-nav" id="lpNav">
+  <div class="lp-container lp-nav-inner">
+    <a class="lp-logo" href="#top">PetCare<sup>+</sup></a>
+    <nav class="lp-nav-links">
+      <a href="#empathy">왜 필요한가요?</a>
+      <a href="#features">주요 기능</a>
+      <a href="#flow">사용 방법</a>
+    </nav>
+    <a class="btn lp-nav-cta" href="index.html">시작하기</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ════════════════════════════════════════════════════
+       1. HERO — 배경 사진 풀블리드 + 좌측 텍스트 오버레이
+       ┌─ [이미지 교체] ──────────────────────────────────┐
+       │ 현재: images/img_04.jpg (아이와 강아지가 잔디밭을 │
+       │       뛰노는 가로 사진)                            │
+       │ 교체 위치: css/landing.css 의 .lp-hero-bg          │
+       │            background: url("../images/____") …    │
+       │ 권장: 밝고 따뜻한 분위기의 가로 사진 (1600×900 이상)│
+       │       왼쪽에 텍스트가 올라가니 피사체는 오른쪽 권장 │
+       └──────────────────────────────────────────────────┘ -->
+  <section class="lp-hero">
+    <div class="lp-hero-bg"></div>
+    <div class="lp-hero-scrim"></div>
+    <div class="lp-container lp-hero-inner">
+      <div class="lp-hero-text" data-reveal>
+        <span class="lp-eyebrow"><span class="material-symbols-rounded">pets</span> 우리 아이 건강 케어 다이어리</span>
+        <h1 class="lp-hero-title">
+          우리 아이의 하루 케어,<br><span class="hl">이제 한눈에 챙기세요.</span>
+        </h1>
+        <p class="lp-hero-sub">
+          약 먹는 시간, 식사, 물, 배변, 산책, 병원 일정까지.<br>
+          매일 반복되는 케어를 한곳에 모아<br>
+          놓치는 일 없이 챙길 수 있어요.
+        </p>
+        <div class="lp-hero-actions">
+          <a class="btn btn-primary lp-btn-lg" href="index.html">
+            지금 시작하기
+            <span class="material-symbols-rounded">arrow_forward</span>
+          </a>
+          <a class="btn lp-btn-lg lp-btn-glass" href="#features">서비스 둘러보기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════
+       2. 공감 — 사진 + 다크그린 인용 카드 모자이크
+       ════════════════════════════════════════════════════ -->
+  <section class="lp-section" id="empathy">
+    <div class="lp-container">
+      <div class="lp-section-head" data-reveal>
+        <span class="lp-kicker">왜 필요한가요?</span>
+        <h2 class="lp-section-title">노령견 보호자라면<br><span class="hl">누구나 겪는 불안</span></h2>
+        <p class="lp-section-desc">"말 못하는 아이의 신호를 놓치고 싶지 않으니까요"</p>
+      </div>
+
+      <!-- 모자이크: 사진(m-photo)과 보호자 고민 인용 카드(m-quote)가 번갈아 배치
+           ┌─ [이미지 교체] 사진은 모두 정사각형(1:1)으로 잘려 보입니다 ─┐
+           │ 아래 <img src="images/____"> 의 파일명만 바꾸면 교체됩니다.   │
+           │ 권장: 강아지 단독 정면/클로즈업 사진 (정사각형 800×800 이상) │
+           └──────────────────────────────────────────────────────────┘ -->
+      <div class="lp-mosaic" data-reveal>
+        <!-- [교체①] 강아지 얼굴 클로즈업 -->
+        <figure class="m-photo"><img src="images/dog-portrait.jpg" alt="강아지 얼굴" loading="lazy" /></figure>
+
+        <div class="m-quote">
+          <span class="m-quote-ic material-symbols-rounded">help</span>
+          <p>"오늘 좀 기운이 없는데…<br>병원에 가야 할까?"</p>
+          <small>증상이 걱정될 때</small>
+        </div>
+
+        <!-- [교체②] 노령견 사진 -->
+        <figure class="m-photo"><img src="images/dog-senior.jpg" alt="노령견" loading="lazy" /></figure>
+
+        <div class="m-quote">
+          <span class="m-quote-ic material-symbols-rounded">medication</span>
+          <p>"아침 약 먹였던가?<br>또 헷갈리네…"</p>
+          <small>매일 챙기는 복약</small>
+        </div>
+
+        <div class="m-quote">
+          <span class="m-quote-ic material-symbols-rounded">folder_open</span>
+          <p>"병원 기록이 여기저기<br>흩어져 있어요"</p>
+          <small>진료 기록 보관</small>
+        </div>
+
+        <!-- [교체③] 실내에서 노는 강아지 -->
+        <figure class="m-photo"><img src="images/dog-care.jpg" alt="집에서 노는 강아지" loading="lazy" /></figure>
+
+        <div class="m-quote">
+          <span class="m-quote-ic material-symbols-rounded">event</span>
+          <p>"다음 진료 날짜를<br>놓친 적이 있어요"</p>
+          <small>병원 일정 관리</small>
+        </div>
+
+        <!-- [교체④] 산책하는 강아지 -->
+        <figure class="m-photo"><img src="images/dog-walk.jpg" alt="산책하는 강아지" loading="lazy" /></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════
+       3. 솔루션 배너 (그린 그라데이션)
+       ════════════════════════════════════════════════════ -->
+  <section class="lp-band">
+    <div class="lp-container lp-band-inner" data-reveal>
+      <h2>이 모든 불안, <b>PetCare+</b>가 <b>한 번에</b> 해결합니다</h2>
+      <a class="btn lp-band-btn" href="#features">기능 보기 <span class="material-symbols-rounded">arrow_forward</span></a>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════
+       4. 핵심 소개 — 좌 텍스트 / 우 폰 목업(실제 홈 화면 미니)
+       ════════════════════════════════════════════════════ -->
+  <section class="lp-section lp-section-soft" id="intro">
+    <div class="lp-container lp-split">
+      <div class="lp-split-text" data-reveal>
+        <span class="lp-kicker">핵심 소개</span>
+        <h2 class="lp-section-title lp-left">오늘 해야 할 케어를<br>홈에서 바로 확인하세요.</h2>
+        <p class="lp-lead">
+          약·식사·물·배변·체중·산책·병원 일정까지, 오늘 필요한 일을 한 화면에서 확인하고
+          완료한 항목은 체크만 하면 돼요. 체크한 케어는 자동으로 기록에 저장됩니다.
+        </p>
+        <ul class="lp-checklist">
+          <li><span class="material-symbols-rounded">check_circle</span> 오늘 해야 할 케어 한눈에 확인</li>
+          <li><span class="material-symbols-rounded">check_circle</span> 완료 항목 체크 · 다음 일정 확인</li>
+          <li><span class="material-symbols-rounded">check_circle</span> 반복 루틴 등록 후 자동 반영</li>
+          <li><span class="material-symbols-rounded">check_circle</span> 완료한 케어는 자동 기록 저장</li>
+        </ul>
+      </div>
+
+      <!-- 폰 목업: 실제 PetCare+ 홈 화면 미니 미리보기 -->
+      <div class="lp-split-mock" data-reveal>
+        <div class="lp-phone">
+          <div class="lp-phone-notch"></div>
+          <div class="lp-phone-screen">
+            <div class="lp-mini-head">
+              <span class="lp-mini-brand">PetCare<sup>+</sup></span>
+              <span class="material-symbols-rounded lp-mini-bell">notifications</span>
+            </div>
+            <div class="lp-mini-petcard">
+              <div class="lp-mini-petbody">
+                <div class="lp-mini-petname">사랑이 <span class="material-symbols-rounded">chevron_right</span></div>
+                <div class="lp-mini-petmeta">13살 · 푸들</div>
+                <div class="lp-mini-tags"><span class="tag">심장관리</span><span class="tag">노령견</span></div>
+                <div class="lp-mini-visit"><span class="material-symbols-rounded">calendar_month</span> 다음 진료 <b>D-3</b></div>
+              </div>
+              <!-- [이미지 교체] 앱 미리보기 속 반려견 프로필 사진.
+                   현재: dog-portrait.jpg / 권장: 정사각형 강아지 얼굴 사진.
+                   이미지가 없으면 자동으로 🐶 이모지가 표시됩니다. -->
+              <div class="lp-mini-petphoto">
+                <img src="images/dog-portrait.jpg" alt="사랑이"
+                     onerror="this.parentElement.textContent='🐶'" />
+              </div>
+              <div class="lp-mini-progress">
+                <div class="lp-mini-progress-row"><span>오늘 케어 진행률</span><span><b>3</b> / 4</span></div>
+                <div class="progress"><i style="width:75%"></i></div>
+              </div>
+            </div>
+            <div class="lp-mini-section-title">오늘의 케어</div>
+            <div class="lp-mini-card">
+              <div class="lp-mini-check done"><span class="lp-mini-box"><span class="material-symbols-rounded">check</span></span><span>아침 심장약</span><span class="lp-mini-time">완료</span></div>
+              <div class="lp-mini-check done"><span class="lp-mini-box"><span class="material-symbols-rounded">check</span></span><span>아침 식사</span><span class="lp-mini-time">완료</span></div>
+              <div class="lp-mini-check"><span class="lp-mini-box"></span><span>저녁 산책</span><span class="lp-mini-time">18:00</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════
+       5. 주요 기능 — 아이콘 카드 그리드 (이미지 없음, 라인 아이콘)
+       ════════════════════════════════════════════════════ -->
+  <section class="lp-section" id="features">
+    <div class="lp-container">
+      <div class="lp-section-head" data-reveal>
+        <span class="lp-kicker">주요 기능</span>
+        <h2 class="lp-section-title">하루 케어부터 병원 기록까지<br><span class="hl">하나의 흐름으로</span></h2>
+      </div>
+
+      <div class="lp-feat-grid">
+        <article class="lp-feat" data-reveal>
+          <div class="lp-feat-ic t-med"><span class="material-symbols-rounded">checklist</span></div>
+          <h3>오늘의 케어</h3>
+          <p>매일 반복되는 약·식사·물·배변·산책을 등록하면 오늘 할 일이 홈에 표시돼요. 완료 항목은 체크만 하면 끝.</p>
+        </article>
+        <article class="lp-feat" data-reveal>
+          <div class="lp-feat-ic t-weight"><span class="material-symbols-rounded">event_repeat</span></div>
+          <h3>반복 루틴</h3>
+          <p>아침 약 08:00, 산책 오후 4:00처럼 반복되는 케어를 루틴으로 등록해두면 매일 자동으로 반영됩니다.</p>
+        </article>
+        <article class="lp-feat" data-reveal>
+          <div class="lp-feat-ic t-walk"><span class="material-symbols-rounded">timeline</span></div>
+          <h3>자동 기록</h3>
+          <p>체크한 케어는 시간순으로 자동 저장. 갑작스러운 기침·구토 같은 특이사항은 사진·메모로 남길 수 있어요.</p>
+        </article>
+        <article class="lp-feat" data-reveal>
+          <div class="lp-feat-ic t-hospital"><span class="material-symbols-rounded">local_hospital</span></div>
+          <h3>병원 기록</h3>
+          <p>진료일·병원·처방·검사 결과를 한곳에 보관. 다음 진료일까지 관리해 방문 전 필요한 내용을 미리 확인해요.</p>
+        </article>
+        <article class="lp-feat" data-reveal>
+          <div class="lp-feat-ic t-symptom"><span class="material-symbols-rounded">monitoring</span></div>
+          <h3>주간·월간 리포트</h3>
+          <p>복약 완료율·체중·식사 변화를 보기 쉽게 정리. 병원 상담 전 아이의 상태를 떠올리는 데 도움을 줘요.</p>
+        </article>
+        <article class="lp-feat" data-reveal>
+          <div class="lp-feat-ic t-water"><span class="material-symbols-rounded">notifications_active</span></div>
+          <h3>케어 알림</h3>
+          <p>챙겨야 할 케어 시간과 다음 진료일이 다가오면 알림으로 알려드려 빠뜨리는 일이 없어요.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════
+       6. 사용 방법 — 3단계
+       ════════════════════════════════════════════════════ -->
+  <section class="lp-section lp-section-soft" id="flow">
+    <div class="lp-container">
+      <div class="lp-section-head" data-reveal>
+        <span class="lp-kicker">사용 방법</span>
+        <h2 class="lp-section-title">3단계면 충분해요</h2>
+        <p class="lp-section-desc">등록하고, 체크하고, 확인하면 끝.</p>
+      </div>
+
+      <div class="lp-steps">
+        <div class="lp-step" data-reveal>
+          <div class="lp-step-num">1</div>
+          <div class="lp-step-ic t-med"><span class="material-symbols-rounded">edit_calendar</span></div>
+          <h3>케어 등록</h3>
+          <p>아이 정보와 복약·식사·산책 일정을 한 번 등록해 두세요.</p>
+        </div>
+        <div class="lp-step-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+        <div class="lp-step" data-reveal>
+          <div class="lp-step-num">2</div>
+          <div class="lp-step-ic t-weight"><span class="material-symbols-rounded">task_alt</span></div>
+          <h3>홈에서 체크</h3>
+          <p>오늘 할 케어를 홈에서 체크하면 자동으로 기록 완료.</p>
+        </div>
+        <div class="lp-step-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+        <div class="lp-step" data-reveal>
+          <div class="lp-step-num">3</div>
+          <div class="lp-step-ic t-hospital"><span class="material-symbols-rounded">monitoring</span></div>
+          <h3>변화 확인</h3>
+          <p>쌓인 기록과 리포트로 아이의 건강 변화를 살펴보세요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════
+       7. 추천 대상 + 안심 문구
+       ════════════════════════════════════════════════════ -->
+  <section class="lp-section" id="target">
+    <div class="lp-container lp-split">
+      <!-- ┌─ [이미지 교체] 추천 대상 섹션 사진 ──────────────────┐
+           │ 현재: images/dog-paw.jpg (석양 잔디밭을 뛰어오는 강아지)│
+           │ 권장: 보호자와 교감하는 따뜻한 분위기의 세로 사진       │
+           │       (세로 4:5 비율, 800×1000 이상 권장)              │
+           │ 교체: 아래 <img src="images/____"> 파일명만 변경        │
+           └────────────────────────────────────────────────────┘ -->
+      <div class="lp-target-photo" data-reveal>
+        <img src="images/dog-paw.jpg" alt="보호자와 강아지" loading="lazy" />
+      </div>
+      <div class="lp-split-text" data-reveal>
+        <span class="lp-kicker">추천 대상</span>
+        <h2 class="lp-section-title lp-left">이런 보호자에게<br>추천해요</h2>
+        <ul class="lp-checklist">
+          <li><span class="material-symbols-rounded">check_circle</span> 노령견을 돌보고 있는 보호자</li>
+          <li><span class="material-symbols-rounded">check_circle</span> 매일 약을 챙겨야 하는 반려견 보호자</li>
+          <li><span class="material-symbols-rounded">check_circle</span> 심장·신장·췌장염·당뇨 등 꾸준한 관리가 필요한 경우</li>
+          <li><span class="material-symbols-rounded">check_circle</span> 병원 기록과 검사 결과를 정리하고 싶은 보호자</li>
+          <li><span class="material-symbols-rounded">check_circle</span> 식사·배변·증상 변화를 꾸준히 살펴보고 싶은 보호자</li>
+        </ul>
+        <p class="lp-fineprint">※ 1차 서비스에서는 보호자 1명과 반려견 1마리 관리부터 제공합니다.</p>
+      </div>
+    </div>
+
+    <!-- 안심 문구 -->
+    <div class="lp-container">
+      <div class="lp-notice" data-reveal>
+        <span class="material-symbols-rounded">health_and_safety</span>
+        <div>
+          <b>PetCare+는 진단하지 않습니다. 기록을 더 쉽게 정리합니다.</b>
+          <p>질병을 판단하거나 치료를 안내하는 서비스가 아닙니다. 아이의 이상 증상이 지속되거나 걱정되는 변화가 있다면 반드시 동물병원에 상담하세요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════
+       8. CLOSING CTA — 그린 그라데이션 배너
+       ════════════════════════════════════════════════════ -->
+  <section class="lp-cta">
+    <div class="lp-container lp-cta-inner" data-reveal>
+      <div class="lp-cta-paw">🐾</div>
+      <h2>매일 반복되는 반려견 케어,<br>조금 더 편안하게 관리하세요.</h2>
+      <p>오늘 해야 할 케어부터 병원 기록, 리포트까지 하나의 흐름으로 연결해 보세요.</p>
+      <a class="btn lp-btn-lg lp-cta-btn" href="index.html">
+        PetCare+ 시작하기
+        <span class="material-symbols-rounded">arrow_forward</span>
+      </a>
+      <p class="lp-cta-tagline">우리 아이의 하루 케어, 이제 한눈에 챙기세요.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── Footer ───────────────────────────────────────────── -->
+<footer class="lp-footer">
+  <div class="lp-container lp-footer-inner">
+    <div class="lp-footer-brand">
+      <span class="lp-logo">PetCare<sup>+</sup></span>
+      <p>우리 아이의 하루 케어를 한눈에</p>
+    </div>
+    <div class="lp-footer-links">
+      <a href="#features">기능</a>
+      <a href="#flow">사용법</a>
+      <a href="#target">추천 대상</a>
+      <a href="index.html">시작하기</a>
+    </div>
+  </div>
+  <div class="lp-container lp-footer-copy">© 2026 PetCare+. All rights reserved.</div>
+</footer>
+
+<script src="js/landing.js"></script>
+</body>
+</html>

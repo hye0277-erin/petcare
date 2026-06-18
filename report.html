@@ -10,19 +10,11 @@
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/report.css" />
 <link rel="stylesheet" href="css/picker.css" />
+<link rel="stylesheet" href="css/page-v2.css" />
 <script type="module" src="js/guard.js"></script>
 </head>
 <body>
 <div class="app">
-  <div class="status-bar">
-    <span>9:41</span>
-    <span class="status-icons">
-      <span class="material-symbols-rounded">signal_cellular_alt</span>
-      <span class="material-symbols-rounded">wifi</span>
-      <span class="material-symbols-rounded">battery_full</span>
-    </span>
-  </div>
-
   <!-- Header -->
   <header class="report-header" data-rise>
     <div>
@@ -119,7 +111,7 @@
       <p class="section-copy" id="medication-copy"></p>
     </section>
 
-    <section class="report-card" data-rise>
+    <section class="report-card report-card--symptom" data-rise>
       <div class="section-head tight">
         <h2 class="section-title">증상 기록 요약</h2>
       </div>
@@ -127,7 +119,7 @@
       <p class="section-copy" id="symptom-copy"></p>
     </section>
 
-    <section class="report-card" data-rise>
+    <section class="report-card report-card--meal" data-rise>
       <div class="section-head tight">
         <h2 class="section-title">식사량 기록</h2>
       </div>
@@ -135,7 +127,7 @@
       <p class="section-copy" id="meal-copy"></p>
     </section>
 
-    <section class="report-card weight-card" data-rise>
+    <section class="report-card report-card--weight weight-card" data-rise>
       <div class="section-head tight">
         <h2 class="section-title">체중 변화</h2>
         <span class="section-chip" id="weight-change">-0.2kg</span>
@@ -205,12 +197,12 @@
     </section>
   </main>
 
-  <nav class="tabbar" aria-label="하단 메뉴">
-    <a class="tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
-    <a class="tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
-    <a class="tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
-    <a class="tab active" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
-    <a class="tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
+  <nav class="pv2-tabbar" aria-label="하단 메뉴">
+    <a class="pv2-tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
+    <a class="pv2-tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
+    <a class="pv2-tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
+    <a class="pv2-tab active" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
+    <a class="pv2-tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
   </nav>
   <div class="home-indicator"><i></i></div>
 

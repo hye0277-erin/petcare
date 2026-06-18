@@ -1,0 +1,629 @@
+/* ============================================================
+   page-v2.css — 서브페이지 공통 v2 (Fingoo 화이트 테마)
+   record / hospital / schedule / report / settings / notifications
+   ============================================================ */
+
+/* ── 앱 배경 ── */
+.app {
+  background: #F4F6F9 !important;
+}
+
+/* ── status-bar 제거 ── */
+.status-bar { display: none !important; }
+
+/* ── record.css / report.css 의 body 배경 덮어쓰기 ── */
+body {
+  background: #F4F6F9 !important;
+}
+
+/* ── 전역 box-shadow 완전 제거 ── */
+.app * {
+  box-shadow: none !important;
+}
+
+/* ── 폰트 굵기 한 단계 다운 (탭바 제외) ──
+   900→800, 800→700, 700→600, 600→500        */
+.app *:not(.pv2-tabbar):not(.pv2-tabbar *) {
+  font-weight: revert;
+}
+/* 굵기 단계별 재정의 */
+.app *:not(.pv2-tabbar):not(.pv2-tabbar *)[style*="font-weight: 900"] { font-weight: 800 !important; }
+
+/* 900 → 800 */
+.app .pv2-title { font-weight: 800 !important; }
+.app .sheet-title { font-weight: 700 !important; }
+.app .day-title { font-weight: 700 !important; }
+.app .rec-title { font-weight: 700 !important; }
+
+/* 800 → 700 */
+.app .pv2-header-title,
+.app .section-title,
+.app h1, .app h2, .app h3 { font-weight: 700 !important; }
+
+/* 700 → 600 */
+.app .pv2-tab-label,
+.app .rec-card .rec-title,
+.app .tl-name,
+.app .check-label,
+.app .ni-title { font-weight: 600 !important; }
+
+/* 600 → 500 */
+.app .rec-meta,
+.app .tl-desc,
+.app .check-status,
+.app .ni-meta,
+.app .pv2-desc { font-weight: 500 !important; }
+
+/* switch 토글 내부 원(record.css)은 시각적 깊이감 유지 */
+.switch::after {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18) !important;
+}
+
+/* 데스크톱 앱 프레임 드롭쉐도우는 유지 */
+@media (min-width: 480px) {
+  .app {
+    box-shadow: 0 40px 80px rgba(31, 42, 36, 0.14), 0 0 0 1px rgba(0,0,0,0.04) !important;
+  }
+}
+
+/* ═══════════════════════════════════════
+   공통 v2 헤더 (.pv2-header)
+   ═══════════════════════════════════════ */
+.pv2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #fff;
+  border-bottom: 1px solid #F0F1F3;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.pv2-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pv2-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: #1A2B1F;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+
+.pv2-subtitle {
+  font-size: 13px;
+  color: #6B7C71;
+  font-weight: 500;
+}
+
+.pv2-header-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.pv2-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pv2-nav-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1A2B1F;
+  letter-spacing: -0.03em;
+}
+
+/* ── pv2 아이콘 버튼 ── */
+.pv2-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #2A3D30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+
+.pv2-icon-btn:active { background: #F0F4F1; }
+
+.pv2-icon-btn .material-symbols-rounded {
+  font-size: 24px;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.pv2-icon-btn.solid {
+  background: #2A6F40;
+  color: #fff;
+}
+
+.pv2-icon-btn.solid:active { background: #1B5232; }
+
+/* ── pv2 탭바 ── */
+.pv2-tabbar {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-top: 1px solid #ECEEF0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.pv2-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 4px 8px;
+  text-decoration: none;
+  color: #9EA8A3;
+  font-size: 12px;
+  font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pv2-tab .material-symbols-rounded {
+  font-size: 24px;
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+.pv2-tab.active { color: #2A6F40; }
+
+.pv2-tab.active .material-symbols-rounded {
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ── pv2 카드 레이블 ── */
+.pv2-card-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8A9C90;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 20px 0 6px;
+}
+
+/* ── scroll 좌우 패딩 (style.css 24px → 16px) ── */
+.app .scroll {
+  padding-top: 10px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  padding-bottom: 24px !important;
+}
+
+/* ═══════════════════════════════════════
+   모달 / 시트 / 피커 배경 통일 (#fff)
+   ═══════════════════════════════════════ */
+.app .sheet,
+.app .modal,
+.app .sheet-foot,
+.app .pk-sheet {
+  background: #fff !important;
+}
+.app .overlay,
+.app .sheet-overlay,
+.app .pk-overlay {
+  background: rgba(17, 17, 17, 0.42) !important;
+}
+
+/* ═══════════════════════════════════════
+   RECORD (record.html)
+   ═══════════════════════════════════════ */
+
+/* pet-chip: 반투명 흰색 → 연한 회색 */
+.pet-chip.static {
+  background: #F4F6F9 !important;
+  border: 1px solid #E8ECEC !important;
+  color: #2A3D30 !important;
+  margin-top: 8px !important;
+}
+
+/* summary — record.css 그라디언트 배경 → 흰색 단색으로만 교체 */
+.summary {
+  background: #fff !important;
+  border: 1px solid #F0F2F0 !important;
+}
+
+/* stat-pill 컬러 */
+.stat-pill {
+  background: #F0F5F2 !important;
+  color: #2A6F40 !important;
+  border: none !important;
+}
+.stat-pill.alt { background: #FEF0E5 !important; color: #B85E0D !important; }
+.stat-pill.warn { background: #FDEAEA !important; color: #C0392B !important; }
+
+/* summary-note border 제거 */
+.summary-note { border-top: 1px solid #EEF1EE !important; }
+
+/* quick-grid — 래퍼 카드 스타일 제거 (quick-btn이 이미 각자 카드) */
+.quick-grid {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* filter-row — scroll 16px 패딩에 맞게 negative margin 조정 */
+.filter-row {
+  margin-left: -16px !important;
+  margin-right: -16px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+/* rec-card — box-shadow 이미 전역 제거됨, border만 유지 */
+.rec-card {
+  border-color: #F0F2F0 !important;
+}
+
+/* ═══════════════════════════════════════
+   HOSPITAL (hospital.html)
+   ═══════════════════════════════════════ */
+
+/* 기존 .header → v2 */
+.app .header {
+  background: #fff !important;
+  padding: 14px 20px !important;
+  border-bottom: 1px solid #F0F1F3 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  box-shadow: none !important;
+}
+
+.app .page-title {
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  color: #1A2B1F !important;
+  letter-spacing: -0.04em !important;
+}
+
+.app .greeting-sub {
+  font-size: 13px !important;
+  color: #6B7C71 !important;
+  font-weight: 500 !important;
+  margin-top: 2px !important;
+}
+
+.app .header .icon-btn.solid {
+  background: #2A6F40 !important;
+  color: #fff !important;
+}
+
+/* hospital.js가 만드는 카드 클래스 */
+.h-next-card {
+  background: linear-gradient(135deg, #1B5C32 0%, #2E7D45 100%);
+  color: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.h-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.h-card {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #F0F2F0;
+  padding: 14px 16px;
+}
+
+.h-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* 기존 .card 오버라이드 — hospital 내부 시트용만 */
+.app .card {
+  background: #fff !important;
+  border-radius: 6px !important;
+  border: 1px solid #F0F2F0 !important;
+  margin: 0 !important;
+  padding: 14px 16px !important;
+}
+
+.app .section-head {
+  padding: 0 !important;
+  margin-top: 0 !important;
+}
+
+.app .section-title {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #1A2B1F !important;
+  letter-spacing: -0.03em !important;
+}
+
+/* ═══════════════════════════════════════
+   SCHEDULE (schedule.html)
+   ═══════════════════════════════════════ */
+
+.sched-today {
+  background: #fff !important;
+  border-radius: 8px !important;
+  padding: 13px !important;
+  border: 1px solid #F0F2F0 !important;
+}
+
+.routine-entry {
+  background: #fff !important;
+  border-radius: 6px !important;
+  border: 1px solid #F0F2F0 !important;
+}
+
+.app .card.calendar {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  padding: 16px !important;
+  border: 1px solid #F0F2F0 !important;
+}
+
+/* timeline-card: 안에 tl-item들이 들어가므로 패딩 제거 */
+.app .card.timeline-card {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 1px solid #F0F2F0 !important;
+}
+
+.day-title {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #1A2B1F !important;
+  letter-spacing: -0.03em !important;
+  margin: 0 0 20px !important;
+}
+
+.today-pill {
+  background: #E5F5EA !important;
+  color: #2A6F40 !important;
+  border-radius: 12px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 2px 10px !important;
+}
+
+.app .card-label {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #8A9C90 !important;
+  letter-spacing: 0.06em !important;
+  padding: 16px 0 4px !important;
+  background: transparent !important;
+}
+
+/* ═══════════════════════════════════════
+   REPORT (report.html)
+   ═══════════════════════════════════════ */
+
+.report-header {
+  background: #fff !important;
+  padding: 14px 20px 12px !important;
+  border-bottom: 1px solid #F0F1F3 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+}
+
+.report-header .page-title {
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  color: #1A2B1F !important;
+  letter-spacing: -0.04em !important;
+}
+
+.report-subtitle {
+  font-size: 13px !important;
+  color: #6B7C71 !important;
+  font-weight: 500 !important;
+  margin-top: 2px !important;
+}
+
+.pet-select.static {
+  background: #fff !important;
+  border-radius: 6px !important;
+  padding: 10px 14px !important;
+  border: 1px solid #F0F2F0 !important;
+  margin: 12px 0 0 !important;
+}
+
+.report-tabs {
+  margin: 12px 0 0 !important;
+  background: #F4F6F9 !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  border: none !important;
+  gap: 2px !important;
+}
+
+.report-tabs button {
+  border-radius: 5px !important;
+  font-weight: 700 !important;
+  color: #6B7C71 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  position: relative !important;
+}
+
+/* 버튼 사이 구분선 — active 버튼 인접 시 숨김 */
+.report-tabs button + button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: #D8DDD9;
+}
+
+.report-tabs button.active + button::before,
+.report-tabs button + button.active::before {
+  display: none;
+}
+
+.report-tabs button.active {
+  background: #2A6F40 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.report-card {
+  background: #fff !important;
+  border-radius: 10px !important;
+  border: 1px solid #F0F2F0 !important;
+  margin: 12px 0 0 !important;
+  padding: 16px !important;
+}
+
+.hero-summary {
+  border: 1px solid #E5F0EB !important;
+}
+
+/* ── 리포트 섹션별 그래프 색상 ── */
+/* 증상: 빨간 계열 */
+.report-card--symptom .bar-track i {
+  background: var(--c-symptom)  !important;
+}
+
+/* 식사량: 주황 계열 */
+.report-card--meal .meal-track i {
+  background: var( --color-orange) !important;
+}
+
+/* 체중: 파란 계열 */
+.report-card--weight .line-chart polyline {
+  stroke: var(--c-memo) !important;
+}
+.report-card--weight .line-chart circle {
+  stroke: var(--c-memo) !important;
+}
+
+.metric-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px !important;
+  margin: 12px 0 0 !important;
+}
+
+.metric-card {
+  background: #fff !important;
+  border-radius: 8px !important;
+  border: 1px solid #F0F2F0 !important;
+  padding: 14px !important;
+}
+
+.metric-icon {
+  color: #2A6F40 !important;
+}
+
+/* ═══════════════════════════════════════
+   SETTINGS (settings.html)
+   ═══════════════════════════════════════ */
+
+.app .card-label {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #8A9C90 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  padding: 16px 0 4px !important;
+  background: transparent !important;
+}
+
+.app .card.list {
+  background: #fff !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  border: 1px solid #F0F2F0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.list-item {
+  border-bottom: 1px solid #F3F5F3 !important;
+  padding: 14px 16px !important;
+}
+
+.list-item:last-child {
+  border-bottom: none !important;
+}
+
+.list-ic {
+  background: #F0F5F2 !important;
+  color: #2A6F40 !important;
+  border-radius: 6px !important;
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.list-ic.danger {
+  background: #FDEAEA !important;
+  color: #C0392B !important;
+}
+
+.app .card.pet-card {
+  background: #fff !important;
+  border-radius: 10px !important;
+  border: 1px solid #F0F2F0 !important;
+  margin: 16px 0 0 !important;
+  padding: 16px !important;
+}
+
+.app .card.pet-card .tag {
+  background: #E5F5EA !important;
+  color: #2A6F40 !important;
+  border: none !important;
+}
+
+/* ═══════════════════════════════════════
+   NOTIFICATIONS (notifications.html)
+   ═══════════════════════════════════════ */
+
+.noti {
+  background: #fff !important;
+  border-radius: 6px !important;
+  margin: 0 0 8px !important;
+  border: 1px solid #F0F2F0 !important;
+}
+
+.noti.unread {
+  background: #EAF4EE !important;
+  border-left: 3px solid #2A6F40 !important;
+}
+
+.noti-sec {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #8A9C90 !important;
+  padding: 16px 0 4px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+}

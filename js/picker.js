@@ -18,7 +18,7 @@
     const [y, m, d] = v.split("-").map(Number);
     const dt = new Date(y, m - 1, d);
     if (isNaN(dt)) return v;
-    return `${y}.${pad(m)}.${pad(d)} (${DOW[dt.getDay()]})`;
+    return `${y}.${pad(m)}.${pad(d)}`;
   }
   function fmtTime(v) {
     if (!v) return "";
@@ -90,8 +90,8 @@
     const first = new Date(y, m - 1, 1).getDay();
     const days = new Date(y, m, 0).getDate();
     const today = new Date();
+    const dowRow = DOW.map((d, i) => `<div class="pk-dow ${i === 0 ? "sun" : ""}">${d}</div>`).join("");
     let cells = "";
-    DOW.forEach((d, i) => (cells += `<div class="pk-dow ${i === 0 ? "sun" : ""}">${d}</div>`));
     for (let i = 0; i < first; i++) cells += `<div class="pk-cell empty"></div>`;
     for (let d = 1; d <= days; d++) {
       const isSel = draft.y === y && draft.m === m && draft.d === d;
@@ -104,6 +104,7 @@
         <div class="pk-month">${y}년 ${m}월</div>
         <button type="button" class="pk-nav" data-pk-mon="1"><span class="material-symbols-rounded">chevron_right</span></button>
       </div>
+      <div class="pk-dow-row">${dowRow}</div>
       <div class="pk-grid">${cells}</div>`;
   }
 
@@ -124,9 +125,7 @@
         </div>
         <div class="pk-time-mid"></div>
       </div>
-      <div class="pk-quick">
-        ${["08:00", "12:00", "16:00", "20:00", "21:00"].map((t) => `<button type="button" data-pk-quick="${t}">${fmtTime(t)}</button>`).join("")}
-      </div>`;
+      `;
     // 선택값으로 스크롤
     requestAnimationFrame(() => {
       overlay.querySelectorAll(".pk-opt.sel").forEach((o) => o.scrollIntoView({ block: "center" }));
@@ -175,7 +174,7 @@
     const trig = document.createElement("button");
     trig.type = "button";
     trig.className = "pk-trigger empty";
-    trig.innerHTML = `<span class="material-symbols-rounded pk-ic">${kind === "time" ? "schedule" : "calendar_today"}</span><span class="pk-val"></span>`;
+    trig.innerHTML = `<span class="pk-ic">${kind === "time" ? "schedule" : "calendar_today"}</span><span class="pk-val"></span>`;
     input.insertAdjacentElement("afterend", trig);
     input._pkTrigger = trig;
     trig.addEventListener("click", () => open(input));

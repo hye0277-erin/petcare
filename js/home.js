@@ -27,14 +27,16 @@
   const dateKo = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
 
   /* ── 반려견 요약 카드 ───────────────────────────────── */
+  const TAG_COLORS = ["hv2-tag-red","hv2-tag-blue","hv2-tag-green","hv2-tag-orange"];
   function renderPet() {
     const p = S.getPet(); if (!p) return;
     const nameEl = $("[data-pet-name]");
-    if (nameEl) nameEl.innerHTML = `${p.name}<span class="material-symbols-rounded">chevron_right</span>`;
+    if (nameEl) nameEl.textContent = p.name;
     const metaEl = $("[data-pet-meta]");
     if (metaEl) metaEl.textContent = [p.age ? `${p.age}살` : "", p.breed].filter(Boolean).join(" · ");
     const tagsEl = $("[data-pet-tags]");
-    if (tagsEl) tagsEl.innerHTML = (p.tags || []).map((t) => `<span class="tag">${t}</span>`).join("");
+    if (tagsEl) tagsEl.innerHTML = (p.tags || []).map((t, i) =>
+      `<span class="hv2-tag ${TAG_COLORS[i % TAG_COLORS.length]}">${esc(t)}</span>`).join("");
 
     const photoBox = $("[data-pet-photo]");
     if (photoBox && p.photo) {
@@ -42,14 +44,20 @@
       photoBox.innerHTML = `<img src="${p.photo}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover" />`;
     }
 
+    const banner = document.getElementById("next-visit");
     const ddayEl = $("[data-next-dday]");
     const dateEl = $("[data-next-date]");
     const nv = S.nextVisitDday();
-    if (ddayEl) ddayEl.textContent = nv ? (nv.dday === 0 ? "D-DAY" : `D-${nv.dday}`) : "예정 없음";
-    if (dateEl && nv) {
-      const dow = S.DOW[nv.date.getDay()];
-      dateEl.textContent = `${nv.date.getFullYear()}.${String(nv.date.getMonth() + 1).padStart(2, "0")}.${String(nv.date.getDate()).padStart(2, "0")} (${dow})`;
-    } else if (dateEl) dateEl.textContent = "";
+    if (!nv) {
+      if (banner) banner.style.display = "none";
+    } else {
+      if (banner) banner.style.display = "";
+      if (ddayEl) ddayEl.textContent = nv.dday === 0 ? "D-DAY" : `D-${nv.dday}`;
+      if (dateEl) {
+        const dow = S.DOW[nv.date.getDay()];
+        dateEl.textContent = `${nv.date.getFullYear()}.${String(nv.date.getMonth() + 1).padStart(2, "0")}.${String(nv.date.getDate()).padStart(2, "0")} (${dow})`;
+      }
+    }
   }
 
   /* ── 진행률 + 요약 pill ─────────────────────────────── */
@@ -58,26 +66,38 @@
     const done = tasks.filter((t) => t.status === "done").length;
     const pct = total ? Math.round((done / total) * 100) : 0;
 
+    // 구형 선형 진행률 (다른 화면에서 사용할 수 있으니 유지)
     const fill = $("[data-progress-fill]"); if (fill) fill.style.width = pct + "%";
     const cnt = $("[data-progress-count]"); if (cnt) cnt.innerHTML = `<b>${done}</b> / ${total} 완료`;
+
+    // 원형 진행률 (홈 리디자인)
+    const ring = $("[data-progress-ring]");
+    const pctEl = $("[data-progress-pct]");
+    if (ring) {
+      const circumference = 138.2; // 2 * π * 22
+      const offset = circumference - (pct / 100) * circumference;
+      ring.style.strokeDashoffset = offset;
+    }
+    if (pctEl) pctEl.textContent = pct + "%";
 
     const pending = tasks.filter((t) => t.status === "pending");
     const next = pending.sort((a, b) => (a.scheduled_time || "99").localeCompare(b.scheduled_time || "99"))[0];
     const host = $("#care-summary"); if (!host) return;
     host.innerHTML = `
-      <div class="cs-pill">
-        <span class="cs-label">남은 케어</span>
-        <span class="cs-value"><b>${pending.length}</b>개 남음</span>
+      <div class="hv2-care-stat-chip hv2-chip-done">
+        <span class="material-symbols-rounded">check_circle</span>${done}개 완료
       </div>
-      <div class="cs-pill">
-        <span class="cs-label">다음 일정</span>
-        <span class="cs-value">${next ? `${esc(next.title)}${next.scheduled_time ? " · " + ampm(next.scheduled_time) : ""}` : "모두 완료 🎉"}</span>
+      <div class="hv2-care-stat-chip hv2-chip-todo">
+        <span class="material-symbols-rounded">pending</span>${pending.length}개 남음
+      </div>
+      <div class="hv2-care-stat-chip hv2-chip-total">
+        <span class="material-symbols-rounded">list_alt</span>전체 ${total}개
       </div>`;
   }
 
   /* ── 오늘의 케어 목록 ───────────────────────────────── */
   function statusLabel(t) {
-    if (t.status === "done") return `<span class="check-status">완료${t.completed_at ? " " + ampm(t.completed_at.slice(11, 16)) : ""}</span>`;
+    if (t.status === "done") return `<span class="check-status st-done"><span class="cs-badge">완료</span>${t.completed_at ? `<span class="cs-time">${ampm(t.completed_at.slice(11, 16))}</span>` : ""}</span>`;
     if (t.status === "skipped") return `<span class="check-status st-skipped">건너뜀</span>`;
     if (t.status === "missed") return `<span class="check-status st-missed">놓침</span>`;
     return `<span class="check-status">${t.scheduled_time ? `<span class="material-symbols-rounded">schedule</span>${ampm(t.scheduled_time)}` : ""}</span>`;
@@ -175,6 +195,21 @@
     }).join("");
   }
 
+  /* ── 알림 dot 제어 ─────────────────────────────────── */
+  function renderNotiDot() {
+    const dot = document.querySelector(".hv2-dot");
+    if (!dot) return;
+    const saved = localStorage.getItem("petcare_noti_read_all");
+    let hasUnread;
+    if (saved === null) {
+      // 저장값 없으면 실제 미처리 케어로 판단
+      hasUnread = S.getTodayTasks().some((t) => t.status === "pending" || t.status === "missed");
+    } else {
+      hasUnread = saved !== "1";
+    }
+    dot.style.display = hasUnread ? "" : "none";
+  }
+
   /* ── 전체 렌더 ──────────────────────────────────────── */
   function renderAll() {
     const tasks = S.getTodayTasks();
@@ -183,6 +218,7 @@
     renderCare(tasks);
     renderNotable();
     renderStatus();
+    renderNotiDot();
   }
 
   /* ── 케어 완료 / 건너뜀 ─────────────────────────────── */

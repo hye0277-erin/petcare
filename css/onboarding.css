@@ -25,7 +25,7 @@
 .ob-dot { width:8px; height:8px; border-radius:50%; background:var(--color-border); transition:all .24s var(--ease); }
 .ob-dot.on { width:24px; border-radius:6px; background:var(--color-primary); }
 .ob-text { padding:0 28px; text-align:center; }
-.ob-badge { display:inline-block; padding:4px 12px; border-radius:999px; background:var(--color-primary-soft); color:var(--color-primary); font-size:11px; font-weight:800; letter-spacing:.5px; margin-bottom:14px; }
+.ob-badge { display:inline-block; padding:4px 12px; border-radius:999px; background:var(--color-primary-soft); color:var(--color-primary); font-size:12px; font-weight:800; letter-spacing:.5px; margin-bottom:14px; }
 .ob-h { font-size:24px; font-weight:800; line-height:1.35; letter-spacing:-.5px; }
 .ob-p { font-size:14px; color:var(--color-text-sub); line-height:1.7; margin-top:12px; font-weight:300; }
 .ob-actions { padding:24px; display:flex; flex-direction:column; gap:10px; }

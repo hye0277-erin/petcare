@@ -1,8 +1,5 @@
 /* ============================================================
    PetCare+ · 일정(schedule) — 반복 케어 관리 화면 (1차 MVP)
-   - 오늘의 일정(care_tasks) 우선 노출 + 완료/건너뜀 처리
-   - 체크 시 store 가 records(source: schedule_check) 자동 생성
-   - schedule-add.html 제출 시 반복 루틴(care_routine) 생성
    ============================================================ */
 (function () {
   "use strict";
@@ -20,6 +17,7 @@
     walk: ["산책", "directions_walk", "t-walk"], hospital: ["병원", "local_hospital", "t-hospital"],
     memo: ["메모", "sticky_note_2", "t-memo"],
   };
+
   function fmtTime(t) {
     if (!t) return { period: "", hm: "종일" };
     const [h, m] = t.split(":").map(Number);
@@ -31,13 +29,16 @@
     return `${h < 12 ? "오전" : "오후"} ${h % 12 || 12}:${String(m).padStart(2, "0")}`;
   }
   const DOW = ["일", "월", "화", "수", "목", "금", "토"];
+  const DOW_SHORT = ["일", "월", "화", "수", "목", "금", "토"];
   const pad = (n) => String(n).padStart(2, "0");
   const dot = (iso) => (iso || "").replace(/-/g, ".");
+  function isoDate(d) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
 
   /* 선택 상태: 기본은 오늘 */
   const [ty, tm, td] = TODAY.split("-").map(Number);
-  let selDate = TODAY;                 // YYYY-MM-DD
-  let viewY = ty, viewM = tm;          // 캘린더가 보여주는 연/월
+  let selDate = TODAY;
+  let viewY = ty, viewM = tm;
+  let calOpen = false;
 
   /* ── 오늘 요약 ──────────────────────────────────────── */
   function renderToday(tasks) {
@@ -52,6 +53,45 @@
       <div class="st-pill"><div class="st-num skip">${skipped}</div><div class="st-lab">건너뜀</div></div>`;
   }
 
+  /* ── 주간 날짜 바 ───────────────────────────────────── */
+  function renderWeekBar() {
+    const bar = $("#week-bar"); if (!bar) return;
+
+    // selDate 기준 주 시작(일요일)
+    const sel = new Date(selDate);
+    const base = new Date(sel);
+    base.setDate(sel.getDate() - sel.getDay()); // 해당 주 일요일
+
+    const monthLabel = $("#week-bar-month");
+    if (monthLabel) monthLabel.textContent = `${sel.getFullYear()}년 ${sel.getMonth() + 1}월`;
+
+    let html = "";
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(base);
+      d.setDate(base.getDate() + i);
+      const iso = isoDate(d);
+      const isToday = iso === TODAY;
+      const isSel = iso === selDate;
+      const marks = S.monthMarks(d.getFullYear(), d.getMonth() + 1);
+      const m = marks[iso] || {};
+      let pip = "";
+      if (m.done) pip = `<i class="wb-pip green"></i>`;
+      else if (m.task) pip = `<i class="wb-pip orange"></i>`;
+      else if (m.rec) pip = `<i class="wb-pip blue"></i>`;
+
+      html += `<button class="wb-day${isSel ? " sel" : ""}${isToday ? " today" : ""}" data-date="${iso}">
+        <span class="wb-dow">${DOW_SHORT[d.getDay()]}</span>
+        <span class="wb-num">${d.getDate()}</span>
+        ${pip}
+      </button>`;
+    }
+    bar.innerHTML = html;
+
+    // 선택 날짜 카드를 중앙으로 스크롤
+    const selEl = bar.querySelector(".wb-day.sel");
+    if (selEl) selEl.scrollIntoView({ inline: "center", behavior: "smooth", block: "nearest" });
+  }
+
   /* ── 선택 날짜의 일정 목록 ──────────────────────────── */
   function renderList() {
     const host = $("#day-list"); if (!host) return;
@@ -59,7 +99,6 @@
     const isPast = selDate < TODAY;
     const items = S.getTasksByDate(selDate);
 
-    // 헤더 타이틀
     const [yy, mm, dd] = selDate.split("-").map(Number);
     const dow = DOW[new Date(yy, mm - 1, dd).getDay()];
     const titleEl = $("#day-title");
@@ -68,23 +107,21 @@
       titleEl.innerHTML = `${isToday ? "오늘의 일정" : `${mm}월 ${dd}일 (${dow})`} <span class="today-pill">${pill}</span>`;
     }
 
-    // 오늘만 요약 pill 노출, 과거/미래는 숨김
     const summaryHost = $("#sched-today");
     if (summaryHost) summaryHost.style.display = isToday ? "" : "none";
     if (isToday) renderToday(items);
 
     if (!items.length) {
-      host.innerHTML = `<div style="padding:22px;text-align:center;color:var(--color-text-light)">${isToday ? '오늘 등록된 일정이 없어요.<br><a href="schedule-add.html" style="color:var(--color-primary);font-weight:700">케어 일정 추가하기</a>' : "이 날에는 등록된 일정이 없어요."}</div>`;
+      host.innerHTML = `<div class="card timeline-card"><div style="padding:22px;text-align:center;color:var(--color-text-light)">${isToday ? '오늘 등록된 일정이 없어요.<br><a href="schedule-add.html" style="color:var(--color-primary);font-weight:700">케어 일정 추가하기</a>' : "이 날에는 등록된 일정이 없어요."}</div></div>`;
       return;
     }
-    host.innerHTML = items.map((it) => {
+    host.innerHTML = `<div class="card timeline-card">` + items.map((it) => {
       const [label, icon, cls] = TYPES[it.type] || TYPES.memo;
       const { period, hm } = fmtTime(it.scheduled_time);
       const done = it.status === "done", skipped = it.status === "skipped", missed = it.status === "missed";
       const stateCls = done ? "done" : skipped ? "skipped" : missed ? "missed" : "";
 
       let right;
-      // 과거 날짜는 읽기 전용(상태만), 오늘/미래는 완료/건너뜀 가능
       if (done) right = `<span class="tl-state done">완료</span>`;
       else if (skipped) right = `<span class="tl-state skipped">건너뜀</span>`;
       else if (missed) right = `<span class="tl-state missed">놓침</span>`;
@@ -103,7 +140,7 @@
         </div>
         ${right}
       </div>`;
-    }).join("");
+    }).join("") + `</div>`;
 
     if (sessionStorage.getItem("sched_added")) {
       sessionStorage.removeItem("sched_added");
@@ -111,9 +148,7 @@
     }
   }
 
-  /* ── 선택 날짜의 기록(records) ──────────────────────────
-     일정 목록(위)에 이미 나오는 자동 완료/건너뜀(schedule_check)은
-     중복이라 제외하고, 직접/병원 기록만 노출한다.            */
+  /* ── 선택 날짜의 기록(records) ─────────────────────── */
   function renderDayRecords() {
     const host = $("#day-records"); if (!host) return;
     const recs = S.getRecordsByDate(selDate).filter((r) => r.source !== "schedule_check");
@@ -125,7 +160,6 @@
         const [, icon, cls] = TYPES[r.type] || TYPES.memo;
         const isManual = (r.source || "manual") === "manual";
         const src = SRC[r.source || "manual"] || SRC.manual;
-        // 직접 기록은 배지를 누르면 편집(record.html 상세→수정), 병원 기록은 정적 배지
         const badge = isManual
           ? `<button class="src-badge src-manual" data-edit-rec="${r.id}" aria-label="기록 편집"><span class="material-symbols-rounded">edit</span>직접</button>`
           : `<span class="src-badge src-${r.source}"><span class="material-symbols-rounded">${src[0]}</span>${src[1]}</span>`;
@@ -143,31 +177,34 @@
 
   function refreshDay() { renderList(); renderDayRecords(); }
 
-  /* 완료 / 건너뜀 (오늘/미래만 버튼 노출) */
-  document.addEventListener("click", (e) => {
-    const d = e.target.closest("[data-done]");
-    if (d) { S.completeTask(d.dataset.done); if (window.toast) window.toast("완료했어요. 기록에 저장됐어요."); refreshDay(); renderCalendar(); return; }
-    const s = e.target.closest("[data-skip]");
-    if (s) { S.skipTask(s.dataset.skip, ""); if (window.toast) window.toast("건너뜀으로 기록했어요."); refreshDay(); renderCalendar(); return; }
+  /* ── 날짜 선택 공통 처리 ─────────────────────────────── */
+  function selectDate(iso) {
+    selDate = iso;
+    // 선택 날짜가 속한 달로 뷰 이동
+    const [y, m] = iso.split("-").map(Number);
+    viewY = y; viewM = m;
+    renderWeekBar();
+    if (calOpen) renderCalendar();
+    refreshDay();
+    $("#day-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
-    // 직접 기록 편집 → 기록 화면에서 상세/수정
-    const editRec = e.target.closest("[data-edit-rec]");
-    if (editRec) { location.href = `record.html?id=${encodeURIComponent(editRec.dataset.editRec)}`; return; }
+  /* ── 월간 캘린더 토글 ───────────────────────────────── */
+  function toggleCal() {
+    calOpen = !calOpen;
+    const wrap = $("#full-cal-wrap");
+    const btn = $("#btn-cal-toggle");
+    if (!wrap || !btn) return;
+    wrap.style.display = calOpen ? "" : "none";
+    wrap.setAttribute("aria-hidden", String(!calOpen));
+    btn.setAttribute("aria-expanded", String(calOpen));
+    btn.innerHTML = calOpen
+      ? `전체 접기<span class="material-symbols-rounded">expand_less</span>`
+      : `전체 보기<span class="material-symbols-rounded">expand_more</span>`;
+    if (calOpen) renderCalendar();
+  }
 
-    // 달력 셀 클릭 → 날짜 선택
-    const cell = e.target.closest("[data-date]");
-    if (cell) {
-      selDate = cell.dataset.date;
-      renderCalendar();
-      refreshDay();
-      $("#day-title")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-    if (e.target.closest("#cal-prev")) { viewM--; if (viewM < 1) { viewM = 12; viewY--; } renderCalendar(); return; }
-    if (e.target.closest("#cal-next")) { viewM++; if (viewM > 12) { viewM = 1; viewY++; } renderCalendar(); return; }
-  });
-
-  /* ── 캘린더 렌더 ───────────────────────────────────── */
+  /* ── 월간 캘린더 렌더 ───────────────────────────────── */
   function renderCalendar() {
     const grid = $("#cal-grid"); if (!grid) return;
     $("#cal-month").textContent = `${viewY}년 ${viewM}월`;
@@ -192,9 +229,35 @@
     grid.innerHTML = html;
   }
 
-  /* ── 추가 폼 (schedule-add.html) → 반복 루틴 생성 ───── */
+  /* ── 이벤트 ─────────────────────────────────────────── */
+  document.addEventListener("click", (e) => {
+    // 완료
+    const d = e.target.closest("[data-done]");
+    if (d) { S.completeTask(d.dataset.done); if (window.toast) window.toast("완료했어요. 기록에 저장됐어요."); refreshDay(); renderWeekBar(); if (calOpen) renderCalendar(); return; }
+    // 건너뜀
+    const sk = e.target.closest("[data-skip]");
+    if (sk) { S.skipTask(sk.dataset.skip, ""); if (window.toast) window.toast("건너뜀으로 기록했어요."); refreshDay(); renderWeekBar(); if (calOpen) renderCalendar(); return; }
+    // 기록 편집
+    const editRec = e.target.closest("[data-edit-rec]");
+    if (editRec) { location.href = `record.html?id=${encodeURIComponent(editRec.dataset.editRec)}`; return; }
+    // 주간 바 날짜 클릭
+    const wbDay = e.target.closest(".wb-day[data-date]");
+    if (wbDay) { selectDate(wbDay.dataset.date); return; }
+    // 월간 캘린더 셀 클릭
+    const cell = e.target.closest("#cal-grid [data-date]");
+    if (cell) { selectDate(cell.dataset.date); return; }
+    // 전체 보기 토글
+    if (e.target.closest("#btn-cal-toggle")) { toggleCal(); return; }
+    // 월 이동
+    if (e.target.closest("#cal-prev")) { viewM--; if (viewM < 1) { viewM = 12; viewY--; } renderCalendar(); return; }
+    if (e.target.closest("#cal-next")) { viewM++; if (viewM > 12) { viewM = 1; viewY++; } renderCalendar(); return; }
+  });
+
+  /* ── 추가 폼 (schedule-add.html) ───────────────────── */
   function initForm() {
     const form = $("#sched-form"); if (!form) return;
+    const dateInput = $("#s-date");
+    if (dateInput && !dateInput.value) dateInput.value = TODAY;
 
     const daysField = $("#days-field");
     function syncDays() {
@@ -204,7 +267,6 @@
     $$('input[name="repeat"]').forEach((r) => r.addEventListener("change", syncDays));
     syncDays();
 
-    // 알림 토글에 따라 사전 알림시간 노출
     const alarmField = $("#alarm-before-field");
     const alarmChk = $("#s-alarm");
     if (alarmChk && alarmField) {
@@ -219,7 +281,6 @@
       const description = $("#s-desc").value.trim();
       const repeat = $('input[name="repeat"]:checked')?.value || "daily";
       const days = $$('input[name="day"]:checked').map((d) => d.value);
-      // 시간: 콤마/공백 구분으로 여러 번 허용
       const times = ($("#s-time").value || "").split(/[, ]+/).map((s) => s.trim()).filter(Boolean);
       const start = $("#s-date").value || TODAY;
       const end = $("#s-end")?.value || "";
@@ -230,7 +291,6 @@
       if (!title) { if (window.toast) window.toast("일정 제목을 입력해 주세요", "info"); $("#s-title").focus(); return; }
 
       if (repeat === "once") {
-        // 단발성: 루틴 없이 해당 날짜 task 직접 생성
         (times.length ? times : [""]).forEach((t) => {
           S.addTask({ routine_id: null, type, title, description, scheduled_date: start, scheduled_time: t, repeat: "once", memo });
         });
@@ -251,7 +311,9 @@
     });
   }
 
-  renderCalendar();
+  /* 초기화 */
+  $("#full-cal-wrap").style.display = "none";
+  renderWeekBar();
   refreshDay();
   initForm();
 })();

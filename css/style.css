@@ -59,7 +59,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html, body { height: 100%; }
+html, body { height: 100%; overflow: hidden; }
 
 body {
   font-family: var(--font-family);
@@ -90,7 +90,7 @@ input, textarea { font-family: inherit; }
   position: relative;
   width: 100%;
   max-width: 430px;
-  min-height: 100vh;
+  height: 100vh;
   background: var(--color-bg);
   display: flex;
   flex-direction: column;
@@ -102,7 +102,7 @@ input, textarea { font-family: inherit; }
   .app {
     min-height: 0;
     height: 900px;
-    border-radius: 44px;
+    border-radius: 40px;
     box-shadow: 0 40px 90px rgba(31, 42, 36, 0.20), 0 0 0 1px rgba(0, 0, 0, 0.04);
   }
 }
@@ -110,7 +110,7 @@ input, textarea { font-family: inherit; }
 /* ── Status bar ───────────────────────────────────────── */
 .status-bar {
   flex-shrink: 0;
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: center;
   padding: 14px 28px 2px;
@@ -327,7 +327,7 @@ input, textarea { font-family: inherit; }
   top: 50%; right: 8px;
   transform: translateY(-52%);
   width: 132px; height: 132px;
-  border-radius: 15px;
+  border-radius: 11px;
   overflow: hidden;
   z-index: 1;
 }
@@ -338,7 +338,7 @@ input, textarea { font-family: inherit; }
 }
 .pet-photo .heart { display: none; }
 /* 설정 화면 등: 사진 영역을 더 작게 */
-.pet-card-sm .pet-photo { width: 84px; height: 84px; border-radius: 14px; right: 16px; }
+.pet-card-sm .pet-photo { width: 84px; height: 84px; border-radius: 10px; right: 16px; }
 
 .pet-progress { position: relative; z-index: 2; margin-top: 20px; }
 .pet-progress-row {
@@ -387,6 +387,21 @@ input, textarea { font-family: inherit; }
 .check-status .material-symbols-rounded { font-size: 16px; }
 .check-item.done .check-status { color: var(--color-primary); font-weight: 600; }
 
+/* 완료 뱃지 + 시간 */
+.check-status.st-done { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.cs-badge {
+  font-size: 12px; font-weight: 700;
+  color: #fff;
+  background: var(--color-primary);
+  border-radius: 16px;
+  padding: 2px 8px;
+  line-height: 1.4;
+}
+.cs-time {
+  font-size: 12px; font-weight: 500;
+  color: var(--color-text-light);
+}
+
 /* Quick record */
 .quick-grid {
   display: grid;
@@ -395,7 +410,7 @@ input, textarea { font-family: inherit; }
 }
 .quick-btn {
   background: var(--color-card);
-  border-radius: 15px;
+  border-radius: 11px;
   box-shadow: 0 6px 20px var(--color-shadow);
   border: 1px solid rgba(0,0,0,0.04);
   padding: 16px 6px;
@@ -405,7 +420,7 @@ input, textarea { font-family: inherit; }
 .quick-btn:active { transform: translateY(2px); }
 .quick-ic {
   width: 44px; height: 44px;
-  border-radius: 14px;
+  border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
 }
 .quick-ic .material-symbols-rounded { font-size: 24px; }
@@ -435,7 +450,7 @@ input, textarea { font-family: inherit; }
 .quick-hint { font-size: 12px; color: var(--color-text-light); margin: -4px 0 12px; line-height: 1.5; }
 .quick-grid.quick-compact { grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .quick-grid.quick-compact .quick-btn { padding: 12px 4px; gap: 6px; box-shadow: 0 3px 12px var(--color-shadow); }
-.quick-grid.quick-compact .quick-ic { width: 38px; height: 38px; border-radius: 12px; }
+.quick-grid.quick-compact .quick-ic { width: 38px; height: 38px; border-radius: 8px; }
 .quick-grid.quick-compact .quick-ic .material-symbols-rounded { font-size: 20px; }
 
 /* 오늘의 케어 요약 (남은 일정 / 다음 일정) */
@@ -443,7 +458,7 @@ input, textarea { font-family: inherit; }
   display: flex; gap: 10px; margin-bottom: 12px;
 }
 .care-summary .cs-pill {
-  flex: 1; background: var(--color-card); border-radius: 14px;
+  flex: 1; background: var(--color-card); border-radius: 10px;
   box-shadow: 0 4px 14px var(--color-shadow); padding: 12px 14px;
   display: flex; flex-direction: column; gap: 3px;
 }
@@ -477,7 +492,7 @@ input, textarea { font-family: inherit; }
 /* 기록 출처 배지 */
 .src-badge {
   display: inline-flex; align-items: center; gap: 3px;
-  font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px;
   border: none; flex-shrink: 0;
 }
 button.src-badge { cursor: pointer; }
@@ -490,14 +505,14 @@ button.src-badge:active { opacity: 0.7; }
 /* 홈 최근 특이사항 카드 */
 .notable-item {
   display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
-  background: var(--color-card); border-radius: 14px; box-shadow: 0 4px 14px var(--color-shadow);
+  background: var(--color-card); border-radius: 10px; box-shadow: 0 4px 14px var(--color-shadow);
   padding: 13px 15px; margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.04);
 }
-.notable-item .ni-ic { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notable-item .ni-ic { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .notable-item .ni-body { flex: 1; min-width: 0; }
 .notable-item .ni-title { font-size: 14px; font-weight: 700; }
 .notable-item .ni-meta { font-size: 12px; color: var(--color-text-light); margin-top: 2px; }
-.notable-empty { font-size: 13px; color: var(--color-text-light); padding: 16px; text-align: center; background: var(--color-card); border-radius: 14px; box-shadow: 0 4px 14px var(--color-shadow); }
+.notable-empty { font-size: 13px; color: var(--color-text-light); padding: 16px; text-align: center; background: var(--color-card); border-radius: 10px; box-shadow: 0 4px 14px var(--color-shadow); }
 
 /* Status summary grid */
 .status-grid {
@@ -521,7 +536,7 @@ button.src-badge:active { opacity: 0.7; }
 }
 .status-card .value-ic .material-symbols-rounded { font-size: 18px; color: var(--color-primary); }
 .status-card .value { font-size: 15px; font-weight: 700; }
-.status-card .time { font-size: 11px; color: var(--color-text-light); margin-top: 8px; }
+.status-card .time { font-size: 12px; color: var(--color-text-light); margin-top: 8px; }
 
 /* ============================================================
    SCHEDULE
@@ -580,7 +595,7 @@ button.src-badge:active { opacity: 0.7; }
 /* 캘린더 범례 */
 .cal-legend {
   display: flex; justify-content: center; gap: 14px; margin-top: 12px;
-  font-size: 11px; color: var(--color-text-light);
+  font-size: 12px; color: var(--color-text-light);
 }
 .cal-legend span { display: inline-flex; align-items: center; gap: 5px; }
 .cal-legend .pip { position: static; transform: none; width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
@@ -599,7 +614,7 @@ button.src-badge:active { opacity: 0.7; }
 .timeline-card { padding: 4px 24px; }
 .tl-item {
   display: flex; align-items: center; gap: 14px;
-  padding: 16px 0;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--color-border);
 }
 .tl-item:last-child { border-bottom: none; }
@@ -610,7 +625,7 @@ button.src-badge:active { opacity: 0.7; }
 }
 .tl-time b { display: block; font-size: 14px; font-weight: 700; color: var(--color-text-main); }
 .tl-ic {
-  width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
 }
 .tl-ic .material-symbols-rounded { font-size: 24px; }
@@ -618,7 +633,7 @@ button.src-badge:active { opacity: 0.7; }
 .tl-name { font-size: 14px; font-weight: 700; }
 .tl-repeat {
   display: inline-flex; align-items: center; gap: 2px;
-  font-size: 11px; font-weight: 600;
+  font-size: 12px; font-weight: 600;
   color: var(--color-primary); background: var(--color-primary-soft);
   border-radius: var(--radius-pill); padding: 1px 7px 1px 5px;
   vertical-align: middle;
@@ -652,7 +667,7 @@ button.src-badge:active { opacity: 0.7; }
   display: flex; gap: 10px; margin-bottom: 12px;
 }
 .sched-today .st-pill {
-  flex: 1; background: var(--color-card); border-radius: 14px; box-shadow: 0 4px 14px var(--color-shadow);
+  flex: 1; background: var(--color-card); border-radius: 10px; box-shadow: 0 4px 14px var(--color-shadow);
   padding: 12px 14px; text-align: center;
 }
 .sched-today .st-num { font-size: 20px; font-weight: 800; }
@@ -661,13 +676,105 @@ button.src-badge:active { opacity: 0.7; }
 .sched-today .st-lab { font-size: 12px; color: var(--color-text-light); margin-top: 2px; }
 .routine-entry {
   display: flex; align-items: center; gap: 12px; width: 100%;
-  background: var(--color-card); border-radius: 14px; box-shadow: 0 4px 14px var(--color-shadow);
+  background: var(--color-card); border-radius: 10px; box-shadow: 0 4px 14px var(--color-shadow);
   padding: 14px 16px; border: 1px solid rgba(0,0,0,0.04);
 }
-.routine-entry .re-ic { width: 40px; height: 40px; border-radius: 12px; background: var(--color-primary-soft); color: var(--color-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.routine-entry .re-ic { width: 40px; height: 40px; border-radius: 8px; background: var(--color-primary-soft); color: var(--color-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .routine-entry .re-body { flex: 1; }
 .routine-entry .re-title { display: block; font-size: 15px; font-weight: 700; }
 .routine-entry .re-desc { display: block; font-size: 12px; color: var(--color-text-light); margin-top: 2px; }
+
+/* ── 주간 날짜 바 ─────────────────────────────────────── */
+.week-bar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.week-bar-month {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  letter-spacing: -0.02em;
+}
+.week-bar-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.week-bar-all .material-symbols-rounded { font-size: 18px; }
+
+.week-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+.week-bar::-webkit-scrollbar { display: none; }
+.week-bar { scrollbar-width: none; }
+
+.wb-day {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: calc((100%) / 7 - 6px);
+  min-width: 40px;
+  padding: 10px 4px 8px;
+  border-radius: 10px;
+  background: var(--color-card);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.wb-day:active { opacity: 0.75; }
+.wb-dow {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-light);
+}
+.wb-num {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  line-height: 1;
+}
+.wb-pip {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.wb-pip.green { background: var(--color-primary); }
+.wb-pip.orange { background: var(--color-orange); }
+.wb-pip.blue { background: var(--color-blue); }
+
+.wb-day.today .wb-dow { color: var(--color-primary); font-weight: 700; }
+.wb-day.today .wb-num { color: var(--color-primary); }
+
+.wb-day.sel {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.wb-day.sel .wb-dow,
+.wb-day.sel .wb-num { color: #fff; }
+.wb-day.sel .wb-pip { background: rgba(255,255,255,0.7) !important; }
+
+/* ── 월간 캘린더 래퍼 (접힘 시 숨김) ─────────────────── */
+.full-cal-wrap {
+  overflow: hidden;
+}
 
 /* ============================================================
    RECORD (증상 기록)
@@ -783,7 +890,7 @@ button.src-badge:active { opacity: 0.7; }
 .segment button {
   flex: 1;
   padding: 11px 0;
-  border-radius: 11px;
+  border-radius: 7px;
   font-size: 14px; font-weight: 700;
   color: var(--color-text-sub);
   transition: all var(--t) var(--ease);
@@ -823,7 +930,7 @@ button.src-badge:active { opacity: 0.7; }
   font-size: 32px; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
 }
 .report-mini .big small { font-size: 16px; font-weight: 700; }
-.report-mini .foot { font-size: 11px; color: var(--color-text-light); margin-top: 12px; }
+.report-mini .foot { font-size: 12px; color: var(--color-text-light); margin-top: 12px; }
 .report-mini .foot b { color: var(--color-primary); }
 
 /* Donut */
@@ -857,7 +964,7 @@ button.src-badge:active { opacity: 0.7; }
 }
 .change-item:last-child { border-bottom: none; }
 .change-ic {
-  width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
   background: var(--color-primary-soft); color: var(--color-primary);
   display: flex; align-items: center; justify-content: center;
 }
@@ -883,7 +990,7 @@ button.src-badge:active { opacity: 0.7; }
   position: relative; overflow: hidden;
 }
 .comment-ic {
-  width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
+  width: 48px; height: 48px; border-radius: 10px; flex-shrink: 0;
   background: var(--color-primary); color: #fff;
   display: flex; align-items: center; justify-content: center;
 }
@@ -920,7 +1027,7 @@ button.src-badge:active { opacity: 0.7; }
   font-size: 25px;
   font-variation-settings: 'wght' 250, 'opsz' 24, 'FILL' 0, 'GRAD' 0;
 }
-.tab span { font-size: 11px; font-weight: 500; }
+.tab span { font-size: 12px; font-weight: 500; }
 .tab.active { color: var(--color-primary); }
 .tab.active span { font-weight: 700; }
 .tab.active .material-symbols-rounded { font-variation-settings: 'wght' 350, 'opsz' 24, 'FILL' 0, 'GRAD' 0; }
@@ -988,7 +1095,7 @@ button.src-badge:active { opacity: 0.7; }
 .auth-hero { text-align: center; padding: 36px 0 6px; }
 .auth-logo {
   width: 72px; height: 72px; margin: 0 auto;
-  border-radius: 22px;
+  border-radius: 18px;
   background: var(--color-primary-soft);
   display: flex; align-items: center; justify-content: center;
   font-size: 38px;
@@ -1056,7 +1163,7 @@ button.src-badge:active { opacity: 0.7; }
 .list-item:last-child { border-bottom: none; }
 .list-item:active { background: var(--color-bg); }
 .list-ic {
-  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
   background: var(--color-primary-soft); color: var(--color-primary);
   display: flex; align-items: center; justify-content: center;
 }
@@ -1076,7 +1183,7 @@ button.src-badge:active { opacity: 0.7; }
 .row:first-child { padding-top: 0; }
 .row:last-child { border-bottom: none; padding-bottom: 0; }
 .row-ic {
-  width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+  width: 42px; height: 42px; border-radius: 8px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
 }
 .row-body { flex: 1; min-width: 0; }
@@ -1120,14 +1227,14 @@ a.add-dashed { text-decoration: none; }
 /* 반복 루틴 카드 */
 .routine-card {
   display: flex; align-items: center; gap: 12px;
-  background: var(--color-card); border-radius: 16px; box-shadow: 0 4px 14px var(--color-shadow);
+  background: var(--color-card); border-radius: 12px; box-shadow: 0 4px 14px var(--color-shadow);
   padding: 14px 16px; margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.04);
 }
 .routine-card.off { opacity: 0.6; }
-.routine-card .rc-ic { width: 42px; height: 42px; border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.routine-card .rc-ic { width: 42px; height: 42px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .routine-card .rc-body { flex: 1; min-width: 0; }
 .routine-card .rc-title { font-size: 15px; font-weight: 700; }
-.routine-card .rc-type { font-size: 11px; font-weight: 600; color: var(--color-text-light); background: var(--color-bg); padding: 2px 7px; border-radius: 999px; margin-left: 4px; }
+.routine-card .rc-type { font-size: 12px; font-weight: 600; color: var(--color-text-light); background: var(--color-bg); padding: 2px 7px; border-radius: 999px; margin-left: 4px; }
 .routine-card .rc-meta { font-size: 12px; color: var(--color-text-light); margin-top: 3px; }
 .routine-card .rc-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 .routine-card .icon-btn .material-symbols-rounded { font-size: 20px; color: var(--color-text-light); }
@@ -1155,7 +1262,7 @@ a.add-dashed { text-decoration: none; }
 }
 .cat-btn {
   background: var(--color-card);
-  border-radius: 15px;
+  border-radius: 11px;
   box-shadow: 0 6px 20px var(--color-shadow);
   border: 1px solid rgba(0,0,0,0.04);
   padding: 20px 8px;
@@ -1164,7 +1271,7 @@ a.add-dashed { text-decoration: none; }
 }
 .cat-btn:active { transform: translateY(2px); }
 .cat-ic {
-  width: 52px; height: 52px; border-radius: 15px;
+  width: 52px; height: 52px; border-radius: 11px;
   display: flex; align-items: center; justify-content: center;
 }
 .cat-ic .material-symbols-rounded { font-size: 28px; }
@@ -1183,7 +1290,7 @@ a.add-dashed { text-decoration: none; }
   font-size: 13px; font-weight: 600; color: var(--color-text-sub);
 }
 .rec-dot {
-  width: 38px; height: 38px; border-radius: 12px; flex-shrink: 0;
+  width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
 }
 .rec-dot .material-symbols-rounded { font-size: 21px; }

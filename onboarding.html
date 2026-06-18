@@ -8,13 +8,117 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
 <link rel="stylesheet" href="css/style.css" />
-<link rel="stylesheet" href="css/onboarding.css" />
+<link rel="stylesheet" href="css/page-v2.css" />
+<style>
+/* ── 스플래시 ── */
+.splash {
+  position: absolute; inset: 0; z-index: 20;
+  background: #2A6F40;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1);
+  overflow: hidden;
+}
+.splash::after {
+  content: "";
+  position: absolute; width: 280px; height: 280px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); top: -80px; right: -70px;
+}
+.splash::before {
+  content: "";
+  position: absolute; width: 180px; height: 180px; border-radius: 50%;
+  background: rgba(255,255,255,0.04); bottom: -50px; left: -40px;
+}
+.splash.hide { opacity: 0; pointer-events: none; }
+.splash-paw { font-size: 60px; animation: ob-pulse 1.5s ease-in-out infinite; }
+.splash-name { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.04em; }
+.splash-name sup { font-size: 0.6em; }
+.splash-tag { font-size: 13px; color: rgba(255,255,255,0.65); font-weight: 400; }
+@keyframes ob-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+
+/* ── 온보딩 슬라이드 ── */
+.ob {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #F4F6F9;
+}
+.ob-illus {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; min-height: 0;
+  background: #fff;
+  border-radius: 0 0 32px 32px;
+  margin-bottom: 8px;
+}
+.ob-illus-bg {
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  position: absolute;
+  opacity: 0.7;
+}
+.ob-emoji { font-size: 100px; position: relative; z-index: 1; }
+
+.ob-dots {
+  display: flex; gap: 8px; justify-content: center;
+  padding: 16px 0 8px;
+}
+.ob-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #D8DDD9;
+  transition: all 0.24s cubic-bezier(0.22,1,0.36,1);
+}
+.ob-dot.on { width: 24px; border-radius: 6px; background: #2A6F40; }
+
+.ob-text {
+  padding: 4px 28px 0;
+  text-align: center;
+}
+.ob-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: #EAF4EE;
+  color: #2A6F40;
+  font-size: 12px; font-weight: 800;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.ob-h {
+  font-size: 24px; font-weight: 800;
+  line-height: 1.35; letter-spacing: -0.04em;
+  color: #1A2B1F;
+}
+.ob-p {
+  font-size: 14px; color: #6B7C71;
+  line-height: 1.75; margin-top: 12px;
+  font-weight: 400;
+}
+
+.ob-actions {
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; gap: 10px;
+}
+.ob-btn-next {
+  width: 100%;
+  background: #2A6F40;
+  color: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 16px; font-weight: 700;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+.ob-btn-next:active { opacity: 0.85; }
+.ob-skip {
+  text-align: center;
+  font-size: 13px; color: #9EA8A3;
+  padding: 6px; cursor: pointer;
+  font-weight: 500;
+}
+</style>
 </head>
 <body>
 <div class="app">
-  <div class="status-bar"><span>9:41</span>
-    <span class="status-icons"><span class="material-symbols-rounded">signal_cellular_alt</span><span class="material-symbols-rounded">wifi</span><span class="material-symbols-rounded">battery_full</span></span>
-  </div>
 
   <!-- 스플래시 -->
   <div class="splash" id="splash">
@@ -26,7 +130,7 @@
   <!-- 온보딩 슬라이드 -->
   <div class="ob" id="ob">
     <div class="ob-illus">
-      <div class="ob-illus-bg" id="ob-bg" style="background:linear-gradient(160deg,var(--color-primary-soft),#FDF0E4)"></div>
+      <div class="ob-illus-bg" id="ob-bg" style="background:linear-gradient(160deg,#EAF4EE,#FDF0E4)"></div>
       <div class="ob-emoji" id="ob-emoji">🐶</div>
     </div>
     <div class="ob-dots">
@@ -40,10 +144,11 @@
       <div class="ob-p" id="ob-p">복약·식사·산책 같은 반복 케어를 일정으로 등록하고,<br>홈에서 체크만 하면 자동으로 기록이 쌓여요.</div>
     </div>
     <div class="ob-actions">
-      <button class="btn btn-primary btn-block" id="ob-next">다음</button>
+      <button class="ob-btn-next" id="ob-next">다음</button>
       <div class="ob-skip" id="ob-skip">건너뛰기</div>
     </div>
   </div>
+
 </div>
 
 <script src="js/onboarding.js"></script>

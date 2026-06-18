@@ -1,0 +1,444 @@
+/* ============================================================
+   PetCare+ · Home Redesign — 2025 트렌드 반영
+   Glassmorphism Hero + 원형 진행률 + 카드 리디자인
+   ============================================================ */
+
+/* ── Status bar (hero 내부 통합) ─────────────────────────── */
+.hero-status-bar {
+  display: flex !important; /* style.css의 display:none 오버라이드 */
+  color: rgba(255, 255, 255, 0.85);
+  padding: 10px 4px 0;
+  margin-bottom: 2px;
+}
+.hero-status-bar .status-icons .material-symbols-rounded {
+  color: rgba(255,255,255,0.85);
+}
+
+/* ── Hero Header ─────────────────────────────────────────── */
+.hero-header {
+  flex-shrink: 0;
+  background: linear-gradient(145deg, #2d6a3f 0%, #3F7A4D 45%, #5a9e6a 100%);
+  padding: 12px 20px 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 배경 장식 원 */
+.hero-header::before {
+  content: "";
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+}
+.hero-header::after {
+  content: "";
+  position: absolute;
+  bottom: -40px; left: -30px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+.hero-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.hero-greeting {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.hero-brand {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.04em;
+}
+.hero-brand sup {
+  font-size: 0.65em;
+  opacity: 0.85;
+}
+
+.hero-notif-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.hero-notif-btn:active { background: rgba(255,255,255,0.28); }
+.hero-notif-btn .material-symbols-rounded { font-size: 22px; }
+
+.notif-dot {
+  position: absolute; top: 8px; right: 8px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #FFB74D;
+  border: 2px solid #3F7A4D;
+}
+
+/* ── Pet Hero Card (glassmorphism) ───────────────────────── */
+.pet-hero-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 20px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.22s;
+}
+.pet-hero-card:active { background: rgba(255,255,255,0.22); }
+
+/* 상단 행: 사진 + 정보 + 원형 진행률 */
+.pet-hero-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* 하단 행: 다음 진료 배지 */
+.pet-hero-bottom {
+  display: flex;
+  align-items: center;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.pet-hero-photo {
+  width: 72px; height: 72px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+}
+.pet-hero-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.pet-hero-info { flex: 1; min-width: 0; }
+
+/* 구 .pet-hero-right → 이제 .pet-hero-progress 가 직접 top 행에 위치 */
+
+.pet-hero-name {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 18px; font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+}
+.pet-hero-name .material-symbols-rounded {
+  font-size: 18px;
+  opacity: 0.65;
+}
+
+.pet-hero-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.pet-hero-tags {
+  display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap;
+}
+.hero-tag,
+.pet-hero-tags .tag {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-size: 11px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* 원형 진행률 */
+.pet-hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.pet-hero-progress { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+.progress-circle-wrap {
+  position: relative;
+  width: 56px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+}
+.progress-ring {
+  width: 56px; height: 56px;
+  transform: rotate(-90deg);
+}
+.ring-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.2);
+  stroke-width: 4;
+}
+.ring-fill {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 138.2; /* 2πr = 2*π*22 ≈ 138.2 */
+  stroke-dashoffset: 138.2;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+.progress-pct {
+  position: absolute;
+  font-size: 11px; font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.pet-hero-progress-label {
+  font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,0.72);
+  text-align: center;
+}
+
+/* 다음 진료 배지 */
+.next-visit-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(255, 183, 77, 0.2);
+  border: 1px solid rgba(255, 183, 77, 0.5);
+  border-radius: 999px;
+  padding: 5px 12px 5px 8px;
+  font-size: 12px; font-weight: 600;
+  color: #FFD54F;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.next-visit-badge:active { background: rgba(255,183,77,0.32); }
+.next-visit-badge .material-symbols-rounded { font-size: 14px; }
+.badge-dday {
+  font-weight: 800;
+  color: #FFD54F;
+  margin-left: 2px;
+}
+
+/* ── Home Scroll ─────────────────────────────────────────── */
+.home-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px;
+  scroll-behavior: smooth;
+  background: #F4F7F5;
+}
+.home-scroll::-webkit-scrollbar { display: none; }
+.home-scroll { scrollbar-width: none; }
+
+/* ── Home Sections ───────────────────────────────────────── */
+.home-section {
+  margin-top: 22px;
+}
+.home-section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.home-section-title {
+  font-size: 17px; font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #1a1a1a;
+}
+.home-section-link {
+  display: flex; align-items: center; gap: 1px;
+  font-size: 13px; font-weight: 600;
+  color: #3F7A4D;
+}
+.home-section-link .material-symbols-rounded { font-size: 17px; }
+
+/* ── 케어 요약 통계 칩 ───────────────────────────────────── */
+.care-stat-row {
+  display: flex; gap: 10px;
+  margin-bottom: 14px;
+}
+/* JS에서 .cs-pill 생성 → 기존 care-summary 스타일 오버라이드 */
+.care-stat-row .cs-pill {
+  flex: 1;
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 12px rgba(63,122,77,0.08);
+  border: 1px solid rgba(63,122,77,0.08);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.care-stat-row .cs-label {
+  font-size: 11px; font-weight: 600;
+  color: #999; letter-spacing: 0.02em; text-transform: uppercase;
+}
+.care-stat-row .cs-value {
+  font-size: 18px; font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #1a1a1a;
+}
+.care-stat-row .cs-value b { color: #3F7A4D; }
+
+/* ── 케어 체크리스트 카드 ────────────────────────────────── */
+.care-list-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(63,122,77,0.09);
+  border: 1px solid rgba(63,122,77,0.07);
+  overflow: hidden;
+}
+
+/* 기존 checklist/check-item 스타일 위에 오버라이드 */
+.care-list-card.checklist { padding: 0 20px; }
+
+.care-list-card .check-item {
+  padding: 15px 0;
+  gap: 13px;
+  border-bottom-color: #F0F4F1;
+}
+.care-list-card .check-box {
+  width: 28px; height: 28px;
+  background: #F4F7F5;
+  border-color: #D8E8DC;
+}
+.care-list-card .check-item.done .check-box {
+  background: linear-gradient(135deg, #4CAF72 0%, #3F7A4D 100%);
+  border-color: transparent;
+  box-shadow: 0 3px 10px rgba(63,122,77,0.3);
+}
+.care-list-card .check-label {
+  font-size: 14px; font-weight: 600;
+  color: #222;
+}
+.care-list-card .check-item.done .check-label {
+  color: #999;
+  text-decoration: line-through;
+}
+.care-list-card .check-act {
+  border-radius: 999px;
+  font-size: 11px; font-weight: 700;
+  padding: 5px 11px;
+  border: 1.5px solid #E8EEE9;
+  color: #666;
+}
+.care-list-card .check-act.done-act {
+  background: #EAF4ED;
+  border-color: #c2deca;
+  color: #3F7A4D;
+}
+
+/* ── 빠른 기록 ───────────────────────────────────────────── */
+.quick-hint-text {
+  font-size: 12px; font-weight: 500;
+  color: #999;
+  margin: -8px 0 14px;
+  line-height: 1.5;
+}
+
+.quick-record-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.quick-record-btn {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+  padding: 18px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s cubic-bezier(0.22,1,0.36,1), box-shadow 0.18s;
+}
+.quick-record-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+.qr-icon {
+  width: 50px; height: 50px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.qr-icon .material-symbols-rounded { font-size: 26px; }
+
+.ic-symptom { background: #FBEAEA; color: #D26A6A; }
+.ic-photo   { background: #F0ECF8; color: #927CD8; }
+.ic-memo    { background: #FAF3E2; color: #C29A45; }
+
+.qr-label {
+  font-size: 13px; font-weight: 700;
+  color: #333;
+}
+
+/* ── 최근 특이사항 재스타일 ──────────────────────────────── */
+/* .status-grid / .status-card 는 style.css가 처리하되 여기서 보강 */
+#status-grid .status-card {
+  border-radius: 18px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+}
+#status-grid .value-ic {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+}
+#status-grid .value { font-size: 16px; font-weight: 800; }
+
+/* ── Bottom nav 개선 ─────────────────────────────────────── */
+.tabbar {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.tab.active .material-symbols-rounded {
+  font-variation-settings: 'wght' 400, 'opsz' 24, 'FILL' 1, 'GRAD' 0;
+}
+
+/* ── 홈 인디케이터 ───────────────────────────────────────── */
+.home-indicator {
+  background: rgba(255,255,255,0.95);
+}
+.home-indicator i {
+  background: #ccc;
+  opacity: 1;
+}
+
+/* ── 진입 애니메이션 ─────────────────────────────────────── */
+.hero-header { animation: slideDown 0.38s cubic-bezier(0.22,1,0.36,1) both; }
+.pet-hero-card { animation: fadeUp 0.44s 0.05s cubic-bezier(0.22,1,0.36,1) both; }
+.home-section:nth-child(1) { animation: fadeUp 0.4s 0.12s cubic-bezier(0.22,1,0.36,1) both; }
+.home-section:nth-child(2) { animation: fadeUp 0.4s 0.18s cubic-bezier(0.22,1,0.36,1) both; }
+.home-section:nth-child(3) { animation: fadeUp 0.4s 0.24s cubic-bezier(0.22,1,0.36,1) both; }
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-header,
+  .pet-hero-card,
+  .home-section { animation: none !important; opacity: 1 !important; transform: none !important; }
+}

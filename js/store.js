@@ -20,7 +20,7 @@
     tests: "petcare_test_results",
   };
   const PET_ID = "pet_1";
-  const TODAY = "2026-06-13"; // 데모 고정일 (실서비스: 오늘 날짜)
+  const TODAY = new Date().toISOString().slice(0, 10); // 실제 오늘 날짜
 
   const read = (k, fb) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? fb; } catch (_) { return fb; } };
   const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} };

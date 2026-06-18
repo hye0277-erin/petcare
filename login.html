@@ -8,65 +8,179 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
 <link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/page-v2.css" />
+<style>
+.auth-wrap {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px 32px;
+}
+.auth-brand {
+  text-align: center;
+  padding: 48px 0 32px;
+}
+.auth-brand-icon {
+  width: 76px; height: 76px;
+  border-radius: 22px;
+  background: var(--color-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 24px rgba(63,122,77,0.28);
+}
+.auth-brand-name {
+  font-size: 24px;
+  font-weight: 800 !important;
+  color: #1A2B1F;
+  letter-spacing: -0.04em;
+}
+.auth-brand-name sup {
+  font-size: 14px;
+  font-weight: 700 !important;
+  color: #3D7A4B;
+  position: relative;
+  top: -0.4em;
+}
+.auth-brand-sub {
+  font-size: 13px;
+  color: #6B7C71;
+  margin-top: 6px;
+  font-weight: 400;
+}
+.auth-seg {
+  display: flex;
+  background: #F0F4F2;
+  border-radius: 10px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+.auth-seg button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8A9C90;
+  background: transparent;
+  transition: all 0.2s;
+}
+.auth-seg button.active {
+  background: #fff;
+  color: #1A2B1F;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+.auth-form-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #ECEEF0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.auth-field-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8A9C90;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.auth-input {
+  width: 100%;
+  background: #F7F9F7;
+  border: 1.5px solid #E8ECEC;
+  border-radius: 10px;
+  padding: 13px 14px;
+  font-size: 15px;
+  color: #1A2B1F;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.18s;
+}
+.auth-input:focus { border-color: #3F7A4D; background: #fff; }
+.auth-input::placeholder { color: #B0BBB5; }
+.auth-submit {
+  width: 100%;
+  background: #2A6F40;
+  color: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 4px;
+  transition: opacity 0.15s;
+  font-family: inherit;
+}
+.auth-submit:active { opacity: 0.85; }
+.auth-submit:disabled { opacity: 0.55; }
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.auth-link {
+  font-size: 13px;
+  color: #6B7C71;
+  font-weight: 600;
+}
+.auth-link.primary { color: #2A6F40; }
+.auth-alert {
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+.auth-alert.error { background: #FDEAEA; color: #C0392B; }
+.auth-alert.info  { background: #EAF4EE; color: #2A6F40; }
+</style>
 </head>
 <body>
 <div class="app">
-
-  <div class="status-bar">
-    <span>9:41</span>
-    <span class="status-icons">
-      <span class="material-symbols-rounded">signal_cellular_alt</span>
-      <span class="material-symbols-rounded">wifi</span>
-      <span class="material-symbols-rounded">battery_full</span>
-    </span>
-  </div>
-
   <main class="scroll">
-    <div class="auth-hero" data-rise>
-      <div class="auth-logo">🐶</div>
-      <div class="auth-title">PetCare+</div>
-      <div class="auth-sub">반려동물 건강 케어를 시작해요</div>
-    </div>
+    <div class="auth-wrap">
 
-    <!-- 로그인 / 회원가입 토글 -->
-    <div class="segment" data-rise>
-      <button type="button" id="tab-login" class="active" data-mode="login">로그인</button>
-      <button type="button" id="tab-signup" data-mode="signup">회원가입</button>
-    </div>
+      <div class="auth-brand">
+        <div class="auth-brand-icon">🐾</div>
+        <div class="auth-brand-name">PetCare<sup>+</sup></div>
+        <div class="auth-brand-sub">반려동물 건강 케어를 시작해요</div>
+      </div>
 
-    <div class="section" data-rise>
-      <div class="card">
-        <div class="form">
-          <div class="form-group">
-            <span class="form-label">이메일</span>
-            <input class="input" type="email" id="auth-email" placeholder="example@email.com" autocomplete="email" />
-          </div>
-          <div class="form-group">
-            <span class="form-label">비밀번호</span>
-            <input class="input" type="password" id="auth-password" placeholder="6자 이상" autocomplete="current-password" />
-          </div>
+      <div class="auth-seg">
+        <button type="button" id="tab-login" class="active">로그인</button>
+        <button type="button" id="tab-signup">회원가입</button>
+      </div>
 
-          <div class="alert alert-error" id="auth-error" style="display:none"></div>
-          <div class="alert alert-info" id="auth-info" style="display:none"></div>
+      <div class="auth-form-card">
+        <div>
+          <div class="auth-field-label">이메일</div>
+          <input class="auth-input" type="email" id="auth-email" placeholder="example@email.com" autocomplete="email" />
+        </div>
+        <div>
+          <div class="auth-field-label">비밀번호</div>
+          <input class="auth-input" type="password" id="auth-password" placeholder="6자 이상" autocomplete="current-password" />
+        </div>
 
-          <button class="btn btn-primary btn-block" type="button" id="auth-submit">로그인</button>
+        <div class="auth-alert error" id="auth-error" style="display:none"></div>
+        <div class="auth-alert info"  id="auth-info"  style="display:none"></div>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
-            <a href="signup.html" style="font-size:12px;color:var(--color-text-sub);font-weight:600">이메일로 회원가입</a>
-            <a href="forgot.html" style="font-size:12px;color:var(--color-primary);font-weight:600">비밀번호 찾기</a>
-          </div>
+        <button class="auth-submit" type="button" id="auth-submit">로그인</button>
+
+        <div class="auth-links">
+          <a href="signup.html" class="auth-link">이메일로 회원가입</a>
+          <a href="forgot.html" class="auth-link primary">비밀번호 찾기</a>
         </div>
       </div>
+
     </div>
   </main>
-
 </div>
 
 <script src="js/store.js"></script>
 <script type="module">
   import { signUp, signIn, getUser } from './js/auth.js';
 
-  // 반려견 정보 유무에 따라 진입 화면 결정
   const afterAuth = () =>
     (window.PetStore && window.PetStore.hasPet()) ? 'index.html' : 'register.html';
 
@@ -100,10 +214,8 @@
     const email = emailEl.value.trim();
     const password = pwEl.value;
     if (!email || !password) { showError('이메일과 비밀번호를 입력해 주세요.'); return; }
-
     submitEl.disabled = true;
     submitEl.textContent = '처리 중...';
-
     if (mode === 'login') {
       const res = await signIn(email, password);
       if (res.ok) { location.replace(afterAuth()); return; }
@@ -114,9 +226,7 @@
         showInfo('가입 확인 메일을 보냈어요. 메일 인증 후 로그인해 주세요.');
         setMode('login');
       } else if (res.ok) {
-        // 인증 완료 후 첫 로그인 → 반려견 등록
-        location.replace('register.html');
-        return;
+        location.replace('register.html'); return;
       } else {
         showError(res.message);
       }

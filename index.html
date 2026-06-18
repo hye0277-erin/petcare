@@ -7,116 +7,140 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css" />
 <link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/home-v2.css" />
 <script type="module" src="js/guard.js"></script>
 </head>
 <body>
 <div class="app">
 
-  <!-- Status bar -->
-  <div class="status-bar">
-    <span>9:41</span>
-    <span class="status-icons">
-      <span class="material-symbols-rounded">signal_cellular_alt</span>
-      <span class="material-symbols-rounded">wifi</span>
-      <span class="material-symbols-rounded">battery_full</span>
-    </span>
-  </div>
-
-  <!-- Header -->
-  <header class="header" data-rise>
-    <div class="header-row">
-      <div class="brand">PetCare<sup>+</sup></div>
-      <a class="icon-btn" href="notifications.html" aria-label="알림">
+  <!-- ── 상단 헤더 (흰 배경) ── -->
+  <header class="hv2-header">
+    <div class="hv2-brand">PetCare<sup>+</sup></div>
+    <div class="hv2-header-actions">
+      <a class="hv2-icon-btn" href="notifications.html" aria-label="알림">
         <span class="material-symbols-rounded">notifications</span>
-        <i class="dot"></i>
+        <i class="hv2-dot"></i>
+      </a>
+      <a class="hv2-icon-btn" href="schedule-add.html" aria-label="일정 추가">
+        <span class="material-symbols-rounded">edit</span>
       </a>
     </div>
   </header>
 
-  <main class="scroll">
-    <!-- Pet summary card -->
-    <a class="card pet-card" href="settings.html" data-rise style="display:block;text-decoration:none;color:inherit">
-      <div class="pet-card-body">
-        <div class="pet-name-row" data-pet-name>해피<span class="material-symbols-rounded">chevron_right</span></div>
-        <div class="pet-meta" data-pet-meta>12살 · 말티즈</div>
-        <div class="pet-tags" data-pet-tags>
-          <span class="tag">심장질환</span>
-          <span class="tag">신장관리</span>
-        </div>
-        <div class="pet-visit" id="next-visit" role="link" tabindex="0" aria-label="다음 진료 일정 보기">
-          <span class="material-symbols-rounded">calendar_month</span>
-          다음 진료 <span class="dday" data-next-dday>D-3</span>
-          <span class="material-symbols-rounded" style="font-size:16px;margin-left:2px;opacity:.7">chevron_right</span>
-        </div>
-        <div class="pet-visit-date" data-next-date>2026.06.16 (화)</div>
-      </div>
+  <main class="hv2-scroll">
 
-      <div class="pet-photo" data-pet-photo>
+    <!-- ── 반려동물 카드 ── -->
+    <a class="hv2-pet-card" href="settings.html">
+      <div class="hv2-pet-photo" data-pet-photo>
         <img src="images/happy.png" alt="해피"
-             onerror="this.parentElement.style.background='var(--color-primary-soft)';this.replaceWith(Object.assign(document.createElement('div'),{textContent:'🐶',style:'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:64px'}))" />
+             onerror="this.parentElement.innerHTML='🐶'" />
       </div>
-
-      <div class="pet-progress">
-        <div class="pet-progress-row">
-          <span class="pet-progress-label">오늘 케어 진행률</span>
-          <span class="pet-progress-count" data-progress-count><b>0</b> / 0 완료</span>
+      <div class="hv2-pet-info">
+        <div class="hv2-pet-name" data-pet-name>해피</div>
+        <div class="hv2-pet-meta" data-pet-meta>12살 · 말티즈</div>
+        <div class="hv2-pet-tags" data-pet-tags>
+          <span class="hv2-tag hv2-tag-red">심장질환</span>
+          <span class="hv2-tag hv2-tag-blue">신장관리</span>
         </div>
-        <div class="progress"><i data-progress-fill style="width:0%"></i></div>
+        <!-- 진행률 바 -->
+        <div class="hv2-progress-wrap">
+          <div class="hv2-progress-row">
+            <span class="hv2-progress-label">오늘 케어</span>
+            <span class="hv2-progress-count" data-progress-count><b>0</b> / 0</span>
+          </div>
+          <div class="hv2-progress-bar">
+            <div class="hv2-progress-fill" data-progress-fill style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hv2-pet-chevron">
+        <span class="material-symbols-rounded">chevron_right</span>
       </div>
     </a>
 
-    <!-- Today's care (핵심) -->
-    <section class="section" data-rise>
-      <div class="section-head">
-        <h2 class="section-title">오늘의 케어</h2>
-        <a class="section-link" href="schedule.html">일정 관리<span class="material-symbols-rounded">chevron_right</span></a>
+    <!-- ── 다음 진료 배너 ── -->
+    <div class="hv2-visit-banner" id="next-visit" role="link" tabindex="0" aria-label="다음 진료 일정 보기">
+      <div class="hv2-visit-icon">
+        <span class="material-symbols-rounded">calendar_month</span>
       </div>
-      <div class="care-summary" id="care-summary"></div>
-      <div class="card checklist" id="care-list"></div>
+      <div class="hv2-visit-body">
+        <div class="hv2-visit-label">다음 진료일</div>
+        <div class="hv2-visit-date" data-next-date>2026.06.21 (일)</div>
+      </div>
+      <div class="hv2-visit-dday" data-next-dday>D-3</div>
+    </div>
+
+    <!-- ── 오늘의 케어 ── -->
+    <section class="hv2-section">
+      <div class="hv2-section-head">
+        <h2 class="hv2-section-title">오늘의 케어</h2>
+        <a class="hv2-section-more" href="schedule.html">전체보기</a>
+      </div>
+      <!-- 요약 칩 -->
+      <div class="hv2-care-stats" id="care-summary"></div>
+      <!-- 체크리스트 -->
+      <div class="hv2-care-list checklist" id="care-list"></div>
     </section>
 
-    <!-- 예정 외 빠른 기록 (보조) -->
-    <section class="section" data-rise>
-      <div class="section-head"><h2 class="section-title">빠른 기록</h2></div>
-      <p class="quick-hint">갑작스러운 증상·특이사항을 빠르게 기록해 보세요.</p>
-      <div class="quick-grid quick-compact">
-        <a class="quick-btn" href="record.html?type=symptom">
-          <span class="quick-ic ic-blue"><span class="material-symbols-rounded">stethoscope</span></span>
+    <!-- ── 빠른 기록 ── -->
+    <section class="hv2-section">
+      <div class="hv2-section-head">
+        <h2 class="hv2-section-title">빠른 기록</h2>
+      </div>
+      <div class="hv2-quick-row">
+        <a class="hv2-quick-btn" href="record.html?type=symptom">
+          <i class="ph-duotone ph-stethoscope hv2-qi hv2-qi-red"></i>
           <span>증상</span>
         </a>
-        <a class="quick-btn" href="record.html?type=photo">
-          <span class="quick-ic ic-purple"><span class="material-symbols-rounded">photo_camera</span></span>
-          <span>사진</span>
+        <a class="hv2-quick-btn" href="record.html?type=meal">
+          <i class="ph-duotone ph-bowl-food hv2-qi hv2-qi-orange"></i>
+          <span>식사</span>
         </a>
-        <a class="quick-btn" href="record.html?type=memo">
-          <span class="quick-ic ic-yellow"><span class="material-symbols-rounded">sticky_note_2</span></span>
+        <a class="hv2-quick-btn" href="record.html?type=water">
+          <i class="ph-duotone ph-drop hv2-qi hv2-qi-blue"></i>
+          <span>물</span>
+        </a>
+        <a class="hv2-quick-btn" href="record.html?type=memo">
+          <i class="ph-duotone ph-note-pencil hv2-qi hv2-qi-yellow"></i>
           <span>메모</span>
         </a>
       </div>
     </section>
 
-    <!-- 최근 특이사항 -->
-    <section class="section" data-rise>
-      <div class="section-head">
-        <h2 class="section-title">최근 특이사항</h2>
-        <a class="section-link" href="record.html">전체 기록<span class="material-symbols-rounded">chevron_right</span></a>
+    <!-- ── 최근 특이사항 ── -->
+    <section class="hv2-section" style="padding-bottom:24px">
+      <div class="hv2-section-head">
+        <h2 class="hv2-section-title">최근 특이사항</h2>
+        <a class="hv2-section-more" href="record.html">전체보기</a>
       </div>
       <div class="status-grid" id="status-grid"></div>
     </section>
+
   </main>
 
-  <!-- Bottom nav -->
-  <nav class="tabbar">
-    <a class="tab active" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
-    <a class="tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
-    <a class="tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
-    <a class="tab" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
-    <a class="tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
+  <!-- ── 하단 탭바 ── -->
+  <nav class="hv2-tabbar">
+    <a class="hv2-tab active" href="index.html">
+      <span class="material-symbols-rounded">home</span><span>홈</span>
+    </a>
+    <a class="hv2-tab" href="record.html">
+      <span class="material-symbols-rounded">edit_note</span><span>기록</span>
+    </a>
+    <a class="hv2-tab" href="hospital.html">
+      <span class="material-symbols-rounded">local_hospital</span><span>병원</span>
+    </a>
+    <a class="hv2-tab" href="report.html">
+      <span class="material-symbols-rounded">bar_chart</span><span>리포트</span>
+    </a>
+    <a class="hv2-tab" href="settings.html">
+      <span class="material-symbols-rounded">settings</span><span>설정</span>
+    </a>
   </nav>
   <div class="home-indicator"><i></i></div>
 
-  <!-- FAB record sheet -->
+  <!-- FAB record sheet (기존 유지) -->
   <div class="sheet-overlay" data-sheet>
     <div class="sheet">
       <div class="sheet-handle"></div>
@@ -154,5 +178,6 @@
 <script src="js/store.js"></script>
 <script src="js/main.js"></script>
 <script src="js/home.js"></script>
+<script src="js/alarm.js"></script>
 </body>
 </html>

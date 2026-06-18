@@ -10,5 +10,5 @@
 .term-check.on { background:var(--color-primary); border-color:var(--color-primary); }
 .term-check.on .material-symbols-rounded { transform:scale(1); }
 .term-txt { flex:1; font-size:13px; font-weight:500; }
-.term-req { font-size:11px; color:#C0564E; font-weight:700; }
-.term-opt { font-size:11px; color:var(--color-text-light); font-weight:700; }
+.term-req { font-size:12px; color:#C0564E; font-weight:700; }
+.term-opt { font-size:12px; color:var(--color-text-light); font-weight:700; }

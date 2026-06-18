@@ -9,46 +9,107 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/signup.css" />
+<link rel="stylesheet" href="css/page-v2.css" />
+<style>
+.auth-input {
+  width: 100%;
+  background: #F7F9F7;
+  border: 1.5px solid #E8ECEC;
+  border-radius: 10px;
+  padding: 13px 14px;
+  font-size: 15px;
+  color: #1A2B1F;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.18s;
+}
+.auth-input:focus { border-color: #3F7A4D; background: #fff; }
+.auth-input::placeholder { color: #B0BBB5; }
+.auth-field-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8A9C90;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.auth-submit {
+  width: 100%;
+  background: #2A6F40;
+  color: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  transition: opacity 0.15s;
+  font-family: inherit;
+  margin-top: 4px;
+}
+.auth-submit:active { opacity: 0.85; }
+.auth-submit:disabled { opacity: 0.55; }
+.auth-alert {
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+.auth-alert.error { background: #FDEAEA; color: #C0392B; }
+.auth-alert.info  { background: #EAF4EE; color: #2A6F40; }
+.auth-form-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #ECEEF0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.auth-section-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8A9C90;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 20px 0 8px;
+}
+</style>
 </head>
 <body>
 <div class="app">
-  <div class="status-bar"><span>9:41</span>
-    <span class="status-icons"><span class="material-symbols-rounded">signal_cellular_alt</span><span class="material-symbols-rounded">wifi</span><span class="material-symbols-rounded">battery_full</span></span>
-  </div>
 
-  <header class="sub-header">
-    <a class="icon-btn" href="login.html" aria-label="뒤로"><span class="material-symbols-rounded">arrow_back_ios_new</span></a>
-    <div class="title">회원가입</div>
-    <span style="width:44px"></span>
+  <header class="pv2-header">
+    <div class="pv2-header-nav">
+      <a class="pv2-icon-btn" href="login.html" aria-label="뒤로">
+        <span class="material-symbols-rounded">arrow_back_ios_new</span>
+      </a>
+      <div class="pv2-nav-title">회원가입</div>
+    </div>
   </header>
 
   <main class="scroll">
-    <div class="section" data-rise>
-      <div class="card">
-        <div class="form">
-          <div class="form-group">
-            <span class="form-label">이름</span>
-            <input class="input" id="su-name" type="text" placeholder="이름을 입력하세요" />
-          </div>
-          <div class="form-group">
-            <span class="form-label">이메일</span>
-            <input class="input" id="su-email" type="email" placeholder="example@email.com" autocomplete="email" />
-          </div>
-          <div class="form-group">
-            <span class="form-label">비밀번호</span>
-            <input class="input" id="su-pw" type="password" placeholder="6자 이상 입력하세요" autocomplete="new-password" />
-          </div>
-          <div class="form-group">
-            <span class="form-label">비밀번호 확인</span>
-            <input class="input" id="su-pw2" type="password" placeholder="비밀번호를 다시 입력하세요" autocomplete="new-password" />
-          </div>
-        </div>
+
+    <div class="auth-section-label">기본 정보</div>
+    <div class="auth-form-card">
+      <div>
+        <div class="auth-field-label">이름</div>
+        <input class="auth-input" id="su-name" type="text" placeholder="이름을 입력하세요" />
+      </div>
+      <div>
+        <div class="auth-field-label">이메일</div>
+        <input class="auth-input" id="su-email" type="email" placeholder="example@email.com" autocomplete="email" />
+      </div>
+      <div>
+        <div class="auth-field-label">비밀번호</div>
+        <input class="auth-input" id="su-pw" type="password" placeholder="6자 이상 입력하세요" autocomplete="new-password" />
+      </div>
+      <div>
+        <div class="auth-field-label">비밀번호 확인</div>
+        <input class="auth-input" id="su-pw2" type="password" placeholder="비밀번호를 다시 입력하세요" autocomplete="new-password" />
       </div>
     </div>
 
-    <!-- 약관 동의 -->
-    <div class="card-label" data-rise>약관 동의</div>
-    <div class="card" data-rise>
+    <div class="auth-section-label">약관 동의</div>
+    <div class="auth-form-card">
       <div class="term-all" id="term-all">
         <span class="term-check" id="chk-all"><span class="material-symbols-rounded">check</span></span>
         <span class="term-all-txt">전체 동의하기</span>
@@ -73,15 +134,16 @@
       </div>
     </div>
 
-    <div class="alert alert-error" id="su-error" style="display:none;margin:0 var(--space-page)"></div>
-    <div class="alert alert-info" id="su-info" style="display:none;margin:0 var(--space-page)"></div>
+    <div class="auth-alert error" id="su-error" style="display:none;margin-top:12px;"></div>
+    <div class="auth-alert info"  id="su-info"  style="display:none;margin-top:12px;"></div>
 
-    <div class="section" data-rise>
-      <button class="btn btn-primary btn-block" id="su-submit" type="button">가입하기</button>
-      <div style="text-align:center;font-size:13px;color:var(--color-text-sub);margin-top:14px">
-        이미 계정이 있으신가요? <a href="login.html" style="color:var(--color-primary);font-weight:700">로그인</a>
-      </div>
+    <button class="auth-submit" id="su-submit" type="button">가입하기</button>
+
+    <div style="text-align:center;font-size:13px;color:#6B7C71;margin-top:16px;padding-bottom:8px;">
+      이미 계정이 있으신가요?
+      <a href="login.html" style="color:#2A6F40;font-weight:700;">로그인</a>
     </div>
+
   </main>
 </div>
 

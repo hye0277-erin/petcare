@@ -1,0 +1,542 @@
+/* ============================================================
+   home-v2.css — Fingoo-style 클린 화이트 홈 디자인
+   ============================================================ */
+
+/* ── 전체 앱 배경 ── */
+.app {
+  background: #F4F6F9;
+}
+
+/* ── 폰트 굵기 한 단계 다운 (탭바 제외) ──
+   900→800, 800→700, 700→600, 600→500        */
+/* 900 → 800 */
+.app .hv2-brand { font-weight: 800; }
+.app .hv2-pet-name { font-weight: 700; }
+.app .hv2-section-title { font-weight: 700; }
+
+/* 800 → 700 */
+.app .hv2-visit-dday { font-weight: 700; }
+
+/* 700 → 600 */
+.app .hv2-quick-btn span,
+.app .hv2-section-more,
+.app .hv2-progress-label { font-weight: 500; }
+
+/* 600 → 500 */
+.app .hv2-pet-meta,
+.app .hv2-tag,
+.app .hv2-visit-label,
+.app .hv2-visit-date { font-weight: 400; }
+
+/* ── 상단 헤더 ── */
+.hv2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #fff;
+  border-bottom: 1px solid #F0F1F3;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.hv2-brand {
+  font-size: 22px;
+  font-weight: 900;
+  color: #1A2B1F;
+  letter-spacing: -0.04em;
+}
+
+.hv2-brand sup {
+  font-size: 13px;
+  font-weight: 700;
+  color: #3D7A4B;
+  top: -0.4em;
+  position: relative;
+}
+
+.hv2-header-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.hv2-icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #2A3D30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hv2-icon-btn:active {
+  background: #F0F4F1;
+}
+
+.hv2-icon-btn-solid {
+  background: #2A6F40;
+  color: #fff;
+}
+.hv2-icon-btn-solid:active {
+  background: #235C35;
+}
+
+.hv2-icon-btn .material-symbols-rounded {
+  font-size: 24px;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.hv2-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #E04545;
+  border: 2px solid #fff;
+  display: block;
+}
+
+/* ── 스크롤 영역 ── */
+.hv2-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+}
+
+/* ── 반려동물 카드 ── */
+.hv2-pet-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 16px 16px 0;
+  padding: 16px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #F0F2F0;
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hv2-pet-card:active {
+  opacity: 0.92;
+}
+
+.hv2-pet-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #E8F4EC;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+
+.hv2-pet-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hv2-pet-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.hv2-pet-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1A2B1F;
+  letter-spacing: -0.03em;
+}
+
+.hv2-pet-meta {
+  font-size: 13px;
+  color: #6B7C71;
+  margin-top: 2px;
+}
+
+.hv2-pet-tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.hv2-tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 16px;
+}
+
+.hv2-tag-red {
+  background: #FDEAEA;
+  color: #C0392B;
+}
+
+.hv2-tag-blue {
+  background: #E5EFFE;
+  color: #1A5FBB;
+}
+
+.hv2-tag-green {
+  background: #E5F5EA;
+  color: #2A7A40;
+}
+
+.hv2-tag-orange {
+  background: #FEF0E5;
+  color: #B85E0D;
+}
+
+/* 진행률 바 */
+.hv2-progress-wrap {
+  margin-top: 10px;
+}
+
+.hv2-progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.hv2-progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8A9C90;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.hv2-progress-count {
+  font-size: 12px;
+  color: #4A6151;
+}
+
+.hv2-progress-count b {
+  font-weight: 800;
+  color: #2A6F40;
+}
+
+.hv2-progress-bar {
+  height: 6px;
+  background: #EDF2EE;
+  border-radius: 95px;
+  overflow: hidden;
+}
+
+.hv2-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #dbeb02, #5FA86A);
+  border-radius: 95px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hv2-pet-chevron {
+  color: #B8C4BC;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.hv2-pet-chevron .material-symbols-rounded {
+  font-size: 20px;
+  font-variation-settings: 'FILL' 0, 'wght' 300;
+}
+
+/* ── 다음 진료 배너 ── */
+.hv2-visit-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 16px 0;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #1B5C32 0%, #2E7D45 100%);
+  border-radius: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hv2-visit-banner:active {
+  opacity: 0.92;
+}
+
+.hv2-visit-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.hv2-visit-icon .material-symbols-rounded {
+  font-size: 20px;
+  font-variation-settings: 'FILL' 1, 'wght' 400;
+}
+
+.hv2-visit-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.hv2-visit-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hv2-visit-date {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 1px;
+}
+
+.hv2-visit-dday {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 10px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+
+/* ── 섹션 공통 ── */
+.hv2-section {
+  margin-top: 20px;
+  padding: 0 16px;
+}
+
+.hv2-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.hv2-section-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1A2B1F;
+  letter-spacing: -0.03em;
+}
+
+.hv2-section-more {
+  font-size: 13px;
+  font-weight: 600;
+  color: #3D7A4B;
+  text-decoration: none;
+}
+
+/* ── 케어 요약 칩 ── */
+.hv2-care-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.hv2-care-stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #fff;
+  border: 1px solid #EEF0EE;
+}
+
+.hv2-care-stat-chip .material-symbols-rounded {
+  font-size: 16px;
+  font-variation-settings: 'FILL' 1, 'wght' 500;
+}
+
+.hv2-chip-done { color: #2A7A40; }
+.hv2-chip-done .material-symbols-rounded { color: #2A7A40; }
+.hv2-chip-todo { color: #B85E0D; }
+.hv2-chip-todo .material-symbols-rounded { color: #B85E0D; }
+.hv2-chip-total { color: #4A5568; }
+.hv2-chip-total .material-symbols-rounded { color: #6B7C71; }
+
+/* ── 케어 리스트 ── */
+.hv2-care-list {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #F0F2F0;
+}
+
+/* home.js 가 만드는 .care-item 스타일 유지하고 카드 안에 넣기 */
+.hv2-care-list .care-item {
+  border-bottom: 1px solid #F3F5F3;
+}
+
+.hv2-care-list .care-item:last-child {
+  border-bottom: none;
+}
+
+/* ── 빠른 기록 ── */
+.hv2-quick-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.hv2-quick-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #F0F2F0;
+  text-decoration: none;
+  color: #1A2B1F;
+  font-size: 12px;
+  font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s ease;
+}
+
+.hv2-quick-btn:active {
+  transform: scale(0.95);
+  box-shadow: none;
+}
+
+/* Phosphor duotone 아이콘 */
+.hv2-qi {
+  font-size: 30px;
+  --ph-duotone-opacity: 0.25;
+}
+
+.hv2-qi-red    { color: #D94040; }
+.hv2-qi-orange { color: #D47A1A; }
+.hv2-qi-blue   { color: #2060C0; }
+.hv2-qi-yellow { color: #B89010; }
+.hv2-qi-green  { color: #2A7A40; }
+.hv2-qi-purple { color: #7040C0; }
+
+/* ── 최근 특이사항 (status-grid) ── */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+/* home.js 가 만드는 .status-card 스타일 오버라이드 */
+.status-grid .status-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid #F0F2F0;
+}
+
+/* ── 하단 탭바 ── */
+.hv2-tabbar {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-top: 1px solid #ECEEF0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.hv2-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 4px 8px;
+  text-decoration: none;
+  color: #9EA8A3;
+  font-size: 12px;
+  font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.15s;
+}
+
+.hv2-tab .material-symbols-rounded {
+  font-size: 24px;
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+.hv2-tab.active {
+  color: #2A6F40;
+}
+
+.hv2-tab.active .material-symbols-rounded {
+  font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+/* status-bar 숨기기 */
+.status-bar { display: none !important; }
+
+/* ── 케어 카드 내부 care-more 링크 ── */
+.hv2-care-list .care-more {
+  border-top: 1px solid #F3F5F3;
+  padding: 12px 22px;
+  font-size: 13px;
+  color: #3D7A4B;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+
+.hv2-care-list .care-more .material-symbols-rounded {
+  font-size: 16px;
+}
+
+/* ── status-card 오버라이드 (흰 카드 배경과 어울리게) ── */
+.hv2-section .status-card {
+  background: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: none;
+}
+
+/* ── 전역 box-shadow 제거 (홈) ── */
+.app * { box-shadow: none !important; }
+
+@media (min-width: 480px) {
+  .app { box-shadow: 0 40px 80px rgba(31,42,36,0.14), 0 0 0 1px rgba(0,0,0,0.04) !important; }
+}
+
+/* ── 반응형 보호 ── */
+@media (max-width: 360px) {
+  .hv2-quick-row { gap: 8px; }
+  .hv2-qi { font-size: 26px; }
+  .hv2-quick-btn { padding: 12px 4px; }
+}

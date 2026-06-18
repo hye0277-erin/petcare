@@ -32,14 +32,13 @@
       info = S.getHospitals().find((h) => h.next_visit_date === iso) || S.getHospitals()[0] || null;
     }
     if (!nv) {
-      host.innerHTML = `<div style="${PAGE}"><div class="card" style="text-align:center;color:var(--color-text-light);padding:22px">
-        예정된 다음 진료가 없어요.<br><span style="color:var(--color-primary);font-weight:700;cursor:pointer" id="nv-add">병원 기록 추가하기</span></div></div>`;
+      host.innerHTML = `<div class="h-card" style="text-align:center;color:var(--color-text-light);padding:22px">
+        예정된 다음 진료가 없어요.<br><span style="color:var(--color-primary);font-weight:700;cursor:pointer" id="nv-add">병원 기록 추가하기</span></div>`;
       return;
     }
     const dd = nv.dday === 0 ? "D-DAY" : `D-${nv.dday}`;
-    host.innerHTML = `<div style="${PAGE}">
-      <div class="card" style="background:var(--color-primary);color:#fff;position:relative;overflow:hidden">
-        <div style="position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.07);top:-40px;right:-30px"></div>
+    host.innerHTML = `<div class="h-next-card">
+        <div style="position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.07);top:-40px;right:-30px;pointer-events:none"></div>
         <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px">다음 진료까지</div>
         <div style="font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:12px">${dd}</div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
@@ -49,19 +48,18 @@
             <div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:2px">${dot(info?.next_visit_date || "")} (${dowOf(info?.next_visit_date || "")})${info?.purpose ? " · " + esc(info.purpose) : ""}</div>
           </div>
         </div>
-        <a href="report.html" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:var(--radius-sm);background:rgba(255,255,255,.16);color:#fff;font-size:13px;font-weight:700;text-decoration:none">
+        <a href="report.html" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:10px;background:rgba(255,255,255,.16);color:#fff;font-size:13px;font-weight:700;text-decoration:none">
           <span class="material-symbols-rounded" style="font-size:18px">description</span>진료 전 요약 보기</a>
-      </div>
-    </div>`;
+      </div>`;
   }
 
   /* ── 최근 방문 기록 ─────────────────────────────────── */
   function renderVisits() {
     const host = $("#visit-list");
     const list = S.getHospitals();
-    if (!list.length) { host.innerHTML = `<div style="${PAGE}"><div class="card" style="color:var(--color-text-light);padding:18px;text-align:center">아직 병원 방문 기록이 없어요.</div></div>`; return; }
-    host.innerHTML = `<div style="${PAGE}display:flex;flex-direction:column;gap:9px">` + list.map((h) => `
-      <div class="card" style="display:flex;align-items:flex-start;gap:12px;margin:0;padding:14px 16px">
+    if (!list.length) { host.innerHTML = `<div class="h-card" style="color:var(--color-text-light);padding:18px;text-align:center">아직 병원 방문 기록이 없어요.</div>`; return; }
+    host.innerHTML = `<div class="h-list">` + list.map((h) => `
+      <div class="h-card h-row">
         <span class="row-ic ${PURPOSE_T[h.purpose] || "t-weight"}" style="flex-shrink:0"><span class="material-symbols-rounded">local_hospital</span></span>
         <div style="flex:1;min-width:0">
           <div style="font-size:14px;font-weight:700">${esc(h.hospital_name || "병원")}</div>
@@ -77,10 +75,10 @@
     const host = $("#test-list");
     const list = S.getTests();
     const typeLabel = (t) => ({ blood: "혈액검사", image: "영상 검사", urine: "소변검사" }[t.type] || "기타");
-    if (!list.length) { host.innerHTML = `<div style="${PAGE}"><div class="card" style="color:var(--color-text-light);padding:18px;text-align:center">업로드된 검사 결과가 없어요.</div></div>`; return; }
-    host.innerHTML = `<div style="${PAGE}display:flex;flex-direction:column;gap:9px">` + list.map((t) => {
+    if (!list.length) { host.innerHTML = `<div class="h-card" style="color:var(--color-text-light);padding:18px;text-align:center">업로드된 검사 결과가 없어요.</div>`; return; }
+    host.innerHTML = `<div class="h-list">` + list.map((t) => {
       const file = (t.files || [])[0];
-      return `<div class="card" style="margin:0;padding:14px 16px">
+      return `<div class="h-card">
         <div style="display:flex;align-items:flex-start;gap:12px">
           <span class="row-ic ${t.type === "image" ? "t-photo" : "t-temp"}" style="flex-shrink:0"><span class="material-symbols-rounded">${t.type === "image" ? "photo_library" : "description"}</span></span>
           <div style="flex:1;min-width:0">
@@ -105,10 +103,10 @@
     // 처방을 {text, hospitalId} 로 수집 (중복 텍스트 제거)
     const seen = new Set(); const list = [];
     S.getHospitals().forEach((h) => (h.prescriptions || []).forEach((p) => { if (!seen.has(p)) { seen.add(p); list.push(p); } }));
-    if (!list.length) { host.innerHTML = `<div style="${PAGE}"><div class="card" style="color:var(--color-text-light);padding:18px;text-align:center">등록된 처방 내역이 없어요.</div></div>`; return; }
-    host.innerHTML = `<div style="${PAGE}display:flex;flex-direction:column;gap:9px">` + list.map((p) => {
+    if (!list.length) { host.innerHTML = `<div class="h-card" style="color:var(--color-text-light);padding:18px;text-align:center">등록된 처방 내역이 없어요.</div>`; return; }
+    host.innerHTML = `<div class="h-list">` + list.map((p) => {
       const [name, ...rest] = p.split(/\s+/);
-      return `<div class="card" style="display:flex;align-items:center;gap:12px;margin:0;padding:13px 16px">
+      return `<div class="h-card h-row">
         <span class="row-ic t-med" style="flex-shrink:0"><span class="material-symbols-rounded">medication</span></span>
         <div style="flex:1;min-width:0">
           <div style="font-size:14px;font-weight:700">${esc(name)}</div>
@@ -124,8 +122,7 @@
     const host = $("#memo-card"); if (!host) return;
     // 가장 최근 병원 기록의 메모를 다음 진료 때 확인할 내용으로 노출
     const memos = S.getHospitals().filter((h) => h.memo).map((h) => ({ memo: h.memo, date: h.date }));
-    host.innerHTML = `<div style="${PAGE}">
-      <div class="card" style="margin:0">
+    host.innerHTML = `<div class="h-card">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:${memos.length ? "10px" : "0"}">
           <span class="material-symbols-rounded" style="color:var(--color-orange)">sticky_note_2</span>
           <span style="font-size:13px;font-weight:700">다음 진료 때 확인할 내용</span>
@@ -133,14 +130,17 @@
         ${memos.length
           ? memos.map((m) => `<div style="font-size:12px;color:var(--color-text-sub);line-height:1.6;padding:8px 0;border-top:1px solid var(--color-border)">${esc(m.memo)} <span style="color:var(--color-text-light)">· ${dot(m.date)}</span></div>`).join("")
           : `<div style="font-size:12px;color:var(--color-text-light)">병원 기록 추가 시 메모를 남기면 여기에 모여요.</div>`}
-      </div>
-    </div>`;
+      </div>`;
   }
 
   function renderAll() { renderNextVisit(); renderVisits(); renderTests(); renderRx(); renderMemo(); }
 
   /* ── 병원 기록 추가 ─────────────────────────────────── */
-  function openHospitalSheet() { $("#hospital-sheet").classList.add("show"); }
+  function openHospitalSheet() {
+    const dateInput = $("#h-date");
+    if (dateInput && !dateInput.value) dateInput.value = S.TODAY;
+    $("#hospital-sheet").classList.add("show");
+  }
   function closeSheets() { $$(".sheet-overlay").forEach((o) => o.classList.remove("show")); }
 
   function saveHospital() {

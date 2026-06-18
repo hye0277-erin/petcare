@@ -173,7 +173,17 @@
     const p = S.getPet(); if (!p) return;
     const line = [p.name, p.age ? `${p.age}살` : "", p.breed].filter(Boolean).join(" · ");
     const lineEl = document.querySelector("[data-pet-line]"); if (lineEl) lineEl.textContent = line;
-    const initEl = document.querySelector("[data-pet-initial]"); if (initEl) initEl.textContent = (p.name || "해")[0];
+    const initEl = document.querySelector("[data-pet-initial]");
+    if (initEl) {
+      if (p.photo) {
+        initEl.textContent = "";
+        initEl.style.background = "transparent";
+        initEl.style.padding = "0";
+        initEl.innerHTML = `<img src="${p.photo}" alt="${p.name || ""}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      } else {
+        initEl.textContent = (p.name || "해")[0];
+      }
+    }
     document.querySelectorAll("[data-pet-name]").forEach((e) => (e.textContent = p.name));
   }
 
@@ -223,7 +233,7 @@
     }
 
     // 다음 진료 D-day
-    const nv = S.nextVisitDday(new Date("2026-06-13"));
+    const nv = S.nextVisitDday(new Date());
     if (nv) d.metrics.next = [d.metrics.next[0], nv.dday === 0 ? "D-DAY" : `D-${nv.dday}`, d.metrics.next[2]];
 
     return d;
@@ -267,7 +277,7 @@
 
   function ensureCustomRange() {
     if (customRange) return customRange;
-    const end = (S && S.TODAY) || "2026-06-13"; // 기본: 최근 7일
+    const end = (S && S.TODAY) || new Date().toISOString().slice(0, 10);
     const d = new Date(end); d.setDate(d.getDate() - 6);
     const start = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     customRange = { start, end };

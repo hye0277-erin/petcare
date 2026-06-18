@@ -9,18 +9,20 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0&display=swap" />
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/notifications.css" />
+<link rel="stylesheet" href="css/page-v2.css" />
 <script type="module" src="js/guard.js"></script>
 </head>
 <body>
 <div class="app">
-  <div class="status-bar"><span>9:41</span>
-    <span class="status-icons"><span class="material-symbols-rounded">signal_cellular_alt</span><span class="material-symbols-rounded">wifi</span><span class="material-symbols-rounded">battery_full</span></span>
-  </div>
-
-  <header class="sub-header">
-    <a class="icon-btn" href="index.html" aria-label="뒤로"><span class="material-symbols-rounded">arrow_back_ios_new</span></a>
-    <div class="title">알림</div>
-    <button class="icon-btn noti-readall" id="read-all" aria-label="모두 읽음">모두 읽음</button>
+  <header class="pv2-header">
+    <div class="pv2-header-nav">
+      <a class="pv2-icon-btn" href="index.html" aria-label="뒤로">
+        <span class="material-symbols-rounded">arrow_back_ios_new</span>
+      </a>
+      <div class="pv2-nav-title">알림</div>
+    </div>
+    <button class="pv2-icon-btn noti-readall" id="read-all" aria-label="모두 읽음"
+      style="font-size:13px;font-weight:700;width:auto;padding:0 8px;color:#3D7A4B;">모두 읽음</button>
   </header>
 
   <main class="scroll">
@@ -28,12 +30,12 @@
     <div id="noti-list"></div>
   </main>
 
-  <nav class="tabbar">
-    <a class="tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
-    <a class="tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
-    <a class="tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
-    <a class="tab" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
-    <a class="tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
+  <nav class="pv2-tabbar">
+    <a class="pv2-tab" href="index.html"><span class="material-symbols-rounded">home</span><span>홈</span></a>
+    <a class="pv2-tab" href="record.html"><span class="material-symbols-rounded">edit_note</span><span>기록</span></a>
+    <a class="pv2-tab" href="hospital.html"><span class="material-symbols-rounded">local_hospital</span><span>병원</span></a>
+    <a class="pv2-tab" href="report.html"><span class="material-symbols-rounded">bar_chart</span><span>리포트</span></a>
+    <a class="pv2-tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
   </nav>
   <div class="home-indicator"><i></i></div>
 </div>

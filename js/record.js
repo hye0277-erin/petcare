@@ -53,7 +53,7 @@
     meal: {
       label: "식사", icon: "restaurant", color: ["#FAF2DD", "#D2A03C"], tagClass: "ghost",
       fields: [
-        { key: "kind", label: "식사 종류", chips: ["처방식", "일반 사료", "습식", "간식"] },
+        { key: "kind", label: "식사 종류", chips: ["처방식", "일반 사료", "습식", "화식", "간식", "기타"] },
         { key: "amount", label: "식사량", input: "text", ph: "예: 40g" },
         { key: "complete", label: "완료율", chips: ["25%", "50%", "75%", "완식"] },
       ],
@@ -142,8 +142,11 @@
     get(id) { return S.getRecord(id); },
   };
 
-  const TODAY = "2026.06.13";
-  const YESTERDAY = "2026.06.12";
+  const _todayDate = new Date();
+  const _pad = (n) => String(n).padStart(2, "0");
+  const TODAY = `${_todayDate.getFullYear()}.${_pad(_todayDate.getMonth() + 1)}.${_pad(_todayDate.getDate())}`;
+  const _yd = new Date(_todayDate); _yd.setDate(_yd.getDate() - 1);
+  const YESTERDAY = `${_yd.getFullYear()}.${_pad(_yd.getMonth() + 1)}.${_pad(_yd.getDate())}`;
   const relLabel = (d) => (d === TODAY ? "오늘" : d === YESTERDAY ? "어제" : "");
 
   /* ── 3. 화면 상태 ────────────────────────────────────── */
@@ -180,6 +183,28 @@
         aria-pressed="${f.key === activeFilter}">${f.label}</button>`).join("");
   }
 
+  /* ── 유형별 동의어/관련어 맵 ──────────────────────────
+     키워드가 기록 내용에 없어도 유형 연관어가 일치하면 표시 */
+  const TYPE_ALIASES = {
+    symptom: ["증상", "아픔", "아파", "기침", "구토", "설사", "무기력", "식욕저하", "호흡이상", "호흡 이상", "통증", "피부", "눈", "귀", "이상", "sick", "컨디션"],
+    med:     ["복약", "약", "투약", "복용", "심장약", "신장", "처방", "medicine", "알약"],
+    meal:    ["식사", "밥", "사료", "먹이", "간식", "습식", "화식", "처방식", "먹었", "먹음", "식욕", "food"],
+    water:   ["물", "수분", "음수", "water", "마셨", "마심"],
+    poop:    ["배변", "대변", "소변", "변", "설사", "변비", "혈변", "배설", "용변"],
+    weight:  ["체중", "몸무게", "무게", "kg", "살쪘", "빠졌"],
+    temp:    ["체온", "온도", "열", "발열", "temperature"],
+    breath:  ["호흡", "숨", "헐떡", "호흡수", "breath"],
+    walk:    ["산책", "걷기", "운동", "walk", "산책함"],
+    photo:   ["사진", "photo", "사진첨부", "이미지"],
+    hospital:["병원", "진료", "의사", "검사", "치료", "수술", "hospital"],
+    memo:    ["메모", "노트", "기록", "memo"],
+  };
+
+  function keywordMatchesType(kw, type) {
+    const aliases = TYPE_ALIASES[type] || [];
+    return aliases.some((a) => a.includes(kw) || kw.includes(a));
+  }
+
   /* ── 7. 타임라인 ─────────────────────────────────────── */
   function passesFilter(r) {
     if (activeFilter !== "all" && r.type !== activeFilter) return false;
@@ -187,10 +212,28 @@
     if (search.importantOnly && !r.important) return false;
     if (search.photoOnly && !r.photo) return false;
     if (search.keyword) {
+      const kw = search.keyword.toLowerCase();
       const hay = (r.summary + " " + (r.memo || "") + " " + (TYPES[r.type]?.label || "") + " " + JSON.stringify(r.fields || {})).toLowerCase();
-      if (!hay.includes(search.keyword.toLowerCase())) return false;
+      // 직접 텍스트 매칭 OR 유형 동의어 매칭
+      if (!hay.includes(kw) && !keywordMatchesType(kw, r.type)) return false;
     }
-    if (search.period === "today" && r.date !== TODAY) return false;
+    // 기간 필터
+    if (search.period !== "all") {
+      const recIso = r.date.replace(/\./g, "-");  // YYYY-MM-DD
+      const todayIso = TODAY.replace(/\./g, "-");
+      const todayMs = new Date(todayIso).getTime();
+      const recMs = new Date(recIso).getTime();
+      if (search.period === "today" && recIso !== todayIso) return false;
+      if (search.period === "7d" && recMs < todayMs - 6 * 86400000) return false;
+      if (search.period === "30d" && recMs < todayMs - 29 * 86400000) return false;
+      if (search.period === "month") {
+        const [ty, tm] = todayIso.split("-");
+        if (!recIso.startsWith(`${ty}-${tm}`)) return false;
+      }
+      if (search.period === "custom" && search.customFrom && search.customTo) {
+        if (recIso < search.customFrom || recIso > search.customTo) return false;
+      }
+    }
     return true;
   }
 
@@ -492,25 +535,100 @@
     $$("#search-sheet [data-stype]").forEach((b) => b.classList.toggle("active", b.dataset.stype === search.type));
     $("#s-important").classList.toggle("on", search.importantOnly);
     $("#s-photo").classList.toggle("on", search.photoOnly);
+    // 직접 선택 기간 복원
+    const range = $("#custom-range");
+    if (range) {
+      const isCustom = search.period === "custom";
+      range.style.display = isCustom ? "" : "none";
+      if (isCustom) {
+        if (window.PetPicker) window.PetPicker.bindAll(range);
+        if (search.customFrom && $("#s-from")) window.PetPicker?.setValue($("#s-from"), search.customFrom);
+        if (search.customTo && $("#s-to")) window.PetPicker?.setValue($("#s-to"), search.customTo);
+      }
+    }
     openOverlay("#search-sheet");
   }
+  /* ── 검색 결과 뷰 ────────────────────────────────────── */
+  function buildSearchLabel() {
+    const parts = [];
+    if (search.keyword) parts.push(`"${search.keyword}"`);
+    const periodMap = { today: "오늘", "7d": "최근 7일", "30d": "최근 30일", month: "이번 달", custom: "직접 선택" };
+    if (search.period !== "all") parts.push(periodMap[search.period] || search.period);
+    if (search.type !== "all") parts.push(TYPES[search.type]?.label || search.type);
+    if (search.importantOnly) parts.push("중요");
+    if (search.photoOnly) parts.push("사진 있음");
+    return parts.length ? parts.join(" · ") : "전체 기록";
+  }
+
+  function renderSearchView() {
+    const list = store.records.filter(passesFilter)
+      .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.time.localeCompare(a.time)));
+
+    $("#search-view-query").textContent = buildSearchLabel();
+    $("#search-view-count").textContent = `검색 결과 ${list.length}건`;
+
+    const wrap = $("#search-timeline");
+    if (!list.length) {
+      let hint = "";
+      if (search.keyword) {
+        const kw = search.keyword.toLowerCase();
+        const matched = Object.keys(TYPE_ALIASES).filter((t) => keywordMatchesType(kw, t));
+        if (matched.length) {
+          const labels = matched.map((t) => TYPES[t]?.label).filter(Boolean).join(", ");
+          hint = `<div style="font-size:13px;color:var(--sub);margin-top:8px">"${search.keyword}"은 <b>${labels}</b> 기록과 관련이 있어요.<br/>해당 기간에 기록이 없거나 다른 조건을 확인해보세요.</div>`;
+        }
+      }
+      wrap.innerHTML = `<div class="empty show" style="position:static">
+        <div class="empty-ic"><span class="material-symbols-rounded">search_off</span></div>
+        <div class="empty-text"><b>검색 결과가 없어요.</b><br />다른 키워드나 조건으로 검색해보세요.${hint}</div>
+      </div>`;
+      return;
+    }
+    const groups = {};
+    list.forEach((r) => (groups[r.date] = groups[r.date] || []).push(r));
+    wrap.innerHTML = Object.keys(groups).sort((a, b) => (a < b ? 1 : -1)).map((date) => {
+      const rel = relLabel(date);
+      return `<div class="day-group">
+        <div class="day-label">${date}${rel ? ` <span class="rel">${rel}</span>` : ""}<span class="line"></span></div>
+        ${groups[date].map(recordCard).join("")}
+      </div>`;
+    }).join("");
+  }
+
+  function openSearchView() {
+    renderSearchView();
+    const sv = $("#search-view");
+    sv.style.display = "flex";
+    sv.scrollTop = 0;
+  }
+
+  function closeSearchView() {
+    $("#search-view").style.display = "none";
+    search = { keyword: "", period: "all", type: "all", importantOnly: false, photoOnly: false, customFrom: "", customTo: "" };
+    renderTimeline();
+  }
+
   function applySearch() {
     search.keyword = $("#s-keyword").value.trim();
     search.period = $("#search-sheet [data-period].active")?.dataset.period || "all";
     search.type = $("#search-sheet [data-stype].active")?.dataset.stype || "all";
     search.importantOnly = $("#s-important").classList.contains("on");
     search.photoOnly = $("#s-photo").classList.contains("on");
+    search.customFrom = ($("#s-from")?.value || "").replace(/\./g, "-");
+    search.customTo = ($("#s-to")?.value || "").replace(/\./g, "-");
     closeOverlay("#search-sheet");
-    renderTimeline();
-    toast("검색 결과를 적용했어요", "filter_list");
+    openSearchView();
   }
+
   function resetSearch() {
-    search = { keyword: "", period: "all", type: "all", importantOnly: false, photoOnly: false };
+    search = { keyword: "", period: "all", type: "all", importantOnly: false, photoOnly: false, customFrom: "", customTo: "" };
     $("#s-keyword").value = "";
     $$("#search-sheet [data-period]").forEach((b) => b.classList.toggle("active", b.dataset.period === "all"));
     $$("#search-sheet [data-stype]").forEach((b) => b.classList.toggle("active", b.dataset.stype === "all"));
     $("#s-important").classList.remove("on");
     $("#s-photo").classList.remove("on");
+    const range = $("#custom-range");
+    if (range) range.style.display = "none";
   }
 
   /* ── 11. 오버레이 헬퍼 ──────────────────────────────── */
@@ -539,6 +657,8 @@
     if (card) return openDetail(card.dataset.detail);
 
     if (t.closest("#btn-search")) return openSearch();
+    if (t.closest("#search-back")) return closeSearchView();
+    if (t.closest("#search-edit")) { openSearch(); return; }
     if (t.closest("#btn-calendar")) return (location.href = "schedule.html");
 
     const tt = t.closest("[data-type]");
@@ -581,7 +701,17 @@
     if (t.closest("#confirm-no")) return closeOverlay("#confirm-modal");
 
     const per = t.closest("[data-period]");
-    if (per) { $$("#search-sheet [data-period]").forEach((b) => b.classList.remove("active")); per.classList.add("active"); return; }
+    if (per) {
+      $$("#search-sheet [data-period]").forEach((b) => b.classList.remove("active"));
+      per.classList.add("active");
+      const isCustom = per.dataset.period === "custom";
+      const range = $("#custom-range");
+      if (range) {
+        range.style.display = isCustom ? "" : "none";
+        if (isCustom && window.PetPicker) window.PetPicker.bindAll(range);
+      }
+      return;
+    }
     const st = t.closest("[data-stype]");
     if (st) { $$("#search-sheet [data-stype]").forEach((b) => b.classList.remove("active")); st.classList.add("active"); return; }
     if (t.closest("#s-important")) { $("#s-important").classList.toggle("on"); return; }
@@ -611,6 +741,14 @@
     const p = S.getPet(); if (!p) return;
     const chip = $("[data-pet-chip]");
     if (chip) chip.textContent = [p.name, p.age ? `${p.age}살` : "", p.breed].filter(Boolean).join(" · ");
+    const avatar = document.querySelector(".pet-chip .avatar");
+    if (avatar) {
+      if (p.photo) {
+        avatar.innerHTML = `<img src="${p.photo}" alt="${p.name || ""}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      } else {
+        avatar.textContent = "🐶";
+      }
+    }
   }
 
   renderPetChip();
