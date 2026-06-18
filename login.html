@@ -181,8 +181,7 @@
 <script type="module">
   import { signUp, signIn, getUser } from './js/auth.js';
 
-  const afterAuth = () =>
-    (window.PetStore && window.PetStore.hasPet()) ? 'index.html' : 'register.html';
+  const afterAuth = () => 'index.html';
 
   const $ = (id) => document.getElementById(id);
   const emailEl  = $('auth-email');
