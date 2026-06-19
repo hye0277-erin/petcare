@@ -178,7 +178,8 @@ body {
   align-items: center;
   background: #fff;
   border-top: 1px solid #ECEEF0;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: 8px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   flex-shrink: 0;
   z-index: 100;
 }
@@ -195,6 +196,7 @@ body {
   font-size: 12px;
   font-weight: 600;
   -webkit-tap-highlight-color: transparent;
+  min-height: 56px;
 }
 
 .pv2-tab .material-symbols-rounded {
@@ -223,7 +225,8 @@ body {
   padding-top: 10px !important;
   padding-left: 16px !important;
   padding-right: 16px !important;
-  padding-bottom: 24px !important;
+  /* 탭바(56px) + safe-area + 여유 공간 */
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
 /* ═══════════════════════════════════════
