@@ -317,7 +317,7 @@ img { display: block; max-width: 100%; }
 .rec-card-ic .material-symbols-rounded { font-size: 21px; }
 .rec-card-body { flex: 1; min-width: 0; }
 .rec-card-head { display: flex; align-items: center; gap: 6px; }
-.rec-type { font-size: 14px; font-weight: 700; }
+.rec-type { font-size: 14px; font-weight: 800; }
 .rec-time { display: none; }
 .rec-star { margin-left: auto; color: #E0B23C; display: none; }
 .rec-star.on { display: inline-flex; }

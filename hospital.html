@@ -86,11 +86,10 @@
       <div class="sheet-handle"></div>
       <div class="sheet-title">병원 기록 추가</div>
       <div class="form">
-        <div class="field-row">
-          <div class="form-group"><span class="form-label">진료 날짜</span>
-            <input class="input" id="h-date" data-picker="date" /></div>
-          <div class="form-group"><span class="form-label">다음 진료 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
-            <input class="input" id="h-next" data-picker="date" data-picker-placeholder="선택 안 함" /></div>
+        <!-- 다음 진료 날짜 -->
+        <div class="form-group">
+          <span class="form-label">다음 진료일</span>
+          <input class="input" id="h-next" data-picker="date" data-picker-placeholder="날짜를 선택하세요" />
         </div>
         <div class="form-group"><span class="form-label">병원명</span>
           <input class="input" id="h-name" type="text" placeholder="예: 서울동물병원" /></div>

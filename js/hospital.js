@@ -25,7 +25,6 @@
   function renderNextVisit() {
     const host = $("#next-visit-card"); if (!host) return;
     const nv = S.nextVisitDday();
-    // 다음 진료가 등록된 병원 기록(있으면 가장 가까운 미래) 찾기
     let info = null;
     if (nv) {
       const iso = `${nv.date.getFullYear()}-${String(nv.date.getMonth() + 1).padStart(2, "0")}-${String(nv.date.getDate()).padStart(2, "0")}`;
@@ -39,7 +38,12 @@
     const dd = nv.dday === 0 ? "D-DAY" : `D-${nv.dday}`;
     host.innerHTML = `<div class="h-next-card">
         <div style="position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.07);top:-40px;right:-30px;pointer-events:none"></div>
-        <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px">다음 진료까지</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div style="font-size:11px;color:rgba(255,255,255,.6)">다음 진료까지</div>
+          <button id="nv-edit-btn" data-nv-id="${esc(info?.id || "")}" style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:rgba(255,255,255,.75);background:rgba(255,255,255,.15);border:none;border-radius:99px;padding:3px 10px;cursor:pointer">
+            <span class="material-symbols-rounded" style="font-size:13px;font-family:'Material Symbols Rounded';font-style:normal;line-height:1">edit_calendar</span>날짜 수정
+          </button>
+        </div>
         <div style="font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:12px">${dd}</div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
           <div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center"><span class="material-symbols-rounded">local_hospital</span></div>
@@ -51,6 +55,38 @@
         <a href="report.html" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:10px;background:rgba(255,255,255,.16);color:#fff;font-size:13px;font-weight:700;text-decoration:none">
           <span class="material-symbols-rounded" style="font-size:18px">description</span>진료 전 요약 보기</a>
       </div>`;
+  }
+
+  /* ── 다음 진료일 수정 피커 ──────────────────────────── */
+  function openNextVisitEdit(hospitalId) {
+    // 히든 input을 임시 생성해 PetPicker 연결
+    let inp = document.getElementById("_nv_edit_input");
+    if (!inp) {
+      inp = document.createElement("input");
+      inp.id = "_nv_edit_input";
+      inp.type = "hidden";
+      inp.dataset.picker = "date";
+      inp.dataset.pickerTitle = "다음 진료일 수정";
+      document.body.appendChild(inp);
+      window.PetPicker.bind(inp);
+      inp.addEventListener("change", () => {
+        const newDate = inp.value; if (!newDate) return;
+        const hospitals = S.getHospitals();
+        // 해당 병원 기록의 next_visit_date 업데이트
+        const target = hospitals.find((h) => h.id === hospitalId) || hospitals[0];
+        if (target) {
+          target.next_visit_date = newDate;
+          S.saveHospitals ? S.saveHospitals(hospitals) : localStorage.setItem("petcare_hospitals", JSON.stringify(hospitals));
+          S.savePet({ next_visit: newDate });
+        }
+        renderAll();
+        toast("다음 진료일을 수정했어요", "event");
+      });
+    }
+    // 현재 날짜 세팅 후 피커 열기
+    const cur = S.getHospitals().find((h) => h.id === hospitalId)?.next_visit_date || "";
+    inp.value = cur;
+    inp._pkTrigger?.click();
   }
 
   /* ── 최근 방문 기록 ─────────────────────────────────── */
@@ -65,8 +101,16 @@
           <div style="font-size:14px;font-weight:700">${esc(h.hospital_name || "병원")}</div>
           <div style="font-size:12px;color:var(--color-text-sub);margin-top:2px">${esc([h.purpose, h.doctor_name].filter(Boolean).join(" · "))}</div>
           ${h.content || h.memo ? `<div style="font-size:12px;color:var(--color-text-light);margin-top:6px;line-height:1.5">${esc(h.content || h.memo)}</div>` : ""}
+          <div style="font-size:11px;color:var(--color-text-light);margin-top:4px">${dot(h.date)}</div>
         </div>
-        <span style="font-size:11px;color:var(--color-text-light);flex-shrink:0">${dot(h.date)}</span>
+        <div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0;margin-left:4px">
+          <button style="width:32px;height:32px;border-radius:8px;border:none;background:transparent;color:var(--color-text-light);display:flex;align-items:center;justify-content:center;cursor:pointer" data-h-edit="${esc(h.id)}" aria-label="수정">
+            <span class="material-symbols-rounded" style="font-size:18px;font-family:'Material Symbols Rounded';font-style:normal;line-height:1">edit</span>
+          </button>
+          <button style="width:32px;height:32px;border-radius:8px;border:none;background:transparent;color:#C0392B;display:flex;align-items:center;justify-content:center;cursor:pointer" data-h-del="${esc(h.id)}" aria-label="삭제">
+            <span class="material-symbols-rounded" style="font-size:18px;font-family:'Material Symbols Rounded';font-style:normal;line-height:1">delete</span>
+          </button>
+        </div>
       </div>`).join("") + `</div>`;
   }
 
@@ -137,8 +181,6 @@
 
   /* ── 병원 기록 추가 ─────────────────────────────────── */
   function openHospitalSheet() {
-    const dateInput = $("#h-date");
-    if (dateInput && !dateInput.value) dateInput.value = S.TODAY;
     $("#hospital-sheet").classList.add("show");
   }
   function closeSheets() { $$(".sheet-overlay").forEach((o) => o.classList.remove("show")); }
@@ -147,16 +189,39 @@
     const name = $("#h-name").value.trim();
     if (!name) { toast("병원명을 입력해 주세요", "info"); $("#h-name").focus(); return; }
 
+    const prescriptions = $("#h-rx").value.split("\n").map((s) => s.trim()).filter(Boolean);
+    const next = $("#h-next").value || "";
+    const editId = $("#h-save").dataset.editId;
+
+    if (editId) {
+      // 수정 모드: 기존 기록 덮어쓰기
+      const hospitals = S.getHospitals();
+      const idx = hospitals.findIndex((x) => x.id === editId);
+      if (idx !== -1) {
+        hospitals[idx] = {
+          ...hospitals[idx],
+          hospital_name: name,
+          doctor_name: $("#h-doctor").value.trim(),
+          purpose: $('input[name="h-purpose"]:checked')?.value || "정기 진료",
+          content: $("#h-content").value.trim(),
+          prescriptions, next_visit_date: next,
+          memo: $("#h-memo").value.trim(),
+        };
+        S.saveHospitals ? S.saveHospitals(hospitals) : localStorage.setItem("petcare_hospitals", JSON.stringify(hospitals));
+        if (next) S.savePet({ next_visit: next });
+        toast("병원 기록을 수정했어요");
+      }
+      $("#h-save").dataset.editId = "";
+      $("#h-save").textContent = "저장";
+      closeSheets(); renderAll(); return;
+    }
+
     const files = [];
     const fileInput = $("#h-file");
     if (fileInput.files && fileInput.files[0]) { const f = fileInput.files[0]; files.push({ name: f.name, url: URL.createObjectURL(f) }); }
 
-    const prescriptions = $("#h-rx").value.split("\n").map((s) => s.trim()).filter(Boolean);
-    const next = $("#h-next").value || "";
-    const date = $("#h-date").value || S.TODAY;
-
     S.addHospital({
-      date, hospital_name: name,
+      date: S.TODAY, hospital_name: name,
       doctor_name: $("#h-doctor").value.trim(),
       purpose: $('input[name="h-purpose"]:checked')?.value || "정기 진료",
       content: $("#h-content").value.trim(),
@@ -243,11 +308,58 @@
     else toast("공유를 지원하지 않는 환경이에요", "info");
   }
 
+  /* ── 병원 기록 수정 시트 열기 ──────────────────────── */
+  function openEditSheet(id) {
+    const h = S.getHospitals().find((x) => x.id === id); if (!h) return;
+    // 필드 채우기
+    $("#h-next").value = h.next_visit_date || "";
+    $("#h-name").value = h.hospital_name || "";
+    $("#h-doctor").value = h.doctor_name || "";
+    $("#h-content").value = h.content || "";
+    $("#h-rx").value = (h.prescriptions || []).join("\n");
+    $("#h-memo").value = h.memo || "";
+    const radios = document.querySelectorAll('input[name="h-purpose"]');
+    radios.forEach((r) => { r.checked = r.value === h.purpose; });
+    // 트리거 버튼 텍스트 갱신
+    if (window.PetPicker) {
+      window.PetPicker.bind($("#h-next"));
+    }
+    // 저장 버튼을 수정 모드로 전환
+    const saveBtn = $("#h-save");
+    saveBtn.dataset.editId = id;
+    saveBtn.textContent = "수정 완료";
+    $("#hospital-sheet").classList.add("show");
+  }
+
   /* ── 이벤트 ─────────────────────────────────────────── */
   document.addEventListener("click", (e) => {
-    if (e.target.closest("#btn-add-hospital") || e.target.closest("#btn-add-hospital-2") || e.target.closest("#nv-add")) return openHospitalSheet();
+    if (e.target.closest("#btn-add-hospital") || e.target.closest("#btn-add-hospital-2") || e.target.closest("#nv-add")) {
+      // 신규 추가 모드로 초기화
+      $("#h-save").dataset.editId = "";
+      $("#h-save").textContent = "저장";
+      return openHospitalSheet();
+    }
     if (e.target.closest("#h-save")) return saveHospital();
     if (e.target.closest("#t-share")) return shareTest();
+
+    // 다음 진료일 수정
+    const nvEdit = e.target.closest("#nv-edit-btn");
+    if (nvEdit) { openNextVisitEdit(nvEdit.dataset.nvId); return; }
+
+    // 방문 기록 수정
+    const hEdit = e.target.closest("[data-h-edit]");
+    if (hEdit) { openEditSheet(hEdit.dataset.hEdit); return; }
+
+    // 방문 기록 삭제
+    const hDel = e.target.closest("[data-h-del]");
+    if (hDel) {
+      if (!confirm("이 병원 기록을 삭제할까요?")) return;
+      const hospitals = S.getHospitals().filter((x) => x.id !== hDel.dataset.hDel);
+      S.saveHospitals ? S.saveHospitals(hospitals) : localStorage.setItem("petcare_hospitals", JSON.stringify(hospitals));
+      renderAll();
+      toast("기록을 삭제했어요", "delete");
+      return;
+    }
 
     const rxBtn = e.target.closest("[data-rx]");
     if (rxBtn) { makeMedRoutine(rxBtn.dataset.rx); toast("복약 일정으로 추가했어요", "add_alarm"); return; }
@@ -257,7 +369,11 @@
 
     if (e.target.closest("[data-test-dl]") || e.target.closest("[data-test-preview]")) return toast("업로드한 파일에서만 보기·다운로드할 수 있어요", "info");
 
-    if (e.target.closest("[data-h-close]")) return closeSheets();
+    if (e.target.closest("[data-h-close]")) {
+      $("#h-save").dataset.editId = "";
+      $("#h-save").textContent = "저장";
+      return closeSheets();
+    }
     const ov = e.target.closest(".sheet-overlay");
     if (ov && e.target === ov) ov.classList.remove("show");
   });
