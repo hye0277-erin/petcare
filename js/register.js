@@ -38,6 +38,22 @@
 
   clearBtn.addEventListener("click", () => { $("r-photo").value = ""; showPreview(""); });
 
+  // 생년월일 → 나이 자동 계산
+  function calcAge(birthdate) {
+    if (!birthdate) return "";
+    const [y, m, d] = birthdate.split("-").map(Number);
+    const today = new Date();
+    let age = today.getFullYear() - y;
+    if (today.getMonth() + 1 < m || (today.getMonth() + 1 === m && today.getDate() < d)) age--;
+    return age >= 0 ? age : "";
+  }
+  document.addEventListener("change", (e) => {
+    if (e.target.id === "r-birth" || e.target === document.getElementById("r-birth")) {
+      const age = calcAge(document.getElementById("r-birth").value);
+      if (age !== "") $("r-age").value = age;
+    }
+  });
+
   // 모드별 타이틀/버튼
   $("reg-title").textContent = isEdit ? "반려견 정보 수정" : "반려견 등록";
   $("r-submit").textContent = isEdit ? "수정 완료" : "등록 완료";
@@ -45,7 +61,7 @@
   // 수정 모드: 기존 값 채우기
   if (isEdit) {
     $("r-name").value = existing.name || "";
-    $("r-age").value = existing.age || "";
+    $("r-age").value = existing.birthdate ? (calcAge(existing.birthdate) ?? existing.age ?? "") : (existing.age || "");
     $("r-weight").value = existing.weight || "";
     $("r-breed").value = existing.breed || "";
     const setPick = (id, v) => { const el = $(id); if (!el) return; if (window.PetPicker) window.PetPicker.setValue(el, v || ""); else el.value = v || ""; };

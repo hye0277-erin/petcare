@@ -236,7 +236,7 @@
       const tf = testInput.files[0];
       const isImg = /image\//.test(tf.type);
       S.addTest({
-        date, title: $("#h-test-name").value.trim() || tf.name,
+        date: S.TODAY, title: $("#h-test-name").value.trim() || tf.name,
         hospital_name: name, type: isImg ? "image" : "blood",
         values: [], files: [{ name: tf.name, url: URL.createObjectURL(tf) }], memo: "",
       });

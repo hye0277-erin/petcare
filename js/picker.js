@@ -112,7 +112,7 @@
     const curY = draft.view.y;
     const today = new Date();
     const thisY = today.getFullYear();
-    const years = Array.from({ length: 20 }, (_, i) => thisY - 10 + i);
+    const years = Array.from({ length: 41 }, (_, i) => thisY - 30 + i);
     const opts = years.map(y =>
       `<button type="button" class="pk-year-opt ${y === curY ? "sel" : ""}" data-pk-year="${y}">${y}년</button>`
     ).join("");
