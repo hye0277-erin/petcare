@@ -225,8 +225,8 @@ body {
   padding-top: 10px !important;
   padding-left: 16px !important;
   padding-right: 16px !important;
-  /* 탭바(56px) + safe-area + 여유 공간 */
-  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+  /* 탭바(56px) + safe-area */
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
 /* ═══════════════════════════════════════
