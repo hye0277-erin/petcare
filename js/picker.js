@@ -40,19 +40,19 @@
     document.body.appendChild(overlay);
     sheet = overlay.querySelector(".pk-sheet");
 
-    /* 피커 시트를 .app 프레임 너비/위치에 맞춤 (PC 데스크톱 대응) */
-    function alignSheet() {
+    /* 오버레이를 .app 프레임 영역으로 제한 (PC 데스크톱 대응) */
+    function alignOverlay() {
       const appEl = document.querySelector(".app");
       if (!appEl) return;
       const r = appEl.getBoundingClientRect();
-      sheet.style.setProperty("--pk-width", r.width + "px");
-      sheet.style.setProperty("--pk-left", r.left + "px");
-      // position relative + left 대신 margin-left로 이동
-      sheet.style.marginLeft = r.left + "px";
-      sheet.style.width = r.width + "px";
+      overlay.style.left   = r.left + "px";
+      overlay.style.right  = (window.innerWidth - r.right) + "px";
+      overlay.style.top    = r.top + "px";
+      overlay.style.bottom = (window.innerHeight - r.bottom) + "px";
+      overlay.style.inset  = "unset"; /* inset shorthand 초기화 */
     }
-    alignSheet();
-    window.addEventListener("resize", alignSheet);
+    alignOverlay();
+    window.addEventListener("resize", alignOverlay);
 
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay || e.target.closest("[data-pk-cancel]")) return close();

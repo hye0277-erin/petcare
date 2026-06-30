@@ -46,7 +46,6 @@
 }
 .pk-overlay.show { opacity: 1; pointer-events: auto; }
 .pk-sheet {
-  /* JS가 width/marginLeft를 인라인으로 주입해 앱 프레임에 맞춤 */
   width: 100%;
   max-width: 430px;
   background: #fff;
