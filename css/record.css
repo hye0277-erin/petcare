@@ -389,8 +389,7 @@ img { display: block; max-width: 100%; }
 .tab.active span { font-weight: 700; }
 .tab.active .material-symbols-rounded { font-variation-settings: 'wght' 400, 'opsz' 24, 'FILL' 0, 'GRAD' 0; }
 
-.home-indicator { flex-shrink: 0; display: flex; justify-content: center; padding: 6px 0 8px; background: var(--card); }
-.home-indicator i { width: 134px; height: 5px; border-radius: 3px; background: #111; opacity: 0.85; }
+.home-indicator { display: none; }
 
 /* ── Sheet / Modal 공통 ──────────────────────────────── */
 .overlay {
@@ -435,9 +434,18 @@ img { display: block; max-width: 100%; }
 }
 
 /* Center modal */
-.overlay.center { align-items: center; justify-content: center; padding: 24px; }
+.overlay.center {
+  align-items: center; justify-content: center;
+  padding: 24px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  align-items: flex-end;
+}
+@media (min-height: 600px) {
+  .overlay.center { align-items: center; }
+}
 .modal {
-  width: 100%; max-width: 360px; max-height: 86%;
+  width: 100%; max-width: 360px;
+  max-height: calc(100% - 48px - env(safe-area-inset-bottom, 0px));
   background: var(--bg); border-radius: var(--r-lg);
   display: flex; flex-direction: column; overflow: hidden;
   transform: scale(0.94); opacity: 0;
