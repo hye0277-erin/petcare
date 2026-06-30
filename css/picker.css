@@ -38,15 +38,22 @@
 
 /* 오버레이 + 시트 */
 .pk-overlay {
-  position: absolute; inset: 0; z-index: 9999;
-  background: rgba(20, 28, 23, 0.45);
+  position: fixed; inset: 0; z-index: 9999;
   display: flex; align-items: flex-end; justify-content: center;
   opacity: 0; pointer-events: none;
   transition: opacity 0.24s cubic-bezier(0.22,1,0.36,1);
 }
+/* 반투명 배경은 .app 영역에만 */
+.pk-overlay::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(20, 28, 23, 0.45);
+}
 .pk-overlay.show { opacity: 1; pointer-events: auto; }
 .pk-sheet {
+  position: relative; /* ::before 위에 올라오게 */
   width: 100%;
+  max-width: 430px;
   background: #fff;
   border-radius: 18px 22px 0 0;
   padding: 10px 16px calc(24px + env(safe-area-inset-bottom, 8px));

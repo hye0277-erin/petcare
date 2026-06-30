@@ -37,7 +37,7 @@
         <button type="button" class="pk-btn ghost" data-pk-cancel>취소</button>
         <button type="button" class="pk-btn primary" data-pk-ok>확인</button>
       </div></div>`;
-    (document.querySelector(".app") || document.body).appendChild(overlay);
+    document.body.appendChild(overlay);
     sheet = overlay.querySelector(".pk-sheet");
 
     overlay.addEventListener("click", (e) => {
