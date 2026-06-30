@@ -38,7 +38,7 @@
 
 /* 오버레이 + 시트 */
 .pk-overlay {
-  position: fixed; inset: 0; z-index: 9999;
+  position: absolute; inset: 0; z-index: 9999;
   background: rgba(20, 28, 23, 0.45);
   display: flex; align-items: flex-end; justify-content: center;
   opacity: 0; pointer-events: none;
