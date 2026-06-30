@@ -38,22 +38,29 @@
 
 /* 오버레이 + 시트 */
 .pk-overlay {
-  position: fixed; inset: 0; z-index: 9999;
+  position: fixed;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  z-index: 9999;
+  background: rgba(20, 28, 23, 0.45);
   display: flex; align-items: flex-end; justify-content: center;
   opacity: 0; pointer-events: none;
   transition: opacity 0.24s cubic-bezier(0.22,1,0.36,1);
 }
-/* 반투명 배경은 .app 영역에만 */
-.pk-overlay::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: rgba(20, 28, 23, 0.45);
+/* PC: .app과 동일한 상하 여백 + 둥근 모서리 */
+@media (min-width: 480px) {
+  .pk-overlay {
+    top: 28px; bottom: 28px;
+    border-radius: 40px;
+    overflow: hidden;
+  }
 }
 .pk-overlay.show { opacity: 1; pointer-events: auto; }
 .pk-sheet {
-  position: relative; /* ::before 위에 올라오게 */
   width: 100%;
-  max-width: 430px;
   background: #fff;
   border-radius: 18px 22px 0 0;
   padding: 10px 16px calc(24px + env(safe-area-inset-bottom, 8px));
