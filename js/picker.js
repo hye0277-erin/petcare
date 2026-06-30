@@ -37,9 +37,22 @@
         <button type="button" class="pk-btn ghost" data-pk-cancel>취소</button>
         <button type="button" class="pk-btn primary" data-pk-ok>확인</button>
       </div></div>`;
-    const appEl = document.querySelector(".app") || document.body;
-    appEl.appendChild(overlay);
+    document.body.appendChild(overlay);
     sheet = overlay.querySelector(".pk-sheet");
+
+    /* 피커 시트를 .app 프레임 너비/위치에 맞춤 (PC 데스크톱 대응) */
+    function alignSheet() {
+      const appEl = document.querySelector(".app");
+      if (!appEl) return;
+      const r = appEl.getBoundingClientRect();
+      sheet.style.setProperty("--pk-width", r.width + "px");
+      sheet.style.setProperty("--pk-left", r.left + "px");
+      // position relative + left 대신 margin-left로 이동
+      sheet.style.marginLeft = r.left + "px";
+      sheet.style.width = r.width + "px";
+    }
+    alignSheet();
+    window.addEventListener("resize", alignSheet);
 
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay || e.target.closest("[data-pk-cancel]")) return close();

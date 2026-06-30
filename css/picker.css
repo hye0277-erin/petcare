@@ -38,7 +38,7 @@
 
 /* 오버레이 + 시트 */
 .pk-overlay {
-  position: absolute; inset: 0; z-index: 9999;
+  position: fixed; inset: 0; z-index: 9999;
   background: rgba(20, 28, 23, 0.45);
   display: flex; align-items: flex-end; justify-content: center;
   opacity: 0; pointer-events: none;
@@ -46,7 +46,9 @@
 }
 .pk-overlay.show { opacity: 1; pointer-events: auto; }
 .pk-sheet {
-  width: 100%; max-width: 430px;
+  /* JS가 width/marginLeft를 인라인으로 주입해 앱 프레임에 맞춤 */
+  width: 100%;
+  max-width: 430px;
   background: #fff;
   border-radius: 18px 22px 0 0;
   padding: 10px 16px calc(24px + env(safe-area-inset-bottom, 8px));
