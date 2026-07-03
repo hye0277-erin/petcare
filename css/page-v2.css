@@ -235,12 +235,14 @@ body {
 .app .sheet,
 .app .modal,
 .app .sheet-foot,
-.app .pk-sheet {
+.app .pk-sheet,
+body > .pk-overlay .pk-sheet {
   background: #fff !important;
 }
 .app .overlay,
 .app .sheet-overlay,
-.app .pk-overlay {
+.app .pk-overlay,
+body > .pk-overlay {
   background: rgba(17, 17, 17, 0.42) !important;
 }
 

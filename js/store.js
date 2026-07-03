@@ -313,8 +313,35 @@
 
     /* 병원 기록 */
     getHospitals() { return read(KEYS.hospitals, []); },
-    addHospital(h) { h.id = h.id || uid("hospital"); h.pet_id = PET_ID; const l = this.getHospitals(); l.unshift(h); write(KEYS.hospitals, l); return h; },
+    getHospital(id) { return this.getHospitals().find((x) => x.id === id); },
+    addHospital(h) {
+      h.id = h.id || uid("hospital"); h.pet_id = PET_ID;
+      h.created_at = h.created_at || new Date().toISOString();
+      // 새 필드 기본값
+      if (!h.attachments) h.attachments = [];   // [{id,title,kind,date,memo,name,url,type,size}]
+      if (!h.values) h.values = [];             // [{id,name,value,unit,date,memo}]
+      if (!h.vet_notes) h.vet_notes = "";
+      if (!h.diagnosis) h.diagnosis = "";
+      if (!h.recommendations) h.recommendations = [];
+      if (!h.rx_changes) h.rx_changes = [];
+      if (!h.linked_records) h.linked_records = [];
+      if (!h.next_visit_memo) h.next_visit_memo = "";
+      if (!h.next_visit_time) h.next_visit_time = "";
+      if (!h.draft) h.draft = false;
+      const l = this.getHospitals(); l.unshift(h); write(KEYS.hospitals, l); return h;
+    },
+    updateHospital(id, patch) {
+      const l = this.getHospitals(); const h = l.find((x) => x.id === id);
+      if (!h) return null; Object.assign(h, patch); write(KEYS.hospitals, l); return h;
+    },
     removeHospital(id) { write(KEYS.hospitals, this.getHospitals().filter((x) => x.id !== id)); },
+    saveDraft(draft) {
+      draft.draft = true; draft.id = draft.id || uid("hospital");
+      const l = this.getHospitals().filter((x) => !x.draft);
+      l.unshift(draft); write(KEYS.hospitals, l); return draft;
+    },
+    getDraft() { return this.getHospitals().find((x) => x.draft); },
+    clearDraft() { write(KEYS.hospitals, this.getHospitals().filter((x) => !x.draft)); },
 
     /* 검사 결과 */
     getTests() { return read(KEYS.tests, []); },

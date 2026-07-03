@@ -149,14 +149,54 @@
       `;
     // 각 컬럼에 상하 패딩 추가해 첫/끝 항목도 중앙에 올 수 있게 함
     requestAnimationFrame(() => {
-      overlay.querySelectorAll(".pk-col").forEach((col) => {
+      const cols = Array.from(overlay.querySelectorAll(".pk-col"));
+      cols.forEach((col) => {
         const optH = col.querySelector(".pk-opt")?.offsetHeight || 44;
         const pad = (col.clientHeight / 2) - (optH / 2);
         col.style.paddingTop = pad + "px";
         col.style.paddingBottom = pad + "px";
       });
       overlay.querySelectorAll(".pk-opt.sel").forEach((o) => o.scrollIntoView({ block: "center" }));
+      requestAnimationFrame(() => cols.forEach(bindTimeScroll));
     });
+  }
+
+  function bindTimeScroll(col) {
+    if (col._pkTimeScrollBound) return;
+    col._pkTimeScrollBound = true;
+    let raf = 0;
+    const sync = () => {
+      raf = 0;
+      syncTimeColumn(col);
+    };
+    col.addEventListener("scroll", () => {
+      if (!raf) raf = requestAnimationFrame(sync);
+    }, { passive: true });
+  }
+
+  function syncTimeColumn(col) {
+    const key = col.dataset.col;
+    if (key !== "h" && key !== "mi") return;
+    const colBox = col.getBoundingClientRect();
+    const center = colBox.top + (colBox.height / 2);
+    let best = null;
+    let bestDist = Infinity;
+    col.querySelectorAll(".pk-opt").forEach((opt) => {
+      const box = opt.getBoundingClientRect();
+      const optCenter = box.top + (box.height / 2);
+      const dist = Math.abs(optCenter - center);
+      if (dist < bestDist) {
+        best = opt;
+        bestDist = dist;
+      }
+    });
+    if (!best) return;
+    const attr = key === "h" ? "pkH" : "pkMi";
+    const val = Number(best.dataset[attr]);
+    if (Number.isNaN(val) || draft[key] === val) return;
+    draft[key] = val;
+    col.querySelectorAll(".pk-opt").forEach((o) => o.classList.remove("sel"));
+    best.classList.add("sel");
   }
 
   /* ── 시트 내부 클릭 처리 ───────────────────────────── */

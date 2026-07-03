@@ -151,7 +151,7 @@
 
   /* ── 3. 화면 상태 ────────────────────────────────────── */
   let activeFilter = "all";
-  let search = { keyword: "", period: "all", type: "all", importantOnly: false, photoOnly: false };
+  let search = { keyword: "", period: "all", types: [], importantOnly: false, photoOnly: false };
   let editingId = null;
 
   /* ── 4. 요약 카드 ────────────────────────────────────── */
@@ -208,7 +208,7 @@
   /* ── 7. 타임라인 ─────────────────────────────────────── */
   function passesFilter(r) {
     if (activeFilter !== "all" && r.type !== activeFilter) return false;
-    if (search.type !== "all" && r.type !== search.type) return false;
+    if (search.types.length && !search.types.includes(r.type)) return false;
     if (search.importantOnly && !r.important) return false;
     if (search.photoOnly && !r.photo) return false;
     if (search.keyword) {
@@ -546,7 +546,7 @@
   function openSearch() {
     $("#s-keyword").value = search.keyword;
     $$("#search-sheet [data-period]").forEach((b) => b.classList.toggle("active", b.dataset.period === search.period));
-    $$("#search-sheet [data-stype]").forEach((b) => b.classList.toggle("active", b.dataset.stype === search.type));
+    $$("#search-sheet [data-stype]").forEach((b) => b.classList.toggle("active", search.types.length ? search.types.includes(b.dataset.stype) : b.dataset.stype === "all"));
     $("#s-important").classList.toggle("on", search.importantOnly);
     $("#s-photo").classList.toggle("on", search.photoOnly);
     // 직접 선택 기간 복원
@@ -568,7 +568,7 @@
     if (search.keyword) parts.push(`"${search.keyword}"`);
     const periodMap = { today: "오늘", "7d": "최근 7일", "30d": "최근 30일", month: "이번 달", custom: "직접 선택" };
     if (search.period !== "all") parts.push(periodMap[search.period] || search.period);
-    if (search.type !== "all") parts.push(TYPES[search.type]?.label || search.type);
+    if (search.types.length) parts.push(search.types.map((t) => TYPES[t]?.label || t).join(", "));
     if (search.importantOnly) parts.push("중요");
     if (search.photoOnly) parts.push("사진 있음");
     return parts.length ? parts.join(" · ") : "전체 기록";
@@ -618,14 +618,16 @@
 
   function closeSearchView() {
     $("#search-view").style.display = "none";
-    search = { keyword: "", period: "all", type: "all", importantOnly: false, photoOnly: false, customFrom: "", customTo: "" };
+    search = { keyword: "", period: "all", types: [], importantOnly: false, photoOnly: false, customFrom: "", customTo: "" };
     renderTimeline();
   }
 
   function applySearch() {
     search.keyword = $("#s-keyword").value.trim();
     search.period = $("#search-sheet [data-period].active")?.dataset.period || "all";
-    search.type = $("#search-sheet [data-stype].active")?.dataset.stype || "all";
+    search.types = $$("#search-sheet [data-stype].active")
+      .map((b) => b.dataset.stype)
+      .filter((t) => t !== "all");
     search.importantOnly = $("#s-important").classList.contains("on");
     search.photoOnly = $("#s-photo").classList.contains("on");
     search.customFrom = ($("#s-from")?.value || "").replace(/\./g, "-");
@@ -635,7 +637,7 @@
   }
 
   function resetSearch() {
-    search = { keyword: "", period: "all", type: "all", importantOnly: false, photoOnly: false, customFrom: "", customTo: "" };
+    search = { keyword: "", period: "all", types: [], importantOnly: false, photoOnly: false, customFrom: "", customTo: "" };
     $("#s-keyword").value = "";
     $$("#search-sheet [data-period]").forEach((b) => b.classList.toggle("active", b.dataset.period === "all"));
     $$("#search-sheet [data-stype]").forEach((b) => b.classList.toggle("active", b.dataset.stype === "all"));
@@ -727,7 +729,18 @@
       return;
     }
     const st = t.closest("[data-stype]");
-    if (st) { $$("#search-sheet [data-stype]").forEach((b) => b.classList.remove("active")); st.classList.add("active"); return; }
+    if (st) {
+      const all = $$("#search-sheet [data-stype]");
+      if (st.dataset.stype === "all") {
+        all.forEach((b) => b.classList.toggle("active", b.dataset.stype === "all"));
+      } else {
+        $("#search-sheet [data-stype='all']").classList.remove("active");
+        st.classList.toggle("active");
+        const anyActive = all.some((b) => b.dataset.stype !== "all" && b.classList.contains("active"));
+        if (!anyActive) $("#search-sheet [data-stype='all']").classList.add("active");
+      }
+      return;
+    }
     if (t.closest("#s-important")) { $("#s-important").classList.toggle("on"); return; }
     if (t.closest("#s-photo")) { $("#s-photo").classList.toggle("on"); return; }
     if (t.closest("#s-apply")) return applySearch();

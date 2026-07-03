@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/style.css?v=2" />
 <link rel="stylesheet" href="css/picker.css?v=2" />
 <link rel="stylesheet" href="css/page-v2.css?v=2" />
+<link rel="stylesheet" href="css/hospital.css?v=2" />
 <script type="module" src="js/guard.js?v=2"></script>
 </head>
 <body>
@@ -18,40 +19,60 @@
 
   <header class="pv2-header">
     <div class="pv2-header-left">
-      <div class="pv2-title">병원</div>
+      <div class="pv2-title">병원 기록</div>
       <div class="pv2-subtitle" data-pet-sub>해피의 진료 기록을 모아봤어요.</div>
     </div>
     <div class="pv2-header-actions">
-      <button class="pv2-icon-btn solid" id="btn-add-hospital" aria-label="병원 기록 추가">
-        <span class="material-symbols-rounded">add_notes</span>
+      <button class="pv2-icon-btn" id="btn-search" aria-label="검색">
+        <span class="material-symbols-rounded">search</span>
+      </button>
+      <button class="pv2-icon-btn" id="btn-add" aria-label="병원 기록 추가">
+        <span class="material-symbols-rounded">note_add</span>
       </button>
     </div>
   </header>
 
+  <!-- 검색 바 (숨김) -->
+  <div id="search-bar" class="hosp-search-bar">
+    <div class="hosp-search-inner">
+      <span class="material-symbols-rounded hosp-search-ic">search</span>
+      <input id="search-input" type="text" placeholder="병원명, 진료 내용 검색" class="hosp-search-input" />
+      <button id="btn-search-close" class="hosp-search-close"><span class="material-symbols-rounded">close</span></button>
+    </div>
+  </div>
+
   <main class="scroll">
+
+    <!-- 임시 저장 카드 -->
+    <div id="draft-card" class="hosp-draft-wrap"></div>
+
     <!-- 다음 진료 카드 -->
     <div id="next-visit-card" data-rise></div>
 
     <!-- 최근 방문 기록 -->
-    <div class="pv2-card-label">최근 방문 기록</div>
-    <div id="visit-list" data-rise style="padding:0"></div>
+    <div class="hosp-section-head">
+      <span class="hosp-section-title">최근 방문 기록</span>
+      <button class="hosp-text-btn" id="btn-all-visits">전체 보기</button>
+    </div>
+    <div id="visit-list" data-rise class="hosp-list-wrap"></div>
 
-    <!-- 검사 결과 -->
-    <div class="pv2-card-label">검사 결과</div>
-    <div id="test-list" data-rise style="padding:0"></div>
+    <!-- 최근 검사 자료 -->
+    <div class="hosp-section-head">
+      <span class="hosp-section-title">검사 자료</span>
+      <button class="hosp-text-btn" id="btn-all-tests">전체 보기</button>
+    </div>
+    <div id="test-list" data-rise class="hosp-list-wrap"></div>
 
     <!-- 처방 내역 -->
-    <div class="pv2-card-label">처방 내역</div>
-    <div id="rx-list" data-rise style="padding:0"></div>
+    <div class="hosp-section-head">
+      <span class="hosp-section-title">처방 내역</span>
+    </div>
+    <div id="rx-list" data-rise class="hosp-list-wrap"></div>
 
-    <!-- 병원 메모 -->
-    <div class="pv2-card-label">병원 메모</div>
-    <div id="memo-card" data-rise style="padding:0"></div>
-
-    <button class="add-dashed" id="btn-add-hospital-2">
+    <button class="add-dashed" id="btn-add-bottom">
       <span class="material-symbols-rounded">add</span>병원 기록 추가
     </button>
-    <div style="height:8px"></div>
+    <div class="hosp-page-bottom"></div>
   </main>
 
   <nav class="pv2-tabbar">
@@ -62,78 +83,51 @@
     <a class="pv2-tab" href="settings.html"><span class="material-symbols-rounded">settings</span><span>설정</span></a>
   </nav>
 
-  <div class="sheet-overlay" data-sheet>
-    <div class="sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-title">무엇을 기록할까요?</div>
-      <div class="sheet-grid">
-        <a class="quick-btn" href="record.html?type=symptom"><span class="quick-ic ic-blue"><span class="material-symbols-rounded">stethoscope</span></span><span>증상</span></a>
-        <a class="quick-btn" href="record.html?type=meal"><span class="quick-ic ic-green"><span class="material-symbols-rounded">restaurant</span></span><span>식사</span></a>
-        <a class="quick-btn" href="record.html?type=water"><span class="quick-ic ic-blue"><span class="material-symbols-rounded">water_drop</span></span><span>물</span></a>
-        <a class="quick-btn" href="record.html?type=poop"><span class="quick-ic ic-orange"><span class="material-symbols-rounded">pets</span></span><span>배변</span></a>
-        <a class="quick-btn" href="record.html?type=weight"><span class="quick-ic ic-yellow"><span class="material-symbols-rounded">monitor_weight</span></span><span>체중</span></a>
-        <a class="quick-btn" href="record.html?type=breath"><span class="quick-ic ic-green"><span class="material-symbols-rounded">air</span></span><span>호흡</span></a>
-        <a class="quick-btn" href="record.html?type=photo"><span class="quick-ic ic-purple"><span class="material-symbols-rounded">photo_camera</span></span><span>사진</span></a>
-        <button class="quick-btn" data-sheet-close><span class="quick-ic ic-orange"><span class="material-symbols-rounded">close</span></span><span>닫기</span></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 병원 기록 추가 시트 -->
-  <div class="sheet-overlay" id="hospital-sheet">
-    <div class="sheet" style="max-height:86vh;overflow:auto">
-      <div class="sheet-handle"></div>
-      <div class="sheet-title">병원 기록 추가</div>
-      <div class="form">
-        <!-- 다음 진료 날짜 -->
-        <div class="form-group">
-          <span class="form-label">다음 진료일</span>
-          <input class="input" id="h-next" data-picker="date" data-picker-placeholder="날짜를 선택하세요" />
-        </div>
-        <div class="form-group"><span class="form-label">병원명</span>
-          <input class="input" id="h-name" type="text" placeholder="예: 서울동물병원" /></div>
-        <div class="form-group"><span class="form-label">담당 수의사 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
-          <input class="input" id="h-doctor" type="text" placeholder="예: 김하늘 수의사" /></div>
-        <div class="form-group"><span class="form-label">진료 목적</span>
-          <div class="choice-grid" style="grid-template-columns:repeat(3,1fr)">
-            <label class="choice"><input type="radio" name="h-purpose" value="정기 진료" checked /> 정기 진료</label>
-            <label class="choice"><input type="radio" name="h-purpose" value="검사" /> 검사</label>
-            <label class="choice"><input type="radio" name="h-purpose" value="응급" /> 응급</label>
-            <label class="choice"><input type="radio" name="h-purpose" value="예방접종" /> 예방접종</label>
-            <label class="choice"><input type="radio" name="h-purpose" value="처방 갱신" /> 처방 갱신</label>
-            <label class="choice"><input type="radio" name="h-purpose" value="기타" /> 기타</label>
-          </div>
-        </div>
-        <div class="form-group"><span class="form-label">진료 내용 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
-          <textarea class="textarea" id="h-content" placeholder="진료 내용을 적어주세요." style="min-height:70px"></textarea></div>
-        <div class="form-group"><span class="form-label">처방 약물 <span style="font-weight:500;color:var(--color-text-light)">한 줄에 하나씩</span></span>
-          <textarea class="textarea" id="h-rx" placeholder="예: 심장약 1일 1회 · 아침" style="min-height:60px"></textarea></div>
-        <div class="form-group"><span class="form-label">영수증 / 처방전 첨부 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
-          <input class="input" id="h-file" type="file" accept="application/pdf,image/png,image/jpeg" /></div>
-        <div class="form-group"><span class="form-label">검사 결과 파일 <span style="font-weight:500;color:var(--color-text-light)">선택 · 검사 결과 목록에 추가돼요</span></span>
-          <input class="input" id="h-test-file" type="file" accept="application/pdf,image/png,image/jpeg" />
-          <input class="input" id="h-test-name" type="text" placeholder="검사명 (예: 혈액검사)" style="margin-top:8px" /></div>
-        <div class="form-group"><span class="form-label">메모 <span style="font-weight:500;color:var(--color-text-light)">선택</span></span>
-          <input class="input" id="h-memo" type="text" placeholder="기억해 둘 내용" /></div>
-        <label class="choice" style="justify-content:flex-start"><input type="checkbox" id="h-make-task" /> 처방 약물로 복약 일정 만들기</label>
-        <div style="display:flex;gap:10px;margin-top:6px">
-          <button class="btn btn-ghost" type="button" data-h-close style="flex:0 0 90px">취소</button>
-          <button class="btn btn-primary btn-block" type="button" id="h-save">저장</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- 검사 결과 상세 시트 -->
   <div class="sheet-overlay" id="test-sheet">
-    <div class="sheet" style="max-height:86vh;overflow:auto">
+    <div class="sheet hosp-test-sheet">
       <div class="sheet-handle"></div>
-      <div class="sheet-title" id="t-title">검사 결과</div>
+      <div class="sheet-title" id="t-title">검사 자료</div>
       <div id="t-body"></div>
-      <div style="display:flex;gap:10px;margin-top:14px">
-        <button class="btn btn-ghost" type="button" data-h-close style="flex:0 0 90px">닫기</button>
+      <div class="hosp-sheet-btns">
+        <button class="btn btn-ghost hosp-sheet-close-btn" type="button" data-h-close>닫기</button>
         <button class="btn btn-primary btn-block" type="button" id="t-share">공유 준비하기</button>
       </div>
+      <div class="hosp-sheet-del-wrap">
+        <button class="btn btn-block hosp-del-btn" type="button" id="t-delete">
+          <span class="material-symbols-rounded hosp-del-ic">delete</span> 이 기록 삭제
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 처방 수정 시트 -->
+  <div class="sheet-overlay" id="rx-sheet">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">처방 수정</div>
+      <div class="form">
+        <div class="form-group">
+          <span class="form-label">처방 내용</span>
+          <input class="input" id="rx-edit-input" type="text" placeholder="예: 심장약 1일 1회 · 아침" />
+        </div>
+        <div class="hosp-sheet-btns">
+          <button class="btn btn-ghost hosp-sheet-close-btn" type="button" id="rx-edit-cancel">취소</button>
+          <button class="btn btn-primary btn-block" type="button" id="rx-edit-save">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 첨부파일 교체/추가용 hidden input -->
+  <input type="file" id="test-file-replace-input" accept="application/pdf,image/png,image/jpeg" class="hosp-hidden-input" />
+
+  <!-- 이미지 미리보기 모달 -->
+  <div id="img-preview-modal" class="hosp-img-modal" onclick="if(event.target===this)this.style.display='none'">
+    <img id="img-preview-img" src="" alt="미리보기" class="hosp-img-preview" />
+    <div class="hosp-img-modal-btns">
+      <button onclick="document.getElementById('img-preview-modal').style.display='none'" class="hosp-img-btn">닫기</button>
+      <button id="img-preview-dl" class="hosp-img-btn primary">다운로드</button>
     </div>
   </div>
 
@@ -141,6 +135,6 @@
 <script src="js/store.js?v=2"></script>
 <script src="js/picker.js?v=2"></script>
 <script src="js/main.js?v=2"></script>
-<script src="js/hospital.js?v=2"></script>
+<script src="js/hospital.js?v=3"></script>
 </body>
 </html>
