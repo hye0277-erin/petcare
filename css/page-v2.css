@@ -26,7 +26,28 @@ body {
 .app *:not(.pv2-tabbar):not(.pv2-tabbar *) {
   font-weight: revert;
 }
+/* 굵기 단계별 재정의 */
+.app *:not(.pv2-tabbar):not(.pv2-tabbar *)[style*="font-weight: 900"] { font-weight: 800 !important; }
 
+/* 900 → 800 */
+.app .pv2-title { font-weight: 800 !important; }
+.app .sheet-title { font-weight: 800 !important; }
+.app .day-title { font-weight: 800 !important; }
+
+/* 800 → 700 */
+.app .section-title,
+.app .rec-type,
+.app h1, .app h2, .app h3 { font-weight: 700 !important; }
+
+/* 700 → 600 */
+.app .tl-name,
+.app .check-label,
+.app .ni-title { font-weight: 600 !important; }
+
+/* 600 → 500 */
+.app .tl-desc,
+.app .check-status,
+.app .ni-meta { font-weight: 500 !important; }
 
 /* switch 토글 내부 원(record.css)은 시각적 깊이감 유지 */
 .switch::after {
@@ -540,16 +561,6 @@ body > .pk-overlay {
 /* ═══════════════════════════════════════
    SETTINGS (settings.html)
    ═══════════════════════════════════════ */
-
-.app .card-label {
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  color: #8A9C90 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
-  padding: 16px 0 4px !important;
-  background: transparent !important;
-}
 
 .app .card.list {
   background: #fff !important;
