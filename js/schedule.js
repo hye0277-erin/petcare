@@ -53,26 +53,25 @@
       <div class="st-pill"><div class="st-num skip">${skipped}</div><div class="st-lab">건너뜀</div></div>`;
   }
 
-  /* ── 주간 날짜 바 ───────────────────────────────────── */
-  function renderWeekBar() {
+  /* ── 월간 날짜 바 (좌우 스크롤, 기본은 이번 주 위치) ──── */
+  function renderWeekBar(smooth) {
     const bar = $("#week-bar"); if (!bar) return;
 
-    // selDate 기준 주 시작(일요일)
     const sel = new Date(selDate);
-    const base = new Date(sel);
-    base.setDate(sel.getDate() - sel.getDay()); // 해당 주 일요일
+    const y = sel.getFullYear(), mo = sel.getMonth();
+    const first = new Date(y, mo, 1);
+    const last = new Date(y, mo + 1, 0);
 
     const monthLabel = $("#week-bar-month");
-    if (monthLabel) monthLabel.textContent = `${sel.getFullYear()}년 ${sel.getMonth() + 1}월`;
+    if (monthLabel) monthLabel.textContent = `${y}년 ${mo + 1}월`;
 
+    const marks = S.monthMarks(y, mo + 1);
     let html = "";
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(base);
-      d.setDate(base.getDate() + i);
+    for (let day = 1; day <= last.getDate(); day++) {
+      const d = new Date(y, mo, day);
       const iso = isoDate(d);
       const isToday = iso === TODAY;
       const isSel = iso === selDate;
-      const marks = S.monthMarks(d.getFullYear(), d.getMonth() + 1);
       const m = marks[iso] || {};
       let pip = "";
       if (m.done) pip = `<i class="wb-pip green"></i>`;
@@ -87,9 +86,9 @@
     }
     bar.innerHTML = html;
 
-    // 선택 날짜 카드를 중앙으로 스크롤
+    // 선택 날짜(기본: 이번 주 범위)를 중앙으로 스크롤
     const selEl = bar.querySelector(".wb-day.sel");
-    if (selEl) selEl.scrollIntoView({ inline: "center", behavior: "smooth", block: "nearest" });
+    if (selEl) selEl.scrollIntoView({ inline: "center", behavior: smooth ? "smooth" : "auto", block: "nearest" });
   }
 
   /* ── 선택 날짜의 일정 목록 ──────────────────────────── */

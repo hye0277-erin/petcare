@@ -26,33 +26,7 @@ body {
 .app *:not(.pv2-tabbar):not(.pv2-tabbar *) {
   font-weight: revert;
 }
-/* 굵기 단계별 재정의 */
-.app *:not(.pv2-tabbar):not(.pv2-tabbar *)[style*="font-weight: 900"] { font-weight: 800 !important; }
 
-/* 900 → 800 */
-.app .pv2-title { font-weight: 800 !important; }
-.app .sheet-title { font-weight: 700 !important; }
-.app .day-title { font-weight: 700 !important; }
-.app .rec-title { font-weight: 700 !important; }
-
-/* 800 → 700 */
-.app .pv2-header-title,
-.app .section-title,
-.app h1, .app h2, .app h3 { font-weight: 700 !important; }
-
-/* 700 → 600 */
-.app .pv2-tab-label,
-.app .rec-card .rec-title,
-.app .tl-name,
-.app .check-label,
-.app .ni-title { font-weight: 600 !important; }
-
-/* 600 → 500 */
-.app .rec-meta,
-.app .tl-desc,
-.app .check-status,
-.app .ni-meta,
-.app .pv2-desc { font-weight: 500 !important; }
 
 /* switch 토글 내부 원(record.css)은 시각적 깊이감 유지 */
 .switch::after {

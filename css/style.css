@@ -746,8 +746,7 @@ button.src-badge:active { opacity: 0.7; }
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  width: calc((100%) / 7 - 6px);
-  min-width: 40px;
+  width: 44px;
   padding: 10px 4px 8px;
   border-radius: 10px;
   background: var(--color-card);
