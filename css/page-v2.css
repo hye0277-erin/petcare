@@ -31,8 +31,10 @@ body {
 
 /* 900 → 800 */
 .app .pv2-title { font-weight: 800 !important; }
+.app .hosp-form-section-title { font-weight: 900 !important; }
 .app .sheet-title { font-weight: 800 !important; }
 .app .day-title { font-weight: 800 !important; }
+.app .pv2-nav-title { font-weight: 800 !important; }
 
 /* 800 → 700 */
 .app .section-title,
@@ -43,6 +45,9 @@ body {
 .app .tl-name,
 .app .check-label,
 .app .ni-title { font-weight: 600 !important; }
+
+/* 600 → 700 (한 단계 위) */
+.app .form-label { font-weight: 700 !important; }
 
 /* 600 → 500 */
 .app .tl-desc,

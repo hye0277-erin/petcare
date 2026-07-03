@@ -102,8 +102,9 @@
     const dow = DOW[new Date(yy, mm - 1, dd).getDay()];
     const titleEl = $("#day-title");
     if (titleEl) {
-      const pill = isToday ? "오늘" : `${mm}월 ${dd}일`;
-      titleEl.innerHTML = `${isToday ? "오늘의 일정" : `${mm}월 ${dd}일 (${dow})`} <span class="today-pill">${pill}</span>`;
+      titleEl.innerHTML = isToday
+        ? `오늘의 일정 <span class="today-pill">오늘</span>`
+        : `${mm}월 ${dd}일 (${dow})`;
     }
 
     const summaryHost = $("#sched-today");

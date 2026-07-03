@@ -131,7 +131,9 @@
 
   /* ── 시간 빌더 ─────────────────────────────────────── */
   function buildTime(value) {
-    let h = 9, mi = 0;
+    const now = new Date();
+    let h = now.getHours(), mi = Math.round(now.getMinutes() / 5) * 5;
+    if (mi === 60) { mi = 0; h = (h + 1) % 24; }
     if (value && /^\d{1,2}:\d{2}/.test(value)) { const [a, b] = value.split(":").map(Number); h = a; mi = b; }
     draft = { h, mi };
     const hours = Array.from({ length: 24 }, (_, i) => i);
